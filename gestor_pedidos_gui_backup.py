@@ -483,13 +483,18 @@ class PedidoApp(tk.Tk):
         
         # Agregar pedidos con colores alternados
         for i, pedido in enumerate(self.manager.pedidos):
-            tag = 'even' if i % 2 == 0 else 'odd'
+            fecha_str = ""
+            if pedido.fecha_creacion:
+                fecha_str = pedido.fecha_creacion.strftime("%d/%m/%Y")
+            
+            tag = 'evenrow' if i % 2 == 0 else 'oddrow'
             
             self.tabla.insert("", "end", values=(
                 pedido.numero_oferta, 
                 pedido.numero_pedido or "-", 
                 pedido.proveedor, 
-                pedido.status
+                pedido.status,
+                fecha_str
             ), tags=(tag,))
         
         # Actualizar estadísticas en tiempo real
@@ -519,13 +524,18 @@ class PedidoApp(tk.Tk):
         
         # Mostrar resultados con resaltado
         for i, pedido in enumerate(resultados):
-            tag = 'even' if i % 2 == 0 else 'odd'
+            fecha_str = ""
+            if pedido.fecha_creacion:
+                fecha_str = pedido.fecha_creacion.strftime("%d/%m/%Y")
+            
+            tag = 'evenrow' if i % 2 == 0 else 'oddrow'
             
             self.tabla.insert("", "end", values=(
                 pedido.numero_oferta, 
                 pedido.numero_pedido or "-", 
                 pedido.proveedor, 
-                pedido.status
+                pedido.status,
+                fecha_str
             ), tags=(tag,))
         
         # Actualizar barra de estado con resultados de búsqueda
@@ -787,7 +797,7 @@ class PedidoApp(tk.Tk):
                                 text="❌ Cancelar",
                                 command=top.destroy,
                                 font=('Segoe UI', 10),
-                                bg=self.colors['text_secondary'],
+                                bg=self.colors['text_light'],
                                 fg='white',
                                 relief='flat',
                                 padx=20,
@@ -1035,7 +1045,186 @@ class PedidoApp(tk.Tk):
             # Empaquetar canvas y scrollbar
             canvas.pack(side="left", fill="both", expand=True)
             scrollbar.pack(side="right", fill="y")
-
+                            entries["po_pdf"].delete(0, "end")
+                            entries["po_pdf"].insert(0, path)
+                    ttk.Button(pdf_frame, text="Seleccionar", command=seleccionar_po_pdf).pack(side="left", padx=(5,0))
+                
+                if "etiquetas_pdf" in campos_requeridos:
+                    ttk.Label(main_frame, text="PDF de Etiquetas:").pack(anchor="w")
+                    etiq_frame = ttk.Frame(main_frame)
+                    etiq_frame.pack(anchor="w", padx=(20,0), fill="x")
+                    entries["etiquetas_pdf"] = ttk.Entry(etiq_frame, width=40)
+                    entries["etiquetas_pdf"].pack(side="left")
+                    entries["etiquetas_pdf"].insert(0, pedido.etiquetas_pdf)
+                    def seleccionar_etiq_pdf():
+                        path = filedialog.askopenfilename(title="Selecciona PDF de Etiquetas", filetypes=[("PDF files", "*.pdf")])
+                        if path:
+                            entries["etiquetas_pdf"].delete(0, "end")
+                            entries["etiquetas_pdf"].insert(0, path)
+                    ttk.Button(etiq_frame, text="Seleccionar", command=seleccionar_etiq_pdf).pack(side="left", padx=(5,0))
+                
+                if "numero_bultos" in campos_requeridos:
+                    ttk.Label(main_frame, text="Número de Bultos:").pack(anchor="w")
+                    entries["numero_bultos"] = ttk.Entry(main_frame, width=50)
+                    entries["numero_bultos"].pack(anchor="w", padx=(20,0))
+                    entries["numero_bultos"].insert(0, str(pedido.numero_bultos) if pedido.numero_bultos > 0 else "")
+                
+                if "peso_total" in campos_requeridos:
+                    ttk.Label(main_frame, text="Peso Total (kg):").pack(anchor="w")
+                    entries["peso_total"] = ttk.Entry(main_frame, width=50)
+                    entries["peso_total"].pack(anchor="w", padx=(20,0))
+                    entries["peso_total"].insert(0, str(pedido.peso_total) if pedido.peso_total > 0 else "")
+                
+                if "dimensiones" in campos_requeridos:
+                    ttk.Label(main_frame, text="Dimensiones (LxAxA):").pack(anchor="w")
+                    entries["dimensiones"] = ttk.Entry(main_frame, width=50)
+                    entries["dimensiones"].pack(anchor="w", padx=(20,0))
+                    entries["dimensiones"].insert(0, pedido.dimensiones)
+                
+                # Botón para guardar cambios
+                def guardar_cambios():
+                    try:
+                        if "requisition_id" in entries:
+                            pedido.requisition_id = entries["requisition_id"].get().strip()
+                        if "oi" in entries:
+                            oi_text = entries["oi"].get().strip()
+                            pedido.oi = int(oi_text) if oi_text else 0
+                        if "numero_pedido" in entries:
+                            pedido.numero_pedido = entries["numero_pedido"].get().strip()
+                        if "po_pdf" in entries:
+                            pedido.po_pdf = entries["po_pdf"].get().strip()
+                        if "etiquetas_pdf" in entries:
+                            pedido.etiquetas_pdf = entries["etiquetas_pdf"].get().strip()
+                        if "numero_bultos" in entries:
+                            bultos_text = entries["numero_bultos"].get().strip()
+                            pedido.numero_bultos = int(bultos_text) if bultos_text else 0
+                        if "peso_total" in entries:
+                            peso_text = entries["peso_total"].get().strip()
+                            pedido.peso_total = float(peso_text) if peso_text else 0.0
+                        if "dimensiones" in entries:
+                            pedido.dimensiones = entries["dimensiones"].get().strip()
+                        
+                        self.manager.actualizar_pedido(pedido)  # Guardar cambios
+                        self.refrescar_tabla()
+                        messagebox.showinfo("Éxito", "Cambios guardados correctamente", parent=top)
+                    except ValueError as e:
+                        messagebox.showerror("Error", "Por favor, introduce valores numéricos válidos", parent=top)
+                    except Exception as e:
+                        messagebox.showerror("Error", f"Error al guardar: {str(e)}", parent=top)
+                
+                ttk.Button(main_frame, text="Guardar Cambios", command=guardar_cambios).pack(pady=10)
+            
+            # Separador
+            ttk.Separator(main_frame, orient="horizontal").pack(fill="x", pady=5)
+            
+            # Mostrar información completa
+            info_frame = ttk.LabelFrame(main_frame, text="Información Completa del Pedido")
+            info_frame.pack(fill="x", pady=5)
+            
+            # Crear un frame con scroll para la información
+            info_canvas = tk.Canvas(info_frame, height=150)
+            info_scrollbar = ttk.Scrollbar(info_frame, orient="vertical", command=info_canvas.yview)
+            info_scrollable_frame = ttk.Frame(info_canvas)
+            
+            info_scrollable_frame.bind(
+                "<Configure>",
+                lambda e: info_canvas.configure(scrollregion=info_canvas.bbox("all"))
+            )
+            
+            info_canvas.create_window((0, 0), window=info_scrollable_frame, anchor="nw")
+            info_canvas.configure(yscrollcommand=info_scrollbar.set)
+            
+            # Información básica
+            ttk.Label(info_scrollable_frame, text=f"Requisition ID: {pedido.requisition_id or '-'}", font=("Arial", 9)).pack(anchor="w")
+            ttk.Label(info_scrollable_frame, text=f"OI: {pedido.oi if pedido.oi > 0 else '-'}", font=("Arial", 9)).pack(anchor="w")
+            ttk.Label(info_scrollable_frame, text=f"Nº Pedido: {pedido.numero_pedido or '-'}", font=("Arial", 9)).pack(anchor="w")
+            ttk.Label(info_scrollable_frame, text=f"Nº PO: {pedido.numero_po or '-'}", font=("Arial", 9)).pack(anchor="w")
+            
+            # PDFs con botones para abrir
+            if pedido.po_pdf:
+                pdf_frame = ttk.Frame(info_scrollable_frame)
+                pdf_frame.pack(anchor="w", fill="x")
+                ttk.Label(pdf_frame, text=f"PDF PO: {os.path.basename(pedido.po_pdf)}", font=("Arial", 9)).pack(side="left")
+                ttk.Button(pdf_frame, text="Abrir", command=lambda: self.abrir_archivo(pedido.po_pdf)).pack(side="left", padx=(5,0))
+            else:
+                ttk.Label(info_scrollable_frame, text="PDF PO: -", font=("Arial", 9)).pack(anchor="w")
+            
+            if pedido.etiquetas_pdf:
+                etiq_frame = ttk.Frame(info_scrollable_frame)
+                etiq_frame.pack(anchor="w", fill="x")
+                ttk.Label(etiq_frame, text=f"PDF Etiquetas: {os.path.basename(pedido.etiquetas_pdf)}", font=("Arial", 9)).pack(side="left")
+                ttk.Button(etiq_frame, text="Abrir", command=lambda: self.abrir_archivo(pedido.etiquetas_pdf)).pack(side="left", padx=(5,0))
+            else:
+                ttk.Label(info_scrollable_frame, text="PDF Etiquetas: -", font=("Arial", 9)).pack(anchor="w")
+            
+            # Información del paquete
+            ttk.Label(info_scrollable_frame, text=f"Número de Bultos: {pedido.numero_bultos if pedido.numero_bultos > 0 else '-'}", font=("Arial", 9)).pack(anchor="w")
+            ttk.Label(info_scrollable_frame, text=f"Peso Total: {pedido.peso_total if pedido.peso_total > 0 else '-'} kg", font=("Arial", 9)).pack(anchor="w")
+            ttk.Label(info_scrollable_frame, text=f"Dimensiones: {pedido.dimensiones or '-'}", font=("Arial", 9)).pack(anchor="w")
+            ttk.Label(info_scrollable_frame, text=f"Tracking: {pedido.tracking_number or '-'}", font=("Arial", 9)).pack(anchor="w")
+            
+            # Referencias
+            if pedido.referencias:
+                ttk.Label(info_scrollable_frame, text="Referencias:", font=("Arial", 9, "bold")).pack(anchor="w", pady=(10,5))
+                for i, ref in enumerate(pedido.referencias, 1):
+                    ttk.Label(info_scrollable_frame, text=f"  {i}. {ref.codigo} - {ref.descripcion} (Cant: {ref.cantidad}, Proyecto: {ref.proyecto})", font=("Arial", 8)).pack(anchor="w")
+            
+            # Fechas importantes
+            if pedido.fecha_creacion:
+                ttk.Label(info_scrollable_frame, text=f"Fecha creación: {pedido.fecha_creacion.strftime('%d/%m/%Y %H:%M')}", font=("Arial", 9)).pack(anchor="w")
+            if pedido.fecha_eproc_borrador:
+                ttk.Label(info_scrollable_frame, text=f"Fecha borrador: {pedido.fecha_eproc_borrador.strftime('%d/%m/%Y %H:%M')}", font=("Arial", 9)).pack(anchor="w")
+            if pedido.fecha_eproc_firmado:
+                ttk.Label(info_scrollable_frame, text=f"Fecha firmado: {pedido.fecha_eproc_firmado.strftime('%d/%m/%Y %H:%M')}", font=("Arial", 9)).pack(anchor="w")
+            
+            info_canvas.pack(side="left", fill="both", expand=True)
+            info_scrollbar.pack(side="right", fill="y")
+            
+            # Mostrar historial
+            ttk.Label(main_frame, text="Historial:", font=("Arial", 10, "bold")).pack(anchor="w", pady=(10,5))
+            historial_text = tk.Text(main_frame, height=6, width=70)
+            historial_text.pack(fill="x")
+            historial_text.insert("end", "\n".join(pedido.historial) if pedido.historial else "Sin historial")
+            historial_text.config(state="disabled")
+            
+            # Botón para avanzar estado
+            def avanzar():
+                if not pedido.puede_avanzar_estado():
+                    campos = pedido.get_campos_requeridos()
+                    messagebox.showerror("Error", f"Para avanzar al siguiente estado, debes completar los campos: {', '.join(campos)}", parent=top)
+                    return
+                
+                estados = [
+                    PedidoStatus.OFERTA,
+                    PedidoStatus.PEDIDO_EPROC_BORRADOR,
+                    PedidoStatus.PEDIDO_EPROC_ENVIADO_NO_FIRMADO,
+                    PedidoStatus.PEDIDO_EPROC_ENVIADO_FIRMADO,
+                    PedidoStatus.TAR_LANZADO_NO_ETIQUETAS,
+                    PedidoStatus.TAR_LANZADO_SI_ETIQUETAS,
+                    PedidoStatus.ETIQUETAS_ENVIADAS,
+                    PedidoStatus.PAQUETE_RECOGIDO,
+                    PedidoStatus.PAQUETE_EN_CAMINO,
+                    PedidoStatus.PAQUETE_EN_CASA,
+                    PedidoStatus.COMPLETADO
+                ]
+                try:
+                    idx = estados.index(pedido.status)
+                    if idx < len(estados) - 1:
+                        pedido.status = estados[idx+1]
+                        pedido.historial.append(f"{datetime.now()} - Estado cambiado a: {pedido.status}")
+                        self.manager.actualizar_pedido(pedido)  # Guardar cambios
+                        self.refrescar_tabla()
+                        messagebox.showinfo("Estado", f"Avanzado a: {pedido.status}", parent=top)
+                        top.destroy()
+                    else:
+                        messagebox.showinfo("Estado", "El pedido ya está en el estado final", parent=top)
+                except ValueError:
+                    messagebox.showerror("Error", "Estado actual no válido", parent=top)
+            
+            button_frame = ttk.Frame(main_frame)
+            button_frame.pack(pady=10)
+            ttk.Button(button_frame, text="Avanzar Estado", command=avanzar).pack(side="left", padx=5)
+            ttk.Button(button_frame, text="Cerrar", command=top.destroy).pack(side="left", padx=5)
 
 def simple_input(prompt, parent=None):
     if parent:
@@ -1052,7 +1241,6 @@ def simple_input(prompt, parent=None):
         root.destroy()
     
     return result
-
 
 if __name__ == "__main__":
     manager = PedidoManager()

@@ -35,7 +35,61 @@
           "proyecto": "sd"
         }
       ]
+    },
+    {
+      "numero_oferta": "221213",
+      "requisition_id": "",
+      "oi": 0,
+      "numero_pedido": "",
+      "proveedor": "dds",
+      "status": "Oferta recibida",
+      "historial": [],
+      "fecha_creacion": "2025-07-31T17:45:37.256341",
+      "fecha_eproc_borrador": null,
+      "fecha_eproc_firmado": null,
+      "po_pdf": "",
+      "numero_po": "",
+      "etiquetas_pdf": "",
+      "numero_bultos": 0,
+      "peso_total": 0.0,
+      "dimensiones": "",
+      "tracking_number": "",
+      "referencias": [
+        {
+          "codigo": "324342234",
+          "descripcion": "324432",
+          "cantidad": 3234242,
+          "proyecto": "342"
+        }
+      ]
+    },
+    {
+      "numero_oferta": "221213",
+      "requisition_id": "",
+      "oi": 0,
+      "numero_pedido": "",
+      "proveedor": "dds",
+      "status": "Oferta recibida",
+      "historial": [],
+      "fecha_creacion": "2025-07-31T17:45:43.224567",
+      "fecha_eproc_borrador": null,
+      "fecha_eproc_firmado": null,
+      "po_pdf": "",
+      "numero_po": "",
+      "etiquetas_pdf": "",
+      "numero_bultos": 0,
+      "peso_total": 0.0,
+      "dimensiones": "",
+      "tracking_number": "",
+      "referencias": [
+        {
+          "codigo": "324342234",
+          "descripcion": "324432",
+          "cantidad": 3234242,
+          "proyecto": "342"
+        }
+      ]
     }
   ],
-  "fecha_guardado": "2025-07-31T16:52:37.792257"
+  "fecha_guardado": "2025-07-31T17:45:43.224589"
 }
