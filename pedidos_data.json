@@ -1,75 +1,36 @@
 [
   {
-    "numero_oferta": "234",
-    "proveedor": "sesos",
-    "email_proveedor": "jesus@gmail.com",
+    "numero_oferta": "322344",
+    "proveedor": "342343",
+    "email_proveedor": "343443",
+    "pdf_oferta": "/home/jesus/Desktop/pedidos/ofertas_pdf/17189_attachmentLink_090256.pdf",
     "piezas": [
       {
-        "referencia": "34334",
-        "descripcion": "tornillo",
-        "proyecto": "sk216",
-        "cantidad": 1,
-        "precio_unitario": 20.0
-      }
-    ],
-    "total": 20.0,
-    "id": 1,
-    "fecha_creacion": "03/08/2025",
-    "estado": "etiqueta_creada",
-    "eproc": {
-      "numero": "EP2025-001",
-      "oi": "55665656",
-      "fecha_creacion": "03/08/2025"
-    },
-    "bulto": {
-      "fecha_recepcion": "03/08/2025"
-    },
-    "paquete": {
-      "fecha_creacion": "03/08/2025"
-    },
-    "tar": {
-      "numero": "TAR-1",
-      "fecha_creacion": "03/08/2025"
-    },
-    "etiqueta": {
-      "codigo": "ETQ-1",
-      "fecha_creacion": "03/08/2025"
-    }
-  },
-  {
-    "numero_oferta": "43544343",
-    "proveedor": "audi",
-    "email_proveedor": "lolo@gmail.com",
-    "piezas": [
+        "referencia": "34324324",
+        "descripcion": "a",
+        "proyecto": "a",
+        "cantidad": 3,
+        "precio_unitario": 5.0
+      },
       {
-        "referencia": "8897977",
-        "descripcion": "coche",
-        "proyecto": "vw110",
+        "referencia": "32443",
+        "descripcion": "da",
+        "proyecto": "a",
         "cantidad": 1,
-        "precio_unitario": 500.0
+        "precio_unitario": 100.0
       }
     ],
-    "total": 500.0,
+    "total": 115.0,
     "id": 2,
     "fecha_creacion": "03/08/2025",
-    "estado": "oferta_recibida"
-  },
-  {
-    "numero_oferta": "332443",
-    "proveedor": "32324",
-    "email_proveedor": "324",
-    "piezas": [
-      {
-        "referencia": "33434",
-        "descripcion": "342",
-        "proyecto": "",
-        "cantidad": 1,
-        "precio_unitario": 32324.0
-      }
-    ],
-    "total": 32324.0,
-    "id": 3,
-    "fecha_creacion": "03/08/2025",
-    "estado": "oferta_recibida"
+    "estado": "eproc_firmado",
+    "eproc": {
+      "numero": "324432",
+      "oi": "3434324",
+      "fecha": "03/08/2025",
+      "po_pdf": "/home/jesus/Desktop/pedidos/ofertas_pdf/3193_VALEO_SP_170725.pdf",
+      "po_number": "324334234",
+      "fecha_firma": "03/08/2025"
+    }
   }
 ]

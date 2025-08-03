@@ -19,9 +19,9 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;  /* Aumentado de 1200px */
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px;      /* Aumentado de 20px */
         }
 
         .header {
@@ -30,9 +30,9 @@
             align-items: center;
             margin-bottom: 30px;
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 25px;      /* Aumentado de 20px */
+            border-radius: 12px; /* Aumentado de 8px */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Mejorado */
         }
 
         .header h1 {
@@ -90,23 +90,24 @@
 
         .pedido-card {
             border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 12px;    /* Aumentado de 8px */
+            padding: 25px;          /* Aumentado de 20px */
+            margin-bottom: 25px;    /* Aumentado de 20px */
             background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Añadido */
         }
 
         .pedido-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;    /* Aumentado de 15px */
         }
 
         .pedido-info h3 {
             color: #1f2937;
             margin: 0;
-            font-size: 1.2rem;
+            font-size: 1.4rem;      /* Aumentado de 1.2rem */
         }
 
         .pedido-info p {
@@ -138,16 +139,17 @@
             position: relative;
             display: flex;
             align-items: center;
-            margin: 20px 0;
-            padding: 0 20px;
+            margin: 25px 0;      /* Aumentado de 20px */
+            padding: 0 25px;     /* Aumentado de 20px */
+            min-height: 80px;    /* Añadido */
         }
 
         .timeline-line {
             position: absolute;
             top: 50%;
-            left: 20px;
-            right: 20px;
-            height: 2px;
+            left: 25px;          /* Aumentado de 20px */
+            right: 25px;         /* Aumentado de 20px */
+            height: 3px;         /* Aumentado de 2px */
             background: #e5e7eb;
             z-index: 1;
         }
@@ -159,31 +161,35 @@
             flex-direction: column;
             align-items: center;
             flex: 1;
+            padding: 0 8px;      /* Añadido */
         }
 
         .timeline-circle {
-            width: 40px;
-            height: 40px;
+            width: 45px;         /* Aumentado de 40px */
+            height: 45px;        /* Aumentado de 40px */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 16px;     /* Aumentado de 14px */
             background: #e5e7eb;
             color: #6b7280;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Añadido */
         }
 
         .timeline-circle.active {
             background: #10b981;
             color: white;
+            transform: scale(1.1); /* Añadido */
         }
 
         .timeline-label {
-            margin-top: 8px;
-            font-size: 12px;
+            margin-top: 10px;    /* Aumentado de 8px */
+            font-size: 13px;     /* Aumentado de 12px */
             text-align: center;
             color: #6b7280;
+            font-weight: 500;    /* Añadido */
         }
 
         .timeline-label.active {
@@ -239,10 +245,30 @@
         .pdf-tag {
             background: #f3f4f6;
             color: #374151;
-            padding: 4px 8px;
+            padding: 6px 12px;
             border-radius: 4px;
             font-size: 12px;
             border: 1px solid #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .pdf-tag:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+            transform: translateY(-1px);
+        }
+
+        .pdf-tag.clickable {
+            background: #dbeafe;
+            border-color: #93c5fd;
+            color: #1d4ed8;
+        }
+
+        .pdf-tag.clickable:hover {
+            background: #bfdbfe;
+            border-color: #60a5fa;
         }
 
         .empty-state {
@@ -292,35 +318,62 @@
 
         .pieces-container {
             border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            background: #f9fafb;
+            min-height: 350px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        #pieces-grid {
+            min-width: 975px; /* Asegurar ancho mínimo para el grid */
         }
 
         .piece-row {
             display: grid;
-            grid-template-columns: 2fr 3fr 1fr 1fr 1fr auto;
-            gap: 10px;
+            grid-template-columns: 180px 280px 160px 120px 140px 80px;
+            gap: 15px;
             align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            background: #f9fafb;
-            border-radius: 6px;
+            margin-bottom: 15px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f3f4f6;
         }
 
         .piece-row input {
-            padding: 6px 8px;
+            padding: 12px 15px;
             border: 1px solid #d1d5db;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+
+        .piece-row input[type="number"] {
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .piece-row input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .total-row {
             text-align: right;
             font-weight: bold;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #e5e7eb;
+            font-size: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+            color: #059669;
         }
 
         .hidden {
@@ -340,13 +393,14 @@
 
         .modal-content {
             background-color: white;
-            margin: 5% auto;
+            margin: 2% auto;
             padding: 30px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 1000px;
+            max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
         .modal-header {
@@ -418,19 +472,24 @@
                     <input type="email" id="email_proveedor" name="email_proveedor">
                 </div>
 
+                <div class="form-group">
+                    <label for="oferta_pdf">PDF de la Oferta *</label>
+                    <input type="file" id="oferta_pdf" name="oferta_pdf" accept=".pdf" required>
+                </div>
+
                 <div class="pieces-container">
-                    <h3 style="margin-bottom: 15px;">Piezas del Pedido</h3>
+                    <h3 style="margin-bottom: 20px; color: #374151;">Piezas del Pedido</h3>
                     <div id="pieces-grid">
-                        <div class="piece-row" style="background: #e5e7eb; font-weight: bold;">
-                            <div>Referencia</div>
-                            <div>Descripción</div>
-                            <div>Proyecto</div>
-                            <div>Cantidad</div>
-                            <div>Precio Unit.</div>
-                            <div>Acción</div>
+                        <div class="piece-row" style="background: #374151; color: white; font-weight: bold; border-radius: 8px;">
+                            <div style="padding: 12px 15px;">Referencia</div>
+                            <div style="padding: 12px 15px;">Descripción</div>
+                            <div style="padding: 12px 15px;">Proyecto</div>
+                            <div style="padding: 12px 15px;">Cantidad</div>
+                            <div style="padding: 12px 15px;">Precio Unit. (€)</div>
+                            <div style="padding: 12px 15px;">Acción</div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-secondary" onclick="agregarPieza()" style="margin-top: 10px;">+ Agregar Pieza</button>
+                    <button type="button" class="btn btn-secondary" onclick="agregarPieza()" style="margin-top: 15px;">+ Agregar Pieza</button>
                     <div class="total-row">
                         Total: €<span id="total-pedido">0.00</span>
                     </div>
@@ -444,32 +503,205 @@
         </div>
     </div>
 
-    <!-- Modal para crear Eproc -->
-    <div id="modal-crear-eproc" class="modal">
+    <!-- Modal para lanzar Eproc -->
+    <div id="modal-lanzar-eproc" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Crear Eproc</h2>
-                <span class="close" onclick="cerrarModalEproc()">&times;</span>
+                <h2>Lanzar Eproc</h2>
+                <span class="close" onclick="cerrarModalLanzarEproc()">&times;</span>
             </div>
             
-            <form id="form-crear-eproc">
-                <input type="hidden" id="eproc-pedido-id">
+            <form id="form-lanzar-eproc">
+                <input type="hidden" id="lanzar-eproc-pedido-id">
                 
                 <div class="form-group">
-                    <label for="eproc_number">Número Eproc *</label>
-                    <input type="text" id="eproc_number" name="eproc_number" required>
+                    <label for="lanzar_eproc_numero">Número Eproc *</label>
+                    <input type="text" id="lanzar_eproc_numero" name="numero" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="oi">Número OI (Orden Interna)</label>
-                    <input type="number" id="oi" name="oi" step="0.01" placeholder="123456.78">
+                    <label for="lanzar_eproc_oi">OI *</label>
+                    <input type="text" id="lanzar_eproc_oi" name="oi" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lanzar_eproc_fecha">Fecha *</label>
+                    <input type="date" id="lanzar_eproc_fecha" name="fecha" required>
                 </div>
 
                 <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
-                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEproc()">Cancelar</button>
-                    <button type="submit" class="btn">Crear Eproc</button>
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalLanzarEproc()">Cancelar</button>
+                    <button type="submit" class="btn">Lanzar Eproc</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal para firmar Eproc -->
+    <div id="modal-firmar-eproc" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Firmar Eproc</h2>
+                <span class="close" onclick="cerrarModalFirmarEproc()">&times;</span>
+            </div>
+            
+            <form id="form-firmar-eproc">
+                <input type="hidden" id="firmar-eproc-pedido-id">
+                
+                <div class="form-group">
+                    <label for="firmar_eproc_pdf">PDF de la PO *</label>
+                    <input type="file" id="firmar_eproc_pdf" name="pdf" accept=".pdf" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="firmar_eproc_po">Número PO *</label>
+                    <input type="text" id="firmar_eproc_po" name="po" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="firmar_eproc_fecha">Fecha *</label>
+                    <input type="date" id="firmar_eproc_fecha" name="fecha" required>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalFirmarEproc()">Cancelar</button>
+                    <button type="submit" class="btn">Firmar Eproc</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para crear Packing List -->
+    <div id="modal-packing-list" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear Packing List</h2>
+                <span class="close" onclick="cerrarModalPackingList()">&times;</span>
+            </div>
+            
+            <form id="form-packing-list">
+                <input type="hidden" id="packing-list-pedido-id">
+                
+                <div class="form-group">
+                    <label for="packing_list_pdf">PDF del Packing List *</label>
+                    <input type="file" id="packing_list_pdf" name="pdf" accept=".pdf" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="packing_list_direccion">Dirección de entrega *</label>
+                    <textarea id="packing_list_direccion" name="direccion" rows="3" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="packing_list_bultos">Número de bultos *</label>
+                    <input type="number" id="packing_list_bultos" name="bultos" min="1" required>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalPackingList()">Cancelar</button>
+                    <button type="submit" class="btn">Crear Packing List</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para configurar bultos -->
+    <div id="modal-configurar-bultos" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Configurar Bultos</h2>
+                <span class="close" onclick="cerrarModalConfigurarBultos()">&times;</span>
+            </div>
+            
+            <div id="configurar-bultos-contenido">
+                <!-- Se llenará dinámicamente -->
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalConfigurarBultos()">Cancelar</button>
+                <button type="button" class="btn" onclick="guardarConfiguracionBultos()">Guardar Configuración</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para lanzar TAR -->
+    <div id="modal-lanzar-tar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Lanzar TAR</h2>
+                <span class="close" onclick="cerrarModalLanzarTar()">&times;</span>
+            </div>
+            
+            <form id="form-lanzar-tar">
+                <input type="hidden" id="lanzar-tar-pedido-id">
+                
+                <div class="form-group">
+                    <label for="lanzar_tar_numero">Número TAR *</label>
+                    <input type="text" id="lanzar_tar_numero" name="numero" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lanzar_tar_email">Email *</label>
+                    <input type="email" id="lanzar_tar_email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lanzar_tar_url">URL *</label>
+                    <input type="url" id="lanzar_tar_url" name="url" required>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalLanzarTar()">Cancelar</button>
+                    <button type="submit" class="btn">Lanzar TAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para enviar etiquetas -->
+    <div id="modal-enviar-etiquetas" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Enviar Etiquetas</h2>
+                <span class="close" onclick="cerrarModalEnviarEtiquetas()">&times;</span>
+            </div>
+            
+            <form id="form-enviar-etiquetas">
+                <input type="hidden" id="enviar-etiquetas-pedido-id">
+                
+                <div class="form-group">
+                    <label for="enviar_etiquetas_pdf">PDF de las etiquetas *</label>
+                    <input type="file" id="enviar_etiquetas_pdf" name="pdf" accept=".pdf" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="enviar_etiquetas_tracking">Número de tracking *</label>
+                    <input type="text" id="enviar_etiquetas_tracking" name="tracking" required>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEnviarEtiquetas()">Cancelar</button>
+                    <button type="submit" class="btn">Enviar Etiquetas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalles completos -->
+    <div id="modal-detalle-completo" class="modal">
+        <div class="modal-content" style="max-width: 900px; max-height: 90vh;">
+            <div class="modal-header">
+                <h2 id="detalle-titulo">Detalles del Pedido</h2>
+                <span class="close" onclick="cerrarModalDetalle()">&times;</span>
+            </div>
+            
+            <div id="detalle-contenido" style="max-height: 70vh; overflow-y: auto;">
+                <!-- Se llenará dinámicamente -->
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalDetalle()">Cerrar</button>
+            </div>
         </div>
     </div>
 
@@ -478,16 +710,30 @@
         let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
         let nextId = parseInt(localStorage.getItem('nextId')) || 1;
 
-        // Estados del workflow
-        const ESTADOS = ['oferta_recibida', 'eproc_borrador', 'eproc_enviado', 'bulto_recibido', 'paquete_creado', 'tar_creado', 'etiqueta_creada'];
+        // Estados del workflow (10 estados según diagrama)
+        const ESTADOS = [
+            'oferta_recibida', 
+            'eproc_lanzado', 
+            'eproc_firmado', 
+            'packing_list_creado', 
+            'bultos_configurados', 
+            'tar_lanzado', 
+            'etiquetas_enviadas', 
+            'recibido_planta', 
+            'sin_incidencias', 
+            'completado'
+        ];
         const NOMBRES_ESTADOS = {
             'oferta_recibida': 'Oferta',
-            'eproc_borrador': 'Eproc',
-            'eproc_enviado': 'Enviado',
-            'bulto_recibido': 'Bulto',
-            'paquete_creado': 'Paquete',
-            'tar_creado': 'TAR',
-            'etiqueta_creada': 'Etiqueta'
+            'eproc_lanzado': 'Lanzado',
+            'eproc_firmado': 'Firmado',
+            'packing_list_creado': 'Packing',
+            'bultos_configurados': 'Bultos',
+            'tar_lanzado': 'TAR',
+            'etiquetas_enviadas': 'Etiquetas',
+            'recibido_planta': 'Recibido',
+            'sin_incidencias': 'OK',
+            'completado': 'Completado'
         };
 
         // Inicializar la aplicación
@@ -532,6 +778,12 @@
                             <button class="btn-icon" onclick="toggleDetalles(${pedido.id})" title="Ver más detalles">
                                 <span id="toggle-icon-${pedido.id}">▼</span>
                             </button>
+                            <button class="btn-icon" onclick="mostrarDetalleCompleto(${pedido.id})" title="Ver detalle completo" style="background: #dbeafe; border-color: #93c5fd; color: #1d4ed8;">
+                                👁️
+                            </button>
+                            <button class="btn-icon" onclick="eliminarPedido(${pedido.id})" title="Eliminar pedido" style="background: #fee2e2; border-color: #fecaca; color: #dc2626;">
+                                🗑️
+                            </button>
                         </div>
                     </div>
 
@@ -557,9 +809,23 @@
                         ` : ''}
                         
                         ${pedido.estado === 'oferta_recibida' ? `
-                            <button class="btn btn-sm" onclick="abrirModalEproc(${pedido.id})">Crear Eproc</button>
-                        ` : pedido.estado !== 'etiqueta_creada' ? `
-                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Siguiente →</button>
+                            <button class="btn btn-sm" onclick="lanzarEproc(${pedido.id})">Lanzar Eproc</button>
+                        ` : pedido.estado === 'eproc_lanzado' ? `
+                            <button class="btn btn-sm" onclick="firmarEproc(${pedido.id})">Firmar Eproc</button>
+                        ` : pedido.estado === 'eproc_firmado' ? `
+                            <button class="btn btn-sm" onclick="crearPackingList(${pedido.id})">Crear Packing List</button>
+                        ` : pedido.estado === 'packing_list_creado' ? `
+                            <button class="btn btn-sm" onclick="configurarBultos(${pedido.id})">Configurar Bultos</button>
+                        ` : pedido.estado === 'bultos_configurados' ? `
+                            <button class="btn btn-sm" onclick="lanzarTar(${pedido.id})">Lanzar TAR</button>
+                        ` : pedido.estado === 'tar_lanzado' ? `
+                            <button class="btn btn-sm" onclick="enviarEtiquetas(${pedido.id})">Enviar Etiquetas</button>
+                        ` : pedido.estado === 'etiquetas_enviadas' ? `
+                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Marcar Recibido</button>
+                        ` : pedido.estado === 'recibido_planta' ? `
+                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Sin Incidencias</button>
+                        ` : pedido.estado === 'sin_incidencias' ? `
+                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Completar</button>
                         ` : `
                             <span class="btn btn-success btn-sm" style="cursor: default;">✓ Completado</span>
                         `}
@@ -584,14 +850,73 @@
 
                         ${pedido.eproc ? `
                             <div class="info-section">
-                                <h5>Eproc</h5>
+                                <h5>Eproc Lanzado</h5>
                                 <div class="info-grid">
                                     <div>
                                         <p><strong>Número:</strong> ${pedido.eproc.numero}</p>
                                         ${pedido.eproc.oi ? `<p><strong>OI:</strong> ${pedido.eproc.oi}</p>` : ''}
                                     </div>
                                     <div>
-                                        <p><strong>Creado:</strong> ${pedido.eproc.fecha_creacion}</p>
+                                        <p><strong>Fecha:</strong> ${pedido.eproc.fecha}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${pedido.eproc_firmado ? `
+                            <div class="info-section">
+                                <h5>Eproc Firmado</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>PO:</strong> ${pedido.eproc_firmado.po}</p>
+                                        <p><strong>Fecha:</strong> ${pedido.eproc_firmado.fecha}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${pedido.packing_list ? `
+                            <div class="info-section">
+                                <h5>Packing List</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>Dirección:</strong> ${pedido.packing_list.direccion}</p>
+                                        <p><strong>Bultos:</strong> ${pedido.packing_list.bultos}</p>
+                                    </div>
+                                </div>
+                                ${pedido.configuracion_bultos ? `
+                                    <div style="margin-top: 15px;">
+                                        <h6 style="color: #374151; font-weight: 600; margin-bottom: 10px;">Configuración de Bultos:</h6>
+                                        ${Object.entries(pedido.configuracion_bultos).map(([bulto, piezas]) => `
+                                            <div style="margin-bottom: 8px; padding: 8px; background: #f9fafb; border-radius: 4px;">
+                                                <strong>${bulto.replace('_', ' ').charAt(0).toUpperCase() + bulto.replace('_', ' ').slice(1)}:</strong>
+                                                ${piezas.length > 0 ? piezas.map(p => `${p.referencia} (${p.cantidad})`).join(', ') : 'Sin asignar'}
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+
+                        ${pedido.tar ? `
+                            <div class="info-section">
+                                <h5>TAR</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>Número:</strong> ${pedido.tar.numero}</p>
+                                        <p><strong>Email:</strong> ${pedido.tar.email}</p>
+                                        <p><strong>URL:</strong> ${pedido.tar.url}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${pedido.etiquetas ? `
+                            <div class="info-section">
+                                <h5>Etiquetas Enviadas</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>Tracking:</strong> ${pedido.etiquetas.tracking}</p>
                                     </div>
                                 </div>
                             </div>
@@ -600,8 +925,14 @@
                         <div class="info-section">
                             <h5>Documentos</h5>
                             <div class="pdf-tags">
-                                <span class="pdf-tag">📄 Oferta_${pedido.numero_oferta}.pdf</span>
-                                ${pedido.eproc ? `<span class="pdf-tag">📄 Eproc_${pedido.eproc.numero}.pdf</span>` : ''}
+                                <span class="pdf-tag clickable" onclick="abrirPDF('Oferta_${pedido.numero_oferta}.pdf', '${getFileData(pedido, 'oferta')}')" 
+                                      title="Click para abrir PDF">📄 Oferta_${pedido.numero_oferta}.pdf</span>
+                                ${pedido.eproc_firmado ? `<span class="pdf-tag clickable" onclick="abrirPDF('PO_${pedido.eproc_firmado.po}.pdf', '${getFileData(pedido, 'po')}')" 
+                                      title="Click para abrir PDF">📄 PO_${pedido.eproc_firmado.po}.pdf</span>` : ''}
+                                ${pedido.packing_list ? `<span class="pdf-tag clickable" onclick="abrirPDF('PackingList_${pedido.id}.pdf', '${getFileData(pedido, 'packing')}')" 
+                                      title="Click para abrir PDF">📄 PackingList_${pedido.id}.pdf</span>` : ''}
+                                ${pedido.etiquetas ? `<span class="pdf-tag clickable" onclick="abrirPDF('Etiquetas_${pedido.etiquetas.tracking}.pdf', '${getFileData(pedido, 'etiquetas')}')" 
+                                      title="Click para abrir PDF">📄 Etiquetas_${pedido.etiquetas.tracking}.pdf</span>` : ''}
                             </div>
                         </div>
                     </div>
@@ -621,16 +952,156 @@
             document.getElementById('modal-crear-pedido').style.display = 'none';
         }
 
-        function abrirModalEproc(pedidoId) {
-            document.getElementById('modal-crear-eproc').style.display = 'block';
-            document.getElementById('eproc-pedido-id').value = pedidoId;
-            
-            const año = new Date().getFullYear();
-            document.getElementById('eproc_number').value = `EP${año}-${pedidoId.toString().padStart(3, '0')}`;
+        // Funciones para los nuevos modales
+        function cerrarModalLanzarEproc() {
+            document.getElementById('modal-lanzar-eproc').style.display = 'none';
         }
 
-        function cerrarModalEproc() {
-            document.getElementById('modal-crear-eproc').style.display = 'none';
+        function cerrarModalFirmarEproc() {
+            document.getElementById('modal-firmar-eproc').style.display = 'none';
+        }
+
+        function cerrarModalPackingList() {
+            document.getElementById('modal-packing-list').style.display = 'none';
+        }
+
+        function cerrarModalConfigurarBultos() {
+            document.getElementById('modal-configurar-bultos').style.display = 'none';
+        }
+
+        function cerrarModalLanzarTar() {
+            document.getElementById('modal-lanzar-tar').style.display = 'none';
+        }
+
+        function cerrarModalEnviarEtiquetas() {
+            document.getElementById('modal-enviar-etiquetas').style.display = 'none';
+        }
+
+        function cerrarModalDetalle() {
+            document.getElementById('modal-detalle-completo').style.display = 'none';
+        }
+
+        // Función para mostrar detalle completo en modal
+        function mostrarDetalleCompleto(pedidoId) {
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            if (!pedido) return;
+
+            document.getElementById('detalle-titulo').textContent = `Detalles del Pedido #${pedido.id}`;
+            
+            const contenido = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div class="info-section">
+                        <h3 style="color: #374151; margin-bottom: 15px; font-size: 18px;">📋 Información General</h3>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 8px;">
+                            <p><strong>ID:</strong> ${pedido.id}</p>
+                            <p><strong>Número de Oferta:</strong> ${pedido.numero_oferta}</p>
+                            <p><strong>Proveedor:</strong> ${pedido.proveedor}</p>
+                            <p><strong>Email Proveedor:</strong> ${pedido.email_proveedor || 'N/A'}</p>
+                            <p><strong>Fecha Creación:</strong> ${pedido.fecha_creacion}</p>
+                            <p><strong>Estado Actual:</strong> <span style="color: #10b981; font-weight: bold;">${NOMBRES_ESTADOS[pedido.estado] || pedido.estado}</span></p>
+                            <p><strong>Total:</strong> <span style="color: #059669; font-weight: bold;">€${pedido.total.toFixed(2)}</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h3 style="color: #374151; margin-bottom: 15px; font-size: 18px;">📦 Piezas del Pedido</h3>
+                        <div style="background: #f9fafb; padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
+                            ${pedido.piezas.map(pieza => `
+                                <div style="border-bottom: 1px solid #e5e7eb; padding: 8px 0;">
+                                    <p style="margin: 2px 0;"><strong>${pieza.referencia}</strong> - ${pieza.descripcion}</p>
+                                    <p style="margin: 2px 0; font-size: 12px; color: #6b7280;">Proyecto: ${pieza.proyecto} | Cantidad: ${pieza.cantidad} | Precio: €${pieza.precio_unitario.toFixed(2)}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                ${pedido.eproc ? `
+                    <div class="info-section" style="margin-bottom: 20px;">
+                        <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">🚀 EPROC Lanzado</h3>
+                        <div style="background: #dbeafe; padding: 12px; border-radius: 6px;">
+                            <p><strong>Número:</strong> ${pedido.eproc.numero}</p>
+                            <p><strong>OI:</strong> ${pedido.eproc.oi || 'N/A'}</p>
+                            <p><strong>Fecha:</strong> ${pedido.eproc.fecha || 'N/A'}</p>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${pedido.eproc_firmado ? `
+                    <div class="info-section" style="margin-bottom: 20px;">
+                        <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">✍️ EPROC Firmado</h3>
+                        <div style="background: #dcfce7; padding: 12px; border-radius: 6px;">
+                            <p><strong>Número PO:</strong> ${pedido.eproc_firmado.po}</p>
+                            <p><strong>Fecha:</strong> ${pedido.eproc_firmado.fecha}</p>
+                            <p><strong>PDF:</strong> ${pedido.eproc_firmado.pdf || 'N/A'}</p>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${pedido.packing_list ? `
+                    <div class="info-section" style="margin-bottom: 20px;">
+                        <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">📦 Packing List</h3>
+                        <div style="background: #fef3c7; padding: 12px; border-radius: 6px;">
+                            <p><strong>Dirección:</strong> ${pedido.packing_list.direccion}</p>
+                            <p><strong>Número de Bultos:</strong> ${pedido.packing_list.bultos}</p>
+                            <p><strong>PDF:</strong> ${pedido.packing_list.pdf || 'N/A'}</p>
+                            ${pedido.configuracion_bultos ? `
+                                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+                                    <p style="font-weight: 600; margin-bottom: 10px;">Configuración de Bultos:</p>
+                                    ${Object.entries(pedido.configuracion_bultos).map(([bulto, piezas]) => `
+                                        <div style="margin-bottom: 10px; padding: 10px; background: #fffbeb; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                                            <p style="font-weight: 600; color: #92400e;">${bulto.replace('_', ' ').charAt(0).toUpperCase() + bulto.replace('_', ' ').slice(1)}:</p>
+                                            <p style="margin-top: 5px; color: #451a03;">
+                                                ${piezas.length > 0 ? piezas.map(p => `${p.referencia} - ${p.descripcion} (Cant: ${p.cantidad})`).join('<br>') : 'Sin piezas asignadas'}
+                                            </p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${pedido.tar ? `
+                    <div class="info-section" style="margin-bottom: 20px;">
+                        <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">🚚 TAR Lanzado</h3>
+                        <div style="background: #fce7f3; padding: 12px; border-radius: 6px;">
+                            <p><strong>Número TAR:</strong> ${pedido.tar.numero}</p>
+                            <p><strong>Email:</strong> ${pedido.tar.email}</p>
+                            <p><strong>URL:</strong> ${pedido.tar.url || 'N/A'}</p>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${pedido.etiquetas ? `
+                    <div class="info-section" style="margin-bottom: 20px;">
+                        <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">🏷️ Etiquetas Enviadas</h3>
+                        <div style="background: #e0e7ff; padding: 12px; border-radius: 6px;">
+                            <p><strong>Tracking:</strong> ${pedido.etiquetas.tracking}</p>
+                            <p><strong>PDF:</strong> ${pedido.etiquetas.pdf || 'N/A'}</p>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="info-section">
+                    <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">📄 Documentos</h3>
+                    <div style="background: #f3f4f6; padding: 15px; border-radius: 6px;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                            <span class="pdf-tag clickable" onclick="abrirPDF('Oferta_${pedido.numero_oferta}.pdf', '${getFileData(pedido, 'oferta')}')" 
+                                  title="Click para abrir PDF">📄 Oferta_${pedido.numero_oferta}.pdf</span>
+                            ${pedido.eproc_firmado ? `<span class="pdf-tag clickable" onclick="abrirPDF('PO_${pedido.eproc_firmado.po}.pdf', '${getFileData(pedido, 'po')}')" 
+                                  title="Click para abrir PDF">📄 PO_${pedido.eproc_firmado.po}.pdf</span>` : ''}
+                            ${pedido.packing_list ? `<span class="pdf-tag clickable" onclick="abrirPDF('PackingList_${pedido.id}.pdf', '${getFileData(pedido, 'packing')}')" 
+                                  title="Click para abrir PDF">📄 PackingList_${pedido.id}.pdf</span>` : ''}
+                            ${pedido.etiquetas ? `<span class="pdf-tag clickable" onclick="abrirPDF('Etiquetas_${pedido.etiquetas.tracking}.pdf', '${getFileData(pedido, 'etiquetas')}')" 
+                                  title="Click para abrir PDF">📄 Etiquetas_${pedido.etiquetas.tracking}.pdf</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('detalle-contenido').innerHTML = contenido;
+            document.getElementById('modal-detalle-completo').style.display = 'block';
         }
 
         // Funciones de piezas
@@ -646,7 +1117,7 @@
                 <input type="text" name="proyecto_${pieceCount}" placeholder="Proyecto A">
                 <input type="number" name="cantidad_${pieceCount}" value="1" min="1" required onchange="calcularTotal()">
                 <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" required onchange="calcularTotal()">
-                <button type="button" class="btn btn-secondary btn-sm" onclick="eliminarPieza(this)">×</button>
+                <button type="button" class="btn btn-secondary" onclick="eliminarPieza(this)" style="padding: 10px 15px; font-size: 14px; font-weight: bold; width: 100%;">×</button>
             `;
             
             grid.appendChild(pieceRow);
@@ -692,6 +1163,173 @@
             }
         }
 
+        // Funciones específicas para cada estado
+        function lanzarEproc(pedidoId) {
+            document.getElementById('modal-lanzar-eproc').style.display = 'block';
+            document.getElementById('lanzar-eproc-pedido-id').value = pedidoId;
+            
+            // Valores por defecto
+            const año = new Date().getFullYear();
+            document.getElementById('lanzar_eproc_numero').value = `EP${año}-${pedidoId.toString().padStart(3, '0')}`;
+            document.getElementById('lanzar_eproc_fecha').value = new Date().toISOString().split('T')[0];
+        }
+
+        function firmarEproc(pedidoId) {
+            document.getElementById('modal-firmar-eproc').style.display = 'block';
+            document.getElementById('firmar-eproc-pedido-id').value = pedidoId;
+            document.getElementById('firmar_eproc_fecha').value = new Date().toISOString().split('T')[0];
+        }
+
+        function crearPackingList(pedidoId) {
+            document.getElementById('modal-packing-list').style.display = 'block';
+            document.getElementById('packing-list-pedido-id').value = pedidoId;
+        }
+
+        function configurarBultos(pedidoId) {
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            if (!pedido || !pedido.packing_list) return;
+
+            document.getElementById('modal-configurar-bultos').style.display = 'block';
+            
+            let contenido = '<h3 style="margin-bottom: 20px;">Asignar piezas a bultos</h3>';
+            contenido += '<p style="color: #6b7280; margin-bottom: 20px;">Seleccione las piezas que van en cada bulto (mantenga Ctrl para seleccionar múltiples)</p>';
+            
+            for (let i = 1; i <= pedido.packing_list.bultos; i++) {
+                contenido += `
+                    <div class="form-group" style="margin-bottom: 25px;">
+                        <label style="font-weight: 600; font-size: 16px; color: #374151;">Bulto ${i}:</label>
+                        <select id="bulto-${i}-piezas" multiple style="
+                            height: 120px; 
+                            width: 100%; 
+                            padding: 10px; 
+                            border: 2px solid #d1d5db; 
+                            border-radius: 8px; 
+                            font-size: 14px;
+                            background: white;
+                        ">
+                            ${pedido.piezas.map((pieza, index) => 
+                                `<option value="${index}" style="padding: 5px;">${pieza.referencia} - ${pieza.descripcion} (Cant: ${pieza.cantidad})</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                `;
+            }
+            document.getElementById('configurar-bultos-contenido').innerHTML = contenido;
+            
+            // Guardar referencia del pedido
+            document.getElementById('configurar-bultos-contenido').dataset.pedidoId = pedidoId;
+        }
+
+        function guardarConfiguracionBultos() {
+            const pedidoId = parseInt(document.getElementById('configurar-bultos-contenido').dataset.pedidoId);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            
+            if (pedido) {
+                // Recopilar la configuración de bultos
+                const configuracionBultos = {};
+                
+                for (let i = 1; i <= pedido.packing_list.bultos; i++) {
+                    const select = document.getElementById(`bulto-${i}-piezas`);
+                    const piezasSeleccionadas = Array.from(select.selectedOptions).map(option => {
+                        const index = parseInt(option.value);
+                        return {
+                            index: index,
+                            referencia: pedido.piezas[index].referencia,
+                            descripcion: pedido.piezas[index].descripcion,
+                            cantidad: pedido.piezas[index].cantidad
+                        };
+                    });
+                    
+                    configuracionBultos[`bulto_${i}`] = piezasSeleccionadas;
+                }
+                
+                // Guardar la configuración en el pedido
+                pedido.configuracion_bultos = configuracionBultos;
+                pedido.estado = 'bultos_configurados';
+                
+                guardarDatos();
+                mostrarPedidos();
+                cerrarModalConfigurarBultos();
+            }
+        }
+
+        function lanzarTar(pedidoId) {
+            document.getElementById('modal-lanzar-tar').style.display = 'block';
+            document.getElementById('lanzar-tar-pedido-id').value = pedidoId;
+            document.getElementById('lanzar_tar_numero').value = `TAR-${pedidoId}`;
+        }
+
+        function enviarEtiquetas(pedidoId) {
+            document.getElementById('modal-enviar-etiquetas').style.display = 'block';
+            document.getElementById('enviar-etiquetas-pedido-id').value = pedidoId;
+        }
+
+        function eliminarPedido(pedidoId) {
+            if (confirm('¿Está seguro de que desea eliminar este pedido? Esta acción no se puede deshacer.')) {
+                pedidos = pedidos.filter(p => p.id !== pedidoId);
+                guardarDatos();
+                mostrarPedidos();
+            }
+        }
+
+        // Funciones para manejo de PDFs
+        function getFileData(pedido, tipo) {
+            // Devuelve la URL del archivo almacenado o un placeholder
+            switch(tipo) {
+                case 'oferta':
+                    return pedido.oferta_pdf || '';
+                case 'eproc':
+                    return ''; // EPROC lanzado no tiene PDF, solo el firmado
+                case 'po':
+                    return (pedido.eproc_firmado && pedido.eproc_firmado.pdf_url) || '';
+                case 'packing':
+                    return (pedido.packing_list && pedido.packing_list.pdf_url) || '';
+                case 'etiquetas':
+                    return (pedido.etiquetas && pedido.etiquetas.pdf_url) || '';
+                default:
+                    return '';
+            }
+        }
+
+        function abrirPDF(nombreArchivo, fileData) {
+            if (fileData && fileData.startsWith('data:')) {
+                // Si es un archivo base64, crear un blob y abrirlo
+                const byteCharacters = atob(fileData.split(',')[1]);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], {type: 'application/pdf'});
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+                
+                // Limpiar la URL después de un tiempo
+                setTimeout(() => URL.revokeObjectURL(url), 10000);
+            } else if (fileData) {
+                // Si es una URL, abrirla directamente
+                window.open(fileData, '_blank');
+            } else {
+                // Si no hay archivo, mostrar mensaje
+                alert('Archivo PDF no disponible. Asegúrese de subir el archivo correspondiente.');
+            }
+        }
+
+        function procesarArchivoPDF(file) {
+            return new Promise((resolve, reject) => {
+                if (file && file.type === 'application/pdf') {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        resolve(e.target.result); // Devuelve base64
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                } else {
+                    reject(new Error('Archivo no válido'));
+                }
+            });
+        }
+
         // Estados
         function avanzarEstado(pedidoId) {
             if (confirm('¿Está seguro de que desea avanzar al siguiente estado?')) {
@@ -700,18 +1338,6 @@
                 
                 if (estadoIndex < ESTADOS.length - 1) {
                     pedido.estado = ESTADOS[estadoIndex + 1];
-                    
-                    // Simular creación de datos según el estado
-                    if (pedido.estado === 'bulto_recibido') {
-                        pedido.bulto = { fecha_recepcion: new Date().toLocaleDateString() };
-                    } else if (pedido.estado === 'paquete_creado') {
-                        pedido.paquete = { fecha_creacion: new Date().toLocaleDateString() };
-                    } else if (pedido.estado === 'tar_creado') {
-                        pedido.tar = { numero: `TAR-${pedidoId}`, fecha_creacion: new Date().toLocaleDateString() };
-                    } else if (pedido.estado === 'etiqueta_creada') {
-                        pedido.etiqueta = { codigo: `ETQ-${pedidoId}`, fecha_creacion: new Date().toLocaleDateString() };
-                    }
-                    
                     guardarDatos();
                     mostrarPedidos();
                 }
@@ -732,7 +1358,7 @@
         }
 
         // Form handlers
-        document.getElementById('form-crear-pedido').addEventListener('submit', function(e) {
+        document.getElementById('form-crear-pedido').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const formData = new FormData(e.target);
@@ -757,6 +1383,19 @@
                 total += cantidad * precio;
             }
             
+            // Procesar el PDF de la oferta
+            const file = formData.get('oferta_pdf');
+            let pdfUrl = '';
+            
+            if (file && file.size > 0) {
+                try {
+                    pdfUrl = await procesarArchivoPDF(file);
+                } catch (error) {
+                    alert('Error al procesar el archivo PDF');
+                    return;
+                }
+            }
+            
             const nuevoPedido = {
                 id: nextId++,
                 numero_oferta: formData.get('numero_oferta'),
@@ -765,7 +1404,8 @@
                 fecha_creacion: new Date().toLocaleDateString(),
                 estado: 'oferta_recibida',
                 piezas: piezas,
-                total: total
+                total: total,
+                oferta_pdf: pdfUrl
             };
             
             pedidos.push(nuevoPedido);
@@ -774,38 +1414,169 @@
             cerrarModal();
         });
 
-        document.getElementById('form-crear-eproc').addEventListener('submit', function(e) {
+        // Nuevos form handlers
+        document.getElementById('form-lanzar-eproc').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(e.target);
-            const pedidoId = parseInt(formData.get('eproc-pedido-id') || document.getElementById('eproc-pedido-id').value);
+            const pedidoId = parseInt(document.getElementById('lanzar-eproc-pedido-id').value);
             const pedido = pedidos.find(p => p.id === pedidoId);
             
             if (pedido) {
                 pedido.eproc = {
-                    numero: formData.get('eproc_number'),
+                    numero: formData.get('numero'),
                     oi: formData.get('oi'),
-                    fecha_creacion: new Date().toLocaleDateString()
+                    fecha: formData.get('fecha')
                 };
-                pedido.estado = 'eproc_borrador';
+                pedido.estado = 'eproc_lanzado';
                 
                 guardarDatos();
                 mostrarPedidos();
-                cerrarModalEproc();
+                cerrarModalLanzarEproc();
+            }
+        });
+
+        document.getElementById('form-firmar-eproc').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const pedidoId = parseInt(document.getElementById('firmar-eproc-pedido-id').value);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            
+            if (pedido) {
+                const file = formData.get('pdf');
+                let pdfUrl = '';
+                
+                if (file && file.size > 0) {
+                    try {
+                        pdfUrl = await procesarArchivoPDF(file);
+                    } catch (error) {
+                        alert('Error al procesar el archivo PDF');
+                        return;
+                    }
+                }
+                
+                pedido.eproc_firmado = {
+                    pdf: file ? file.name : 'PO_signed.pdf',
+                    pdf_url: pdfUrl,
+                    po: formData.get('po'),
+                    fecha: formData.get('fecha')
+                };
+                pedido.estado = 'eproc_firmado';
+                
+                guardarDatos();
+                mostrarPedidos();
+                cerrarModalFirmarEproc();
+            }
+        });
+
+        document.getElementById('form-packing-list').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const pedidoId = parseInt(document.getElementById('packing-list-pedido-id').value);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            
+            if (pedido) {
+                const file = formData.get('pdf');
+                let pdfUrl = '';
+                
+                if (file && file.size > 0) {
+                    try {
+                        pdfUrl = await procesarArchivoPDF(file);
+                    } catch (error) {
+                        alert('Error al procesar el archivo PDF');
+                        return;
+                    }
+                }
+                
+                pedido.packing_list = {
+                    pdf: file ? file.name : 'packinglist.pdf',
+                    pdf_url: pdfUrl,
+                    direccion: formData.get('direccion'),
+                    bultos: parseInt(formData.get('bultos'))
+                };
+                pedido.estado = 'packing_list_creado';
+                
+                guardarDatos();
+                mostrarPedidos();
+                cerrarModalPackingList();
+            }
+        });
+
+        document.getElementById('form-lanzar-tar').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const pedidoId = parseInt(document.getElementById('lanzar-tar-pedido-id').value);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            
+            if (pedido) {
+                pedido.tar = {
+                    numero: formData.get('numero'),
+                    email: formData.get('email'),
+                    url: formData.get('url')
+                };
+                pedido.estado = 'tar_lanzado';
+                
+                guardarDatos();
+                mostrarPedidos();
+                cerrarModalLanzarTar();
+            }
+        });
+
+        document.getElementById('form-enviar-etiquetas').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const pedidoId = parseInt(document.getElementById('enviar-etiquetas-pedido-id').value);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            
+            if (pedido) {
+                const file = formData.get('pdf');
+                let pdfUrl = '';
+                
+                if (file && file.size > 0) {
+                    try {
+                        pdfUrl = await procesarArchivoPDF(file);
+                    } catch (error) {
+                        alert('Error al procesar el archivo PDF');
+                        return;
+                    }
+                }
+                
+                pedido.etiquetas = {
+                    pdf: file ? file.name : 'etiquetas.pdf',
+                    pdf_url: pdfUrl,
+                    tracking: formData.get('tracking')
+                };
+                pedido.estado = 'etiquetas_enviadas';
+                
+                guardarDatos();
+                mostrarPedidos();
+                cerrarModalEnviarEtiquetas();
             }
         });
 
         // Cerrar modals al hacer click fuera
         window.onclick = function(event) {
-            const modalCrear = document.getElementById('modal-crear-pedido');
-            const modalEproc = document.getElementById('modal-crear-eproc');
+            const modals = [
+                'modal-crear-pedido',
+                'modal-lanzar-eproc', 
+                'modal-firmar-eproc',
+                'modal-packing-list',
+                'modal-configurar-bultos',
+                'modal-lanzar-tar',
+                'modal-enviar-etiquetas',
+                'modal-detalle-completo'
+            ];
             
-            if (event.target === modalCrear) {
-                cerrarModal();
-            }
-            if (event.target === modalEproc) {
-                cerrarModalEproc();
-            }
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>
