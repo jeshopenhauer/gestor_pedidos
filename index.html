@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Pedidos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #374151;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-success {
+            background: #10b981;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .pedido-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: white;
+        }
+
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .pedido-info h3 {
+            color: #1f2937;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+
+        .pedido-info p {
+            color: #6b7280;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+
+        .pedido-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 5px 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-icon:hover {
+            background: #e5e7eb;
+        }
+
+        .timeline {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            right: 20px;
+            height: 2px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .timeline-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+
+        .timeline-circle.active {
+            background: #10b981;
+            color: white;
+        }
+
+        .timeline-label {
+            margin-top: 8px;
+            font-size: 12px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        .timeline-label.active {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .detalles-panel {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .detalles-panel.show {
+            display: block;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h5 {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .pdf-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .pdf-tag {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid #d1d5db;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .empty-state .icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .pieces-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .piece-row {
+            display: grid;
+            grid-template-columns: 2fr 3fr 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+
+        .piece-row input {
+            padding: 6px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .total-row {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Gestor de pedidos</h1>
+            <button class="btn" onclick="abrirModalCrearPedido()">+ Crear pedido</button>
+        </div>
+
+        <!-- Panel de pedidos -->
+        <div class="card">
+            <h2 style="color: #1f2937; margin-bottom: 20px; font-size: 1.5rem;">Panel de pedidos</h2>
+            
+            <div id="pedidos-container">
+                <!-- Aquí se mostrarán los pedidos dinámicamente -->
+            </div>
+
+            <!-- Estado vacío -->
+            <div id="empty-state" class="empty-state">
+                <div class="icon">📋</div>
+                <p style="font-size: 18px; margin-bottom: 15px;">No hay pedidos registrados</p>
+                <p style="margin-bottom: 20px;">Comience creando su primer pedido</p>
+                <button class="btn" onclick="abrirModalCrearPedido()">+ Crear primer pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear pedido -->
+    <div id="modal-crear-pedido" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear Nuevo Pedido</h2>
+                <span class="close" onclick="cerrarModal()">&times;</span>
+            </div>
+            
+            <form id="form-crear-pedido">
+                <div class="form-group">
+                    <label for="numero_oferta">Número de Oferta *</label>
+                    <input type="text" id="numero_oferta" name="numero_oferta" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="proveedor">Proveedor *</label>
+                    <input type="text" id="proveedor" name="proveedor" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email_proveedor">Email Proveedor</label>
+                    <input type="email" id="email_proveedor" name="email_proveedor">
+                </div>
+
+                <div class="pieces-container">
+                    <h3 style="margin-bottom: 15px;">Piezas del Pedido</h3>
+                    <div id="pieces-grid">
+                        <div class="piece-row" style="background: #e5e7eb; font-weight: bold;">
+                            <div>Referencia</div>
+                            <div>Descripción</div>
+                            <div>Proyecto</div>
+                            <div>Cantidad</div>
+                            <div>Precio Unit.</div>
+                            <div>Acción</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="agregarPieza()" style="margin-top: 10px;">+ Agregar Pieza</button>
+                    <div class="total-row">
+                        Total: €<span id="total-pedido">0.00</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn">Crear Pedido</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para crear Eproc -->
+    <div id="modal-crear-eproc" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear Eproc</h2>
+                <span class="close" onclick="cerrarModalEproc()">&times;</span>
+            </div>
+            
+            <form id="form-crear-eproc">
+                <input type="hidden" id="eproc-pedido-id">
+                
+                <div class="form-group">
+                    <label for="eproc_number">Número Eproc *</label>
+                    <input type="text" id="eproc_number" name="eproc_number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="oi">Número OI (Orden Interna)</label>
+                    <input type="number" id="oi" name="oi" step="0.01" placeholder="123456.78">
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEproc()">Cancelar</button>
+                    <button type="submit" class="btn">Crear Eproc</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Datos en memoria
+        let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+        let nextId = parseInt(localStorage.getItem('nextId')) || 1;
+
+        // Estados del workflow
+        const ESTADOS = ['oferta_recibida', 'eproc_borrador', 'eproc_enviado', 'bulto_recibido', 'paquete_creado', 'tar_creado', 'etiqueta_creada'];
+        const NOMBRES_ESTADOS = {
+            'oferta_recibida': 'Oferta',
+            'eproc_borrador': 'Eproc',
+            'eproc_enviado': 'Enviado',
+            'bulto_recibido': 'Bulto',
+            'paquete_creado': 'Paquete',
+            'tar_creado': 'TAR',
+            'etiqueta_creada': 'Etiqueta'
+        };
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarPedidos();
+            agregarPieza(); // Agregar una pieza inicial
+        });
+
+        // Guardar datos en localStorage
+        function guardarDatos() {
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            localStorage.setItem('nextId', nextId.toString());
+        }
+
+        // Mostrar pedidos
+        function mostrarPedidos() {
+            const container = document.getElementById('pedidos-container');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (pedidos.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            container.innerHTML = pedidos.map(pedido => crearTarjetaPedido(pedido)).join('');
+        }
+
+        // Crear tarjeta de pedido
+        function crearTarjetaPedido(pedido) {
+            const estadoIndex = ESTADOS.indexOf(pedido.estado);
+            
+            return `
+                <div class="pedido-card" data-pedido-id="${pedido.id}">
+                    <div class="pedido-header">
+                        <div class="pedido-info">
+                            <h3>Pedido #${pedido.id}</h3>
+                            <p>${pedido.fecha_creacion} - ${pedido.proveedor} - €${pedido.total.toFixed(2)}</p>
+                        </div>
+                        <div class="pedido-actions">
+                            <button class="btn-icon" onclick="toggleDetalles(${pedido.id})" title="Ver más detalles">
+                                <span id="toggle-icon-${pedido.id}">▼</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="timeline-line"></div>
+                        ${ESTADOS.map((estado, index) => `
+                            <div class="timeline-step">
+                                <div class="timeline-circle ${index <= estadoIndex ? 'active' : ''}">
+                                    ${index < estadoIndex ? '✓' : index + 1}
+                                </div>
+                                <span class="timeline-label ${index <= estadoIndex ? 'active' : ''}">
+                                    ${NOMBRES_ESTADOS[estado]}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="navigation-buttons">
+                        ${pedido.estado !== 'oferta_recibida' ? `
+                            <button class="btn btn-secondary btn-sm" onclick="retrocederEstado(${pedido.id})">
+                                ← Anterior
+                            </button>
+                        ` : ''}
+                        
+                        ${pedido.estado === 'oferta_recibida' ? `
+                            <button class="btn btn-sm" onclick="abrirModalEproc(${pedido.id})">Crear Eproc</button>
+                        ` : pedido.estado !== 'etiqueta_creada' ? `
+                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Siguiente →</button>
+                        ` : `
+                            <span class="btn btn-success btn-sm" style="cursor: default;">✓ Completado</span>
+                        `}
+                    </div>
+
+                    <div id="detalles-${pedido.id}" class="detalles-panel">
+                        <h4 style="margin-bottom: 15px;">Información del proceso</h4>
+                        
+                        <div class="info-section">
+                            <h5>Oferta Recibida</h5>
+                            <div class="info-grid">
+                                <div>
+                                    <p><strong>Número:</strong> ${pedido.numero_oferta}</p>
+                                    <p><strong>Email:</strong> ${pedido.email_proveedor || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p><strong>Items:</strong> ${pedido.piezas.length}</p>
+                                    <p><strong>Total:</strong> €${pedido.total.toFixed(2)}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${pedido.eproc ? `
+                            <div class="info-section">
+                                <h5>Eproc</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>Número:</strong> ${pedido.eproc.numero}</p>
+                                        ${pedido.eproc.oi ? `<p><strong>OI:</strong> ${pedido.eproc.oi}</p>` : ''}
+                                    </div>
+                                    <div>
+                                        <p><strong>Creado:</strong> ${pedido.eproc.fecha_creacion}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="info-section">
+                            <h5>Documentos</h5>
+                            <div class="pdf-tags">
+                                <span class="pdf-tag">📄 Oferta_${pedido.numero_oferta}.pdf</span>
+                                ${pedido.eproc ? `<span class="pdf-tag">📄 Eproc_${pedido.eproc.numero}.pdf</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Modal functions
+        function abrirModalCrearPedido() {
+            document.getElementById('modal-crear-pedido').style.display = 'block';
+            document.getElementById('form-crear-pedido').reset();
+            limpiarPiezas();
+            agregarPieza();
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal-crear-pedido').style.display = 'none';
+        }
+
+        function abrirModalEproc(pedidoId) {
+            document.getElementById('modal-crear-eproc').style.display = 'block';
+            document.getElementById('eproc-pedido-id').value = pedidoId;
+            
+            const año = new Date().getFullYear();
+            document.getElementById('eproc_number').value = `EP${año}-${pedidoId.toString().padStart(3, '0')}`;
+        }
+
+        function cerrarModalEproc() {
+            document.getElementById('modal-crear-eproc').style.display = 'none';
+        }
+
+        // Funciones de piezas
+        function agregarPieza() {
+            const grid = document.getElementById('pieces-grid');
+            const pieceCount = grid.children.length;
+            
+            const pieceRow = document.createElement('div');
+            pieceRow.className = 'piece-row';
+            pieceRow.innerHTML = `
+                <input type="text" name="referencia_${pieceCount}" placeholder="REF-001" required>
+                <input type="text" name="descripcion_${pieceCount}" placeholder="Descripción de la pieza" required>
+                <input type="text" name="proyecto_${pieceCount}" placeholder="Proyecto A">
+                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" required onchange="calcularTotal()">
+                <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" required onchange="calcularTotal()">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="eliminarPieza(this)">×</button>
+            `;
+            
+            grid.appendChild(pieceRow);
+        }
+
+        function eliminarPieza(button) {
+            button.parentElement.remove();
+            calcularTotal();
+        }
+
+        function limpiarPiezas() {
+            const grid = document.getElementById('pieces-grid');
+            while (grid.children.length > 1) {
+                grid.removeChild(grid.lastChild);
+            }
+        }
+
+        function calcularTotal() {
+            const grid = document.getElementById('pieces-grid');
+            let total = 0;
+            
+            for (let i = 1; i < grid.children.length; i++) {
+                const row = grid.children[i];
+                const cantidad = parseFloat(row.children[3].value) || 0;
+                const precio = parseFloat(row.children[4].value) || 0;
+                total += cantidad * precio;
+            }
+            
+            document.getElementById('total-pedido').textContent = total.toFixed(2);
+        }
+
+        // Toggle detalles
+        function toggleDetalles(pedidoId) {
+            const detalles = document.getElementById(`detalles-${pedidoId}`);
+            const icon = document.getElementById(`toggle-icon-${pedidoId}`);
+            
+            if (detalles.classList.contains('show')) {
+                detalles.classList.remove('show');
+                icon.textContent = '▼';
+            } else {
+                detalles.classList.add('show');
+                icon.textContent = '▲';
+            }
+        }
+
+        // Estados
+        function avanzarEstado(pedidoId) {
+            if (confirm('¿Está seguro de que desea avanzar al siguiente estado?')) {
+                const pedido = pedidos.find(p => p.id === pedidoId);
+                const estadoIndex = ESTADOS.indexOf(pedido.estado);
+                
+                if (estadoIndex < ESTADOS.length - 1) {
+                    pedido.estado = ESTADOS[estadoIndex + 1];
+                    
+                    // Simular creación de datos según el estado
+                    if (pedido.estado === 'bulto_recibido') {
+                        pedido.bulto = { fecha_recepcion: new Date().toLocaleDateString() };
+                    } else if (pedido.estado === 'paquete_creado') {
+                        pedido.paquete = { fecha_creacion: new Date().toLocaleDateString() };
+                    } else if (pedido.estado === 'tar_creado') {
+                        pedido.tar = { numero: `TAR-${pedidoId}`, fecha_creacion: new Date().toLocaleDateString() };
+                    } else if (pedido.estado === 'etiqueta_creada') {
+                        pedido.etiqueta = { codigo: `ETQ-${pedidoId}`, fecha_creacion: new Date().toLocaleDateString() };
+                    }
+                    
+                    guardarDatos();
+                    mostrarPedidos();
+                }
+            }
+        }
+
+        function retrocederEstado(pedidoId) {
+            if (confirm('¿Está seguro de que desea retroceder al estado anterior?')) {
+                const pedido = pedidos.find(p => p.id === pedidoId);
+                const estadoIndex = ESTADOS.indexOf(pedido.estado);
+                
+                if (estadoIndex > 0) {
+                    pedido.estado = ESTADOS[estadoIndex - 1];
+                    guardarDatos();
+                    mostrarPedidos();
+                }
+            }
+        }
+
+        // Form handlers
+        document.getElementById('form-crear-pedido').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const grid = document.getElementById('pieces-grid');
+            const piezas = [];
+            let total = 0;
+            
+            for (let i = 1; i < grid.children.length; i++) {
+                const row = grid.children[i];
+                const cantidad = parseInt(row.children[3].value);
+                const precio = parseFloat(row.children[4].value);
+                
+                piezas.push({
+                    referencia: row.children[0].value,
+                    descripcion: row.children[1].value,
+                    proyecto: row.children[2].value,
+                    cantidad: cantidad,
+                    precio_unitario: precio,
+                    precio_total: cantidad * precio
+                });
+                
+                total += cantidad * precio;
+            }
+            
+            const nuevoPedido = {
+                id: nextId++,
+                numero_oferta: formData.get('numero_oferta'),
+                proveedor: formData.get('proveedor'),
+                email_proveedor: formData.get('email_proveedor'),
+                fecha_creacion: new Date().toLocaleDateString(),
+                estado: 'oferta_recibida',
+                piezas: piezas,
+                total: total
+            };
+            
+            pedidos.push(nuevoPedido);
+            guardarDatos();
+            mostrarPedidos();
+            cerrarModal();
+        });
+
+        document.getElementById('form-crear-eproc').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const pedidoId = parseInt(formData.get('eproc-pedido-id') || document.getElementById('eproc-pedido-id').value);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            
+            if (pedido) {
+                pedido.eproc = {
+                    numero: formData.get('eproc_number'),
+                    oi: formData.get('oi'),
+                    fecha_creacion: new Date().toLocaleDateString()
+                };
+                pedido.estado = 'eproc_borrador';
+                
+                guardarDatos();
+                mostrarPedidos();
+                cerrarModalEproc();
+            }
+        });
+
+        // Cerrar modals al hacer click fuera
+        window.onclick = function(event) {
+            const modalCrear = document.getElementById('modal-crear-pedido');
+            const modalEproc = document.getElementById('modal-crear-eproc');
+            
+            if (event.target === modalCrear) {
+                cerrarModal();
+            }
+            if (event.target === modalEproc) {
+                cerrarModalEproc();
+            }
+        }
+    </script>
+</body>
+</html>

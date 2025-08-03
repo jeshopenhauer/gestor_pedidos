@@ -1,0 +1,75 @@
+[
+  {
+    "numero_oferta": "234",
+    "proveedor": "sesos",
+    "email_proveedor": "jesus@gmail.com",
+    "piezas": [
+      {
+        "referencia": "34334",
+        "descripcion": "tornillo",
+        "proyecto": "sk216",
+        "cantidad": 1,
+        "precio_unitario": 20.0
+      }
+    ],
+    "total": 20.0,
+    "id": 1,
+    "fecha_creacion": "03/08/2025",
+    "estado": "etiqueta_creada",
+    "eproc": {
+      "numero": "EP2025-001",
+      "oi": "55665656",
+      "fecha_creacion": "03/08/2025"
+    },
+    "bulto": {
+      "fecha_recepcion": "03/08/2025"
+    },
+    "paquete": {
+      "fecha_creacion": "03/08/2025"
+    },
+    "tar": {
+      "numero": "TAR-1",
+      "fecha_creacion": "03/08/2025"
+    },
+    "etiqueta": {
+      "codigo": "ETQ-1",
+      "fecha_creacion": "03/08/2025"
+    }
+  },
+  {
+    "numero_oferta": "43544343",
+    "proveedor": "audi",
+    "email_proveedor": "lolo@gmail.com",
+    "piezas": [
+      {
+        "referencia": "8897977",
+        "descripcion": "coche",
+        "proyecto": "vw110",
+        "cantidad": 1,
+        "precio_unitario": 500.0
+      }
+    ],
+    "total": 500.0,
+    "id": 2,
+    "fecha_creacion": "03/08/2025",
+    "estado": "oferta_recibida"
+  },
+  {
+    "numero_oferta": "332443",
+    "proveedor": "32324",
+    "email_proveedor": "324",
+    "piezas": [
+      {
+        "referencia": "33434",
+        "descripcion": "342",
+        "proyecto": "",
+        "cantidad": 1,
+        "precio_unitario": 32324.0
+      }
+    ],
+    "total": 32324.0,
+    "id": 3,
+    "fecha_creacion": "03/08/2025",
+    "estado": "oferta_recibida"
+  }
+]
