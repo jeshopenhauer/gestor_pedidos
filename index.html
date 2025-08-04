@@ -36,7 +36,7 @@
         }
 
         .header h1 {
-            color: #374151;
+            color: #0062ff;
             font-size: 2rem;
             margin: 0;
         }
@@ -458,13 +458,13 @@
             
             <form id="form-crear-pedido">
                 <div class="form-group">
-                    <label for="numero_oferta">Número de Oferta *</label>
-                    <input type="text" id="numero_oferta" name="numero_oferta" required>
+                    <label for="numero_oferta">Número de Oferta</label>
+                    <input type="text" id="numero_oferta" name="numero_oferta">
                 </div>
 
                 <div class="form-group">
-                    <label for="proveedor">Proveedor *</label>
-                    <input type="text" id="proveedor" name="proveedor" required>
+                    <label for="proveedor">Proveedor</label>
+                    <input type="text" id="proveedor" name="proveedor">
                 </div>
 
                 <div class="form-group">
@@ -473,8 +473,13 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="oferta_pdf">PDF de la Oferta *</label>
-                    <input type="file" id="oferta_pdf" name="oferta_pdf" accept=".pdf" required>
+                    <label for="fecha_oferta">Fecha de la Oferta</label>
+                    <input type="date" id="fecha_oferta" name="fecha_oferta">
+                </div>
+
+                <div class="form-group">
+                    <label for="oferta_pdf">PDF de la Oferta</label>
+                    <input type="file" id="oferta_pdf" name="oferta_pdf" accept=".pdf">
                 </div>
 
                 <div class="pieces-container">
@@ -515,18 +520,18 @@
                 <input type="hidden" id="lanzar-eproc-pedido-id">
                 
                 <div class="form-group">
-                    <label for="lanzar_eproc_numero">Número Eproc *</label>
-                    <input type="text" id="lanzar_eproc_numero" name="numero" required>
+                    <label for="lanzar_eproc_numero">Número Eproc</label>
+                    <input type="text" id="lanzar_eproc_numero" name="numero">
                 </div>
 
                 <div class="form-group">
-                    <label for="lanzar_eproc_oi">OI *</label>
-                    <input type="text" id="lanzar_eproc_oi" name="oi" required>
+                    <label for="lanzar_eproc_oi">OI</label>
+                    <input type="text" id="lanzar_eproc_oi" name="oi">
                 </div>
 
                 <div class="form-group">
-                    <label for="lanzar_eproc_fecha">Fecha *</label>
-                    <input type="date" id="lanzar_eproc_fecha" name="fecha" required>
+                    <label for="lanzar_eproc_fecha">Fecha</label>
+                    <input type="date" id="lanzar_eproc_fecha" name="fecha">
                 </div>
 
                 <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
@@ -549,18 +554,18 @@
                 <input type="hidden" id="firmar-eproc-pedido-id">
                 
                 <div class="form-group">
-                    <label for="firmar_eproc_pdf">PDF de la PO *</label>
-                    <input type="file" id="firmar_eproc_pdf" name="pdf" accept=".pdf" required>
+                    <label for="firmar_eproc_pdf">PDF de la PO</label>
+                    <input type="file" id="firmar_eproc_pdf" name="pdf" accept=".pdf">
                 </div>
 
                 <div class="form-group">
-                    <label for="firmar_eproc_po">Número PO *</label>
-                    <input type="text" id="firmar_eproc_po" name="po" required>
+                    <label for="firmar_eproc_po">Número PO</label>
+                    <input type="text" id="firmar_eproc_po" name="po">
                 </div>
 
                 <div class="form-group">
-                    <label for="firmar_eproc_fecha">Fecha *</label>
-                    <input type="date" id="firmar_eproc_fecha" name="fecha" required>
+                    <label for="firmar_eproc_fecha">Fecha</label>
+                    <input type="date" id="firmar_eproc_fecha" name="fecha">
                 </div>
 
                 <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
@@ -573,7 +578,7 @@
 
     <!-- Modal para crear Packing List -->
     <div id="modal-packing-list" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 800px;">
             <div class="modal-header">
                 <h2>Crear Packing List</h2>
                 <span class="close" onclick="cerrarModalPackingList()">&times;</span>
@@ -583,18 +588,129 @@
                 <input type="hidden" id="packing-list-pedido-id">
                 
                 <div class="form-group">
-                    <label for="packing_list_pdf">PDF del Packing List *</label>
-                    <input type="file" id="packing_list_pdf" name="pdf" accept=".pdf" required>
+                    <label for="packing_list_pdf">PDF del Packing List</label>
+                    <input type="file" id="packing_list_pdf" name="pdf" accept=".pdf">
                 </div>
 
                 <div class="form-group">
-                    <label for="packing_list_direccion">Dirección de entrega *</label>
-                    <textarea id="packing_list_direccion" name="direccion" rows="3" required></textarea>
+                    <label for="packing_list_direccion">Dirección de entrega</label>
+                    <textarea id="packing_list_direccion" name="direccion" rows="3"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="packing_list_bultos">Número de bultos *</label>
-                    <input type="number" id="packing_list_bultos" name="bultos" min="1" required>
+                    <label for="packing_list_bultos">Número de bultos</label>
+                    <input type="number" id="packing_list_bultos" name="bultos" min="1" onchange="generarConfiguracionBultos()">
+                </div>
+
+                <div class="form-group">
+                    <label for="packing_list_fecha">Fecha</label>
+                    <input type="date" id="packing_list_fecha" name="fecha">
+                </div>
+
+                <div class="form-group">
+                    <label for="packing_list_peso_total">Peso Total (kg)</label>
+                    <input type="number" id="packing_list_peso_total" name="peso_total" step="0.1" min="0" placeholder="0.0">
+                </div>
+
+                <!-- Configuración de bultos -->
+                <div id="configuracion-bultos-container" style="margin-top: 20px; display: none;">
+                    <h3 style="color: #374151; margin-bottom: 15px;">Configuración de Bultos</h3>
+                    <p style="color: #6b7280; margin-bottom: 15px;">Asigne las piezas a cada bulto:</p>
+                    
+                    <div style="display: flex; gap: 20px; align-items: flex-start;">
+                        <!-- Lista de piezas disponibles -->
+                        <div style="flex: 1; min-width: 250px;">
+                            <h4 style="margin-bottom: 10px; color: #374151;">Piezas Disponibles</h4>
+                            <div id="piezas-disponibles" style="
+                                border: 2px solid #d1d5db; 
+                                border-radius: 8px; 
+                                padding: 15px; 
+                                background: #f9fafb;
+                                min-height: 300px;
+                                max-height: 400px;
+                                overflow-y: auto;
+                            ">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                        
+                        <!-- Botones de control -->
+                        <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 40px;">
+                            <button type="button" onclick="moverPiezaABulto()" style="
+                                padding: 10px 15px;
+                                border: 2px solid #374151;
+                                background: #374151;
+                                color: white;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                font-weight: bold;
+                            ">→</button>
+                            <button type="button" onclick="regresarPiezaADisponibles()" style="
+                                padding: 10px 15px;
+                                border: 2px solid #374151;
+                                background: white;
+                                color: #374151;
+                                border-radius: 6px;
+                                cursor: pointer;
+                                font-weight: bold;
+                            ">←</button>
+                        </div>
+                        
+                        <!-- Bultos -->
+                        <div style="flex: 2; min-width: 300px;">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                                <h4 style="margin: 0; color: #374151;">Bultos</h4>
+                                <select id="bulto-selector" style="
+                                    padding: 5px 10px;
+                                    border: 2px solid #d1d5db;
+                                    border-radius: 6px;
+                                    background: white;
+                                ">
+                                    <!-- Se llenará dinámicamente -->
+                                </select>
+                            </div>
+                            
+                            <!-- Información del bulto seleccionado -->
+                            <div id="info-bulto-container" style="margin-bottom: 15px; display: none;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; background: #f3f4f6; border-radius: 6px; margin-bottom: 10px;">
+                                    <div>
+                                        <label style="font-size: 12px; color: #6b7280; display: block;">Peso (kg)</label>
+                                        <input type="number" id="bulto-peso" step="0.1" min="0" placeholder="0.0" style="
+                                            width: 100%; 
+                                            padding: 5px; 
+                                            border: 1px solid #d1d5db; 
+                                            border-radius: 4px;
+                                            font-size: 14px;
+                                        " onchange="actualizarInfoBulto()">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 12px; color: #6b7280; display: block;">Dimensiones (cm)</label>
+                                        <input type="text" id="bulto-dimensiones" placeholder="L x W x H" style="
+                                            width: 100%; 
+                                            padding: 5px; 
+                                            border: 1px solid #d1d5db; 
+                                            border-radius: 4px;
+                                            font-size: 14px;
+                                        " onchange="actualizarInfoBulto()">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="bulto-contenido" style="
+                                border: 2px solid #d1d5db; 
+                                border-radius: 8px; 
+                                padding: 15px; 
+                                background: white;
+                                min-height: 300px;
+                                max-height: 400px;
+                                overflow-y: auto;
+                            ">
+                                <p style="color: #9ca3af; text-align: center; margin-top: 50px;">
+                                    Seleccione un bulto y use los botones para asignar piezas
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
@@ -602,25 +718,6 @@
                     <button type="submit" class="btn">Crear Packing List</button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!-- Modal para configurar bultos -->
-    <div id="modal-configurar-bultos" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Configurar Bultos</h2>
-                <span class="close" onclick="cerrarModalConfigurarBultos()">&times;</span>
-            </div>
-            
-            <div id="configurar-bultos-contenido">
-                <!-- Se llenará dinámicamente -->
-            </div>
-
-            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
-                <button type="button" class="btn btn-secondary" onclick="cerrarModalConfigurarBultos()">Cancelar</button>
-                <button type="button" class="btn" onclick="guardarConfiguracionBultos()">Guardar Configuración</button>
-            </div>
         </div>
     </div>
 
@@ -636,18 +733,23 @@
                 <input type="hidden" id="lanzar-tar-pedido-id">
                 
                 <div class="form-group">
-                    <label for="lanzar_tar_numero">Número TAR *</label>
-                    <input type="text" id="lanzar_tar_numero" name="numero" required>
+                    <label for="lanzar_tar_numero">Número TAR</label>
+                    <input type="text" id="lanzar_tar_numero" name="numero">
                 </div>
 
                 <div class="form-group">
-                    <label for="lanzar_tar_email">Email *</label>
-                    <input type="email" id="lanzar_tar_email" name="email" required>
+                    <label for="lanzar_tar_email">Email Logística</label>
+                    <input type="email" id="lanzar_tar_email" name="email">
                 </div>
 
                 <div class="form-group">
-                    <label for="lanzar_tar_url">URL *</label>
-                    <input type="url" id="lanzar_tar_url" name="url" required>
+                    <label for="lanzar_tar_url">URL</label>
+                    <input type="url" id="lanzar_tar_url" name="url">
+                </div>
+
+                <div class="form-group">
+                    <label for="lanzar_tar_fecha">Fecha</label>
+                    <input type="date" id="lanzar_tar_fecha" name="fecha">
                 </div>
 
                 <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
@@ -670,13 +772,18 @@
                 <input type="hidden" id="enviar-etiquetas-pedido-id">
                 
                 <div class="form-group">
-                    <label for="enviar_etiquetas_pdf">PDF de las etiquetas *</label>
-                    <input type="file" id="enviar_etiquetas_pdf" name="pdf" accept=".pdf" required>
+                    <label for="enviar_etiquetas_pdf">PDF de las etiquetas</label>
+                    <input type="file" id="enviar_etiquetas_pdf" name="pdf" accept=".pdf">
                 </div>
 
                 <div class="form-group">
-                    <label for="enviar_etiquetas_tracking">Número de tracking *</label>
-                    <input type="text" id="enviar_etiquetas_tracking" name="tracking" required>
+                    <label for="enviar_etiquetas_tracking">Número de tracking</label>
+                    <input type="text" id="enviar_etiquetas_tracking" name="tracking">
+                </div>
+
+                <div class="form-group">
+                    <label for="enviar_etiquetas_fecha">Fecha</label>
+                    <input type="date" id="enviar_etiquetas_fecha" name="fecha">
                 </div>
 
                 <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
@@ -710,13 +817,12 @@
         let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
         let nextId = parseInt(localStorage.getItem('nextId')) || 1;
 
-        // Estados del workflow (10 estados según diagrama)
+        // Estados del workflow (9 estados sin bultos)
         const ESTADOS = [
             'oferta_recibida', 
             'eproc_lanzado', 
             'eproc_firmado', 
             'packing_list_creado', 
-            'bultos_configurados', 
             'tar_lanzado', 
             'etiquetas_enviadas', 
             'recibido_planta', 
@@ -724,23 +830,44 @@
             'completado'
         ];
         const NOMBRES_ESTADOS = {
-            'oferta_recibida': 'Oferta',
-            'eproc_lanzado': 'Lanzado',
-            'eproc_firmado': 'Firmado',
-            'packing_list_creado': 'Packing',
-            'bultos_configurados': 'Bultos',
-            'tar_lanzado': 'TAR',
-            'etiquetas_enviadas': 'Etiquetas',
-            'recibido_planta': 'Recibido',
-            'sin_incidencias': 'OK',
-            'completado': 'Completado'
+            'oferta_recibida': 'Oferta<br>Recibida',
+            'eproc_lanzado': 'Eproc<br>Lanzado',
+            'eproc_firmado': 'Eproc<br>Firmado',
+            'packing_list_creado': 'Packing<br>List',
+            'tar_lanzado': 'TAR<br>Lanzado',
+            'etiquetas_enviadas': 'Etiquetas<br>Enviadas',
+            'recibido_planta': 'Paquete<br>Recogido',
+            'sin_incidencias': 'Paquete<br>en Casa',
+            'completado': 'Paquete<br>Recogido'
         };
+
+        // Función para obtener nombres de estados sin HTML
+        function getNombreEstadoTexto(estado) {
+            const nombres = {
+                'oferta_recibida': 'Oferta Recibida',
+                'eproc_lanzado': 'Eproc Lanzado', 
+                'eproc_firmado': 'Eproc Firmado',
+                'packing_list_creado': 'Packing List',
+                'tar_lanzado': 'TAR Lanzado',
+                'etiquetas_enviadas': 'Etiquetas Enviadas',
+                'recibido_planta': 'Paquete Recogido',
+                'sin_incidencias': 'Paquete en Casa',
+                'completado': 'Paquete Recogido'
+            };
+            return nombres[estado] || estado;
+        }
 
         // Inicializar la aplicación
         document.addEventListener('DOMContentLoaded', function() {
             mostrarPedidos();
             agregarPieza(); // Agregar una pieza inicial
         });
+
+        // Función para obtener la fecha de hoy en formato YYYY-MM-DD
+        function obtenerFechaHoy() {
+            const hoy = new Date();
+            return hoy.toISOString().split('T')[0];
+        }
 
         // Guardar datos en localStorage
         function guardarDatos() {
@@ -792,7 +919,7 @@
                         ${ESTADOS.map((estado, index) => `
                             <div class="timeline-step">
                                 <div class="timeline-circle ${index <= estadoIndex ? 'active' : ''}">
-                                    ${index < estadoIndex ? '✓' : index + 1}
+                                    ${index <= estadoIndex ? '✓' : index + 1}
                                 </div>
                                 <span class="timeline-label ${index <= estadoIndex ? 'active' : ''}">
                                     ${NOMBRES_ESTADOS[estado]}
@@ -815,17 +942,15 @@
                         ` : pedido.estado === 'eproc_firmado' ? `
                             <button class="btn btn-sm" onclick="crearPackingList(${pedido.id})">Crear Packing List</button>
                         ` : pedido.estado === 'packing_list_creado' ? `
-                            <button class="btn btn-sm" onclick="configurarBultos(${pedido.id})">Configurar Bultos</button>
-                        ` : pedido.estado === 'bultos_configurados' ? `
                             <button class="btn btn-sm" onclick="lanzarTar(${pedido.id})">Lanzar TAR</button>
                         ` : pedido.estado === 'tar_lanzado' ? `
                             <button class="btn btn-sm" onclick="enviarEtiquetas(${pedido.id})">Enviar Etiquetas</button>
                         ` : pedido.estado === 'etiquetas_enviadas' ? `
-                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Marcar Recibido</button>
+                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Paquete recogido al proveedor</button>
                         ` : pedido.estado === 'recibido_planta' ? `
-                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Sin Incidencias</button>
+                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Paquete ha llegado al almacén</button>
                         ` : pedido.estado === 'sin_incidencias' ? `
-                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Completar</button>
+                            <button class="btn btn-sm" onclick="avanzarEstado(${pedido.id})">Paquete recogido</button>
                         ` : `
                             <span class="btn btn-success btn-sm" style="cursor: default;">✓ Completado</span>
                         `}
@@ -839,11 +964,12 @@
                             <div class="info-grid">
                                 <div>
                                     <p><strong>Número:</strong> ${pedido.numero_oferta}</p>
+                                    <p><strong>Proveedor:</strong> ${pedido.proveedor}</p>
                                     <p><strong>Email:</strong> ${pedido.email_proveedor || 'N/A'}</p>
+                                    <p><strong>Total:</strong> €${pedido.total.toFixed(2)}</p>
                                 </div>
                                 <div>
-                                    <p><strong>Items:</strong> ${pedido.piezas.length}</p>
-                                    <p><strong>Total:</strong> €${pedido.total.toFixed(2)}</p>
+                                    <p><strong>Fecha:</strong> ${pedido.fecha_oferta || 'N/A'}</p>
                                 </div>
                             </div>
                         </div>
@@ -882,17 +1008,26 @@
                                     <div>
                                         <p><strong>Dirección:</strong> ${pedido.packing_list.direccion}</p>
                                         <p><strong>Bultos:</strong> ${pedido.packing_list.bultos}</p>
+                                        <p><strong>Peso Total:</strong> ${pedido.packing_list.peso_total || 0} kg</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Fecha:</strong> ${pedido.packing_list.fecha || 'N/A'}</p>
                                     </div>
                                 </div>
                                 ${pedido.configuracion_bultos ? `
                                     <div style="margin-top: 15px;">
                                         <h6 style="color: #374151; font-weight: 600; margin-bottom: 10px;">Configuración de Bultos:</h6>
-                                        ${Object.entries(pedido.configuracion_bultos).map(([bulto, piezas]) => `
-                                            <div style="margin-bottom: 8px; padding: 8px; background: #f9fafb; border-radius: 4px;">
-                                                <strong>${bulto.replace('_', ' ').charAt(0).toUpperCase() + bulto.replace('_', ' ').slice(1)}:</strong>
-                                                ${piezas.length > 0 ? piezas.map(p => `${p.referencia} (${p.cantidad})`).join(', ') : 'Sin asignar'}
-                                            </div>
-                                        `).join('')}
+                                        ${Object.entries(pedido.configuracion_bultos).map(([bulto, piezas]) => {
+                                            const infoBulto = pedido.info_bultos && pedido.info_bultos[bulto];
+                                            return `
+                                                <div style="margin-bottom: 8px; padding: 8px; background: #f9fafb; border-radius: 4px;">
+                                                    <strong>${bulto.replace('_', ' ').charAt(0).toUpperCase() + bulto.replace('_', ' ').slice(1)}:</strong>
+                                                    ${infoBulto ? `<span style="color: #6b7280; font-size: 12px;"> (${infoBulto.peso}kg${infoBulto.dimensiones ? `, ${infoBulto.dimensiones}` : ''})</span>` : ''}
+                                                    <br>
+                                                    ${piezas.length > 0 ? piezas.map(p => `${p.referencia} (${p.cantidad})`).join(', ') : 'Sin asignar'}
+                                                </div>
+                                            `;
+                                        }).join('')}
                                     </div>
                                 ` : ''}
                             </div>
@@ -900,12 +1035,15 @@
 
                         ${pedido.tar ? `
                             <div class="info-section">
-                                <h5>TAR</h5>
+                                <h5>TAR Lanzado</h5>
                                 <div class="info-grid">
                                     <div>
                                         <p><strong>Número:</strong> ${pedido.tar.numero}</p>
-                                        <p><strong>Email:</strong> ${pedido.tar.email}</p>
+                                        <p><strong>Email Logística:</strong> ${pedido.tar.email}</p>
                                         <p><strong>URL:</strong> ${pedido.tar.url}</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Fecha:</strong> ${pedido.tar.fecha || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -917,6 +1055,9 @@
                                 <div class="info-grid">
                                     <div>
                                         <p><strong>Tracking:</strong> ${pedido.etiquetas.tracking}</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Fecha:</strong> ${pedido.etiquetas.fecha || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -944,6 +1085,7 @@
         function abrirModalCrearPedido() {
             document.getElementById('modal-crear-pedido').style.display = 'block';
             document.getElementById('form-crear-pedido').reset();
+            document.getElementById('fecha_oferta').value = obtenerFechaHoy();
             limpiarPiezas();
             agregarPieza();
         }
@@ -963,10 +1105,6 @@
 
         function cerrarModalPackingList() {
             document.getElementById('modal-packing-list').style.display = 'none';
-        }
-
-        function cerrarModalConfigurarBultos() {
-            document.getElementById('modal-configurar-bultos').style.display = 'none';
         }
 
         function cerrarModalLanzarTar() {
@@ -998,7 +1136,8 @@
                             <p><strong>Proveedor:</strong> ${pedido.proveedor}</p>
                             <p><strong>Email Proveedor:</strong> ${pedido.email_proveedor || 'N/A'}</p>
                             <p><strong>Fecha Creación:</strong> ${pedido.fecha_creacion}</p>
-                            <p><strong>Estado Actual:</strong> <span style="color: #10b981; font-weight: bold;">${NOMBRES_ESTADOS[pedido.estado] || pedido.estado}</span></p>
+                            <p><strong>Fecha Oferta:</strong> ${pedido.fecha_oferta || 'N/A'}</p>
+                            <p><strong>Estado Actual:</strong> <span style="color: #10b981; font-weight: bold;">${getNombreEstadoTexto(pedido.estado)}</span></p>
                             <p><strong>Total:</strong> <span style="color: #059669; font-weight: bold;">€${pedido.total.toFixed(2)}</span></p>
                         </div>
                     </div>
@@ -1044,18 +1183,26 @@
                         <div style="background: #fef3c7; padding: 12px; border-radius: 6px;">
                             <p><strong>Dirección:</strong> ${pedido.packing_list.direccion}</p>
                             <p><strong>Número de Bultos:</strong> ${pedido.packing_list.bultos}</p>
+                            <p><strong>Peso Total:</strong> ${pedido.packing_list.peso_total || 0} kg</p>
+                            <p><strong>Fecha:</strong> ${pedido.packing_list.fecha || 'N/A'}</p>
                             <p><strong>PDF:</strong> ${pedido.packing_list.pdf || 'N/A'}</p>
                             ${pedido.configuracion_bultos ? `
                                 <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e5e7eb;">
                                     <p style="font-weight: 600; margin-bottom: 10px;">Configuración de Bultos:</p>
-                                    ${Object.entries(pedido.configuracion_bultos).map(([bulto, piezas]) => `
-                                        <div style="margin-bottom: 10px; padding: 10px; background: #fffbeb; border-radius: 6px; border-left: 4px solid #f59e0b;">
-                                            <p style="font-weight: 600; color: #92400e;">${bulto.replace('_', ' ').charAt(0).toUpperCase() + bulto.replace('_', ' ').slice(1)}:</p>
-                                            <p style="margin-top: 5px; color: #451a03;">
-                                                ${piezas.length > 0 ? piezas.map(p => `${p.referencia} - ${p.descripcion} (Cant: ${p.cantidad})`).join('<br>') : 'Sin piezas asignadas'}
-                                            </p>
-                                        </div>
-                                    `).join('')}
+                                    ${Object.entries(pedido.configuracion_bultos).map(([bulto, piezas]) => {
+                                        const infoBulto = pedido.info_bultos && pedido.info_bultos[bulto];
+                                        return `
+                                            <div style="margin-bottom: 10px; padding: 10px; background: #fffbeb; border-radius: 6px; border-left: 4px solid #f59e0b;">
+                                                <p style="font-weight: 600; color: #92400e;">
+                                                    ${bulto.replace('_', ' ').charAt(0).toUpperCase() + bulto.replace('_', ' ').slice(1)}
+                                                    ${infoBulto ? `<span style="font-weight: normal; color: #6b7280;"> - ${infoBulto.peso}kg${infoBulto.dimensiones ? `, ${infoBulto.dimensiones}` : ''}</span>` : ''}
+                                                </p>
+                                                <p style="margin-top: 5px; color: #451a03;">
+                                                    ${piezas.length > 0 ? piezas.map(p => `${p.referencia} - ${p.descripcion} (Cant: ${p.cantidad})`).join('<br>') : 'Sin piezas asignadas'}
+                                                </p>
+                                            </div>
+                                        `;
+                                    }).join('')}
                                 </div>
                             ` : ''}
                         </div>
@@ -1067,8 +1214,9 @@
                         <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">🚚 TAR Lanzado</h3>
                         <div style="background: #fce7f3; padding: 12px; border-radius: 6px;">
                             <p><strong>Número TAR:</strong> ${pedido.tar.numero}</p>
-                            <p><strong>Email:</strong> ${pedido.tar.email}</p>
+                            <p><strong>Email Logística:</strong> ${pedido.tar.email}</p>
                             <p><strong>URL:</strong> ${pedido.tar.url || 'N/A'}</p>
+                            <p><strong>Fecha:</strong> ${pedido.tar.fecha || 'N/A'}</p>
                         </div>
                     </div>
                 ` : ''}
@@ -1078,6 +1226,7 @@
                         <h3 style="color: #374151; margin-bottom: 10px; font-size: 16px;">🏷️ Etiquetas Enviadas</h3>
                         <div style="background: #e0e7ff; padding: 12px; border-radius: 6px;">
                             <p><strong>Tracking:</strong> ${pedido.etiquetas.tracking}</p>
+                            <p><strong>Fecha:</strong> ${pedido.etiquetas.fecha || 'N/A'}</p>
                             <p><strong>PDF:</strong> ${pedido.etiquetas.pdf || 'N/A'}</p>
                         </div>
                     </div>
@@ -1112,11 +1261,11 @@
             const pieceRow = document.createElement('div');
             pieceRow.className = 'piece-row';
             pieceRow.innerHTML = `
-                <input type="text" name="referencia_${pieceCount}" placeholder="REF-001" required>
-                <input type="text" name="descripcion_${pieceCount}" placeholder="Descripción de la pieza" required>
+                <input type="text" name="referencia_${pieceCount}" placeholder="REF-001">
+                <input type="text" name="descripcion_${pieceCount}" placeholder="Descripción de la pieza">
                 <input type="text" name="proyecto_${pieceCount}" placeholder="Proyecto A">
-                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" required onchange="calcularTotal()">
-                <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" required onchange="calcularTotal()">
+                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" onchange="calcularTotal()">
+                <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" onchange="calcularTotal()">
                 <button type="button" class="btn btn-secondary" onclick="eliminarPieza(this)" style="padding: 10px 15px; font-size: 14px; font-weight: bold; width: 100%;">×</button>
             `;
             
@@ -1171,97 +1320,284 @@
             // Valores por defecto
             const año = new Date().getFullYear();
             document.getElementById('lanzar_eproc_numero').value = `EP${año}-${pedidoId.toString().padStart(3, '0')}`;
-            document.getElementById('lanzar_eproc_fecha').value = new Date().toISOString().split('T')[0];
+            document.getElementById('lanzar_eproc_fecha').value = obtenerFechaHoy();
         }
 
         function firmarEproc(pedidoId) {
             document.getElementById('modal-firmar-eproc').style.display = 'block';
             document.getElementById('firmar-eproc-pedido-id').value = pedidoId;
-            document.getElementById('firmar_eproc_fecha').value = new Date().toISOString().split('T')[0];
+            document.getElementById('firmar_eproc_fecha').value = obtenerFechaHoy();
         }
 
         function crearPackingList(pedidoId) {
             document.getElementById('modal-packing-list').style.display = 'block';
             document.getElementById('packing-list-pedido-id').value = pedidoId;
+            document.getElementById('packing_list_fecha').value = obtenerFechaHoy();
+            
+            // Resetear configuración de bultos
+            document.getElementById('configuracion-bultos-container').style.display = 'none';
+            document.getElementById('packing_list_bultos').value = '';
         }
 
-        function configurarBultos(pedidoId) {
+        function generarConfiguracionBultos() {
+            const numBultos = parseInt(document.getElementById('packing_list_bultos').value);
+            const pedidoId = parseInt(document.getElementById('packing-list-pedido-id').value);
             const pedido = pedidos.find(p => p.id === pedidoId);
-            if (!pedido || !pedido.packing_list) return;
+            
+            if (!numBultos || !pedido) {
+                document.getElementById('configuracion-bultos-container').style.display = 'none';
+                return;
+            }
 
-            document.getElementById('modal-configurar-bultos').style.display = 'block';
+            document.getElementById('configuracion-bultos-container').style.display = 'block';
             
-            let contenido = '<h3 style="margin-bottom: 20px;">Asignar piezas a bultos</h3>';
-            contenido += '<p style="color: #6b7280; margin-bottom: 20px;">Seleccione las piezas que van en cada bulto (mantenga Ctrl para seleccionar múltiples)</p>';
+            // Inicializar datos globales para la configuración
+            window.piezasDisponibles = [...pedido.piezas];
+            window.configuracionBultos = {};
+            window.infoBultos = {};
             
-            for (let i = 1; i <= pedido.packing_list.bultos; i++) {
-                contenido += `
-                    <div class="form-group" style="margin-bottom: 25px;">
-                        <label style="font-weight: 600; font-size: 16px; color: #374151;">Bulto ${i}:</label>
-                        <select id="bulto-${i}-piezas" multiple style="
-                            height: 120px; 
-                            width: 100%; 
-                            padding: 10px; 
-                            border: 2px solid #d1d5db; 
-                            border-radius: 8px; 
-                            font-size: 14px;
-                            background: white;
-                        ">
-                            ${pedido.piezas.map((pieza, index) => 
-                                `<option value="${index}" style="padding: 5px;">${pieza.referencia} - ${pieza.descripcion} (Cant: ${pieza.cantidad})</option>`
-                            ).join('')}
-                        </select>
-                    </div>
+            // Inicializar bultos vacíos con información adicional
+            for (let i = 1; i <= numBultos; i++) {
+                window.configuracionBultos[`bulto_${i}`] = [];
+                window.infoBultos[`bulto_${i}`] = {
+                    peso: 0,
+                    dimensiones: ''
+                };
+            }
+            
+            // Llenar selector de bultos
+            const selector = document.getElementById('bulto-selector');
+            selector.innerHTML = '';
+            for (let i = 1; i <= numBultos; i++) {
+                const option = document.createElement('option');
+                option.value = `bulto_${i}`;
+                option.textContent = `Bulto ${i}`;
+                selector.appendChild(option);
+            }
+            
+            // Cargar primera vista
+            mostrarPiezasDisponibles();
+            mostrarContenidoBulto();
+            cargarInfoBulto();
+            
+            // Event listener para cambio de bulto
+            selector.onchange = () => {
+                mostrarContenidoBulto();
+                cargarInfoBulto();
+            };
+        }
+
+        function mostrarPiezasDisponibles() {
+            const container = document.getElementById('piezas-disponibles');
+            container.innerHTML = '';
+            
+            window.piezasDisponibles.forEach((pieza, index) => {
+                const div = document.createElement('div');
+                div.className = 'pieza-item';
+                div.style.cssText = `
+                    padding: 10px;
+                    margin: 5px 0;
+                    border: 1px solid #d1d5db;
+                    border-radius: 6px;
+                    background: white;
+                    cursor: pointer;
+                    transition: all 0.2s;
                 `;
-            }
-            document.getElementById('configurar-bultos-contenido').innerHTML = contenido;
-            
-            // Guardar referencia del pedido
-            document.getElementById('configurar-bultos-contenido').dataset.pedidoId = pedidoId;
+                div.onclick = () => seleccionarPieza(div, index);
+                div.innerHTML = `
+                    <div style="font-weight: 600; color: #374151;">${pieza.referencia}</div>
+                    <div style="font-size: 12px; color: #6b7280;">${pieza.descripcion}</div>
+                    <div style="font-size: 12px; color: #059669;">Cantidad: ${pieza.cantidad}</div>
+                `;
+                container.appendChild(div);
+            });
         }
 
-        function guardarConfiguracionBultos() {
-            const pedidoId = parseInt(document.getElementById('configurar-bultos-contenido').dataset.pedidoId);
-            const pedido = pedidos.find(p => p.id === pedidoId);
+        function mostrarContenidoBulto() {
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            const container = document.getElementById('bulto-contenido');
             
-            if (pedido) {
-                // Recopilar la configuración de bultos
-                const configuracionBultos = {};
-                
-                for (let i = 1; i <= pedido.packing_list.bultos; i++) {
-                    const select = document.getElementById(`bulto-${i}-piezas`);
-                    const piezasSeleccionadas = Array.from(select.selectedOptions).map(option => {
-                        const index = parseInt(option.value);
-                        return {
-                            index: index,
-                            referencia: pedido.piezas[index].referencia,
-                            descripcion: pedido.piezas[index].descripcion,
-                            cantidad: pedido.piezas[index].cantidad
-                        };
-                    });
-                    
-                    configuracionBultos[`bulto_${i}`] = piezasSeleccionadas;
-                }
-                
-                // Guardar la configuración en el pedido
-                pedido.configuracion_bultos = configuracionBultos;
-                pedido.estado = 'bultos_configurados';
-                
-                guardarDatos();
-                mostrarPedidos();
-                cerrarModalConfigurarBultos();
+            if (!bultoSeleccionado) return;
+            
+            const piezasEnBulto = window.configuracionBultos[bultoSeleccionado] || [];
+            container.innerHTML = '';
+            
+            if (piezasEnBulto.length === 0) {
+                container.innerHTML = `
+                    <p style="color: #9ca3af; text-align: center; margin-top: 50px;">
+                        Este bulto está vacío.<br>
+                        Seleccione piezas de la izquierda y use el botón → para agregar.
+                    </p>
+                `;
+                return;
             }
+            
+            piezasEnBulto.forEach((pieza, index) => {
+                const div = document.createElement('div');
+                div.className = 'pieza-en-bulto';
+                div.style.cssText = `
+                    padding: 10px;
+                    margin: 5px 0;
+                    border: 1px solid #10b981;
+                    border-radius: 6px;
+                    background: #ecfdf5;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                `;
+                div.onclick = () => seleccionarPiezaEnBulto(div, index);
+                div.innerHTML = `
+                    <div style="font-weight: 600; color: #065f46;">${pieza.referencia}</div>
+                    <div style="font-size: 12px; color: #047857;">${pieza.descripcion}</div>
+                    <div style="font-size: 12px; color: #059669;">Cantidad: ${pieza.cantidad}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function cargarInfoBulto() {
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            const infoContainer = document.getElementById('info-bulto-container');
+            
+            if (!bultoSeleccionado) {
+                infoContainer.style.display = 'none';
+                return;
+            }
+            
+            infoContainer.style.display = 'block';
+            
+            const infoBulto = window.infoBultos[bultoSeleccionado];
+            document.getElementById('bulto-peso').value = infoBulto.peso;
+            document.getElementById('bulto-dimensiones').value = infoBulto.dimensiones;
+        }
+
+        function actualizarInfoBulto() {
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            
+            if (!bultoSeleccionado) return;
+            
+            const peso = parseFloat(document.getElementById('bulto-peso').value) || 0;
+            const dimensiones = document.getElementById('bulto-dimensiones').value || '';
+            
+            window.infoBultos[bultoSeleccionado] = {
+                peso: peso,
+                dimensiones: dimensiones
+            };
+            
+            // Actualizar peso total automáticamente
+            actualizarPesoTotal();
+        }
+
+        function actualizarPesoTotal() {
+            let pesoTotal = 0;
+            Object.values(window.infoBultos || {}).forEach(info => {
+                pesoTotal += info.peso || 0;
+            });
+            
+            document.getElementById('packing_list_peso_total').value = pesoTotal.toFixed(1);
+        }
+
+        function seleccionarPieza(elemento, index) {
+            // Limpiar selecciones anteriores
+            document.querySelectorAll('.pieza-item').forEach(item => {
+                item.style.background = 'white';
+                item.style.borderColor = '#d1d5db';
+            });
+            document.querySelectorAll('.pieza-en-bulto').forEach(item => {
+                item.style.background = '#ecfdf5';
+                item.style.borderColor = '#10b981';
+            });
+            
+            // Seleccionar elemento actual
+            elemento.style.background = '#dbeafe';
+            elemento.style.borderColor = '#3b82f6';
+            window.piezaSeleccionadaIndex = index;
+            window.piezaSeleccionadaEnBulto = null;
+        }
+
+        function seleccionarPiezaEnBulto(elemento, index) {
+            // Limpiar selecciones anteriores
+            document.querySelectorAll('.pieza-item').forEach(item => {
+                item.style.background = 'white';
+                item.style.borderColor = '#d1d5db';
+            });
+            document.querySelectorAll('.pieza-en-bulto').forEach(item => {
+                item.style.background = '#ecfdf5';
+                item.style.borderColor = '#10b981';
+            });
+            
+            // Seleccionar elemento actual
+            elemento.style.background = '#fef3c7';
+            elemento.style.borderColor = '#f59e0b';
+            window.piezaSeleccionadaEnBulto = index;
+            window.piezaSeleccionadaIndex = null;
+        }
+
+        function moverPiezaABulto() {
+            if (window.piezaSeleccionadaIndex === null || window.piezaSeleccionadaIndex === undefined) {
+                alert('Seleccione una pieza de la lista de disponibles');
+                return;
+            }
+            
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            
+            if (!bultoSeleccionado) {
+                alert('Seleccione un bulto');
+                return;
+            }
+            
+            // Mover pieza
+            const pieza = window.piezasDisponibles[window.piezaSeleccionadaIndex];
+            window.configuracionBultos[bultoSeleccionado].push(pieza);
+            window.piezasDisponibles.splice(window.piezaSeleccionadaIndex, 1);
+            
+            // Actualizar vistas
+            mostrarPiezasDisponibles();
+            mostrarContenidoBulto();
+            
+            // Limpiar selección
+            window.piezaSeleccionadaIndex = null;
+        }
+
+        function regresarPiezaADisponibles() {
+            if (window.piezaSeleccionadaEnBulto === null || window.piezaSeleccionadaEnBulto === undefined) {
+                alert('Seleccione una pieza del bulto');
+                return;
+            }
+            
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            
+            if (!bultoSeleccionado) return;
+            
+            // Mover pieza de vuelta
+            const pieza = window.configuracionBultos[bultoSeleccionado][window.piezaSeleccionadaEnBulto];
+            window.piezasDisponibles.push(pieza);
+            window.configuracionBultos[bultoSeleccionado].splice(window.piezaSeleccionadaEnBulto, 1);
+            
+            // Actualizar vistas
+            mostrarPiezasDisponibles();
+            mostrarContenidoBulto();
+            
+            // Limpiar selección
+            window.piezaSeleccionadaEnBulto = null;
         }
 
         function lanzarTar(pedidoId) {
             document.getElementById('modal-lanzar-tar').style.display = 'block';
             document.getElementById('lanzar-tar-pedido-id').value = pedidoId;
             document.getElementById('lanzar_tar_numero').value = `TAR-${pedidoId}`;
+            document.getElementById('lanzar_tar_email').value = 'logistica@empresa.com';
+            document.getElementById('lanzar_tar_fecha').value = obtenerFechaHoy();
         }
 
         function enviarEtiquetas(pedidoId) {
             document.getElementById('modal-enviar-etiquetas').style.display = 'block';
             document.getElementById('enviar-etiquetas-pedido-id').value = pedidoId;
+            document.getElementById('enviar_etiquetas_fecha').value = obtenerFechaHoy();
         }
 
         function eliminarPedido(pedidoId) {
@@ -1401,6 +1737,7 @@
                 numero_oferta: formData.get('numero_oferta'),
                 proveedor: formData.get('proveedor'),
                 email_proveedor: formData.get('email_proveedor'),
+                fecha_oferta: formData.get('fecha_oferta'),
                 fecha_creacion: new Date().toLocaleDateString(),
                 estado: 'oferta_recibida',
                 piezas: piezas,
@@ -1490,17 +1827,45 @@
                     }
                 }
                 
+                const numBultos = parseInt(formData.get('bultos'));
+                
+                // Usar la configuración de bultos global si existe
+                let configuracionBultos = {};
+                let infoBultos = {};
+                
+                if (window.configuracionBultos) {
+                    configuracionBultos = window.configuracionBultos;
+                    infoBultos = window.infoBultos || {};
+                } else {
+                    // Fallback: crear configuración vacía
+                    for (let i = 1; i <= numBultos; i++) {
+                        configuracionBultos[`bulto_${i}`] = [];
+                        infoBultos[`bulto_${i}`] = { peso: 0, dimensiones: '' };
+                    }
+                }
+                
                 pedido.packing_list = {
                     pdf: file ? file.name : 'packinglist.pdf',
                     pdf_url: pdfUrl,
                     direccion: formData.get('direccion'),
-                    bultos: parseInt(formData.get('bultos'))
+                    bultos: numBultos,
+                    fecha: formData.get('fecha'),
+                    peso_total: parseFloat(formData.get('peso_total')) || 0
                 };
+                
+                // Guardar configuración de bultos e información adicional
+                pedido.configuracion_bultos = configuracionBultos;
+                pedido.info_bultos = infoBultos;
                 pedido.estado = 'packing_list_creado';
                 
                 guardarDatos();
                 mostrarPedidos();
                 cerrarModalPackingList();
+                
+                // Limpiar variables globales
+                window.configuracionBultos = null;
+                window.piezasDisponibles = null;
+                window.infoBultos = null;
             }
         });
 
@@ -1515,7 +1880,8 @@
                 pedido.tar = {
                     numero: formData.get('numero'),
                     email: formData.get('email'),
-                    url: formData.get('url')
+                    url: formData.get('url'),
+                    fecha: formData.get('fecha')
                 };
                 pedido.estado = 'tar_lanzado';
                 
@@ -1548,7 +1914,8 @@
                 pedido.etiquetas = {
                     pdf: file ? file.name : 'etiquetas.pdf',
                     pdf_url: pdfUrl,
-                    tracking: formData.get('tracking')
+                    tracking: formData.get('tracking'),
+                    fecha: formData.get('fecha')
                 };
                 pedido.estado = 'etiquetas_enviadas';
                 
@@ -1565,7 +1932,6 @@
                 'modal-lanzar-eproc', 
                 'modal-firmar-eproc',
                 'modal-packing-list',
-                'modal-configurar-bultos',
                 'modal-lanzar-tar',
                 'modal-enviar-etiquetas',
                 'modal-detalle-completo'
@@ -1580,4 +1946,4 @@
         }
     </script>
 </body>
-</html>
+</html><!-- Cache Buster: 20250804100120 -->
