@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpiar Datos</title>
+</head>
+<body>
+    <h1>Limpiar LocalStorage</h1>
+    <button onclick="limpiarTodo()">Limpiar todo el localStorage</button>
+    <button onclick="verificarDatos()">Verificar datos</button>
+    
+    <div id="resultado"></div>
+    
+    <script>
+        function limpiarTodo() {
+            localStorage.clear();
+            alert('LocalStorage limpiado completamente');
+            verificarDatos();
+        }
+        
+        function verificarDatos() {
+            const resultado = document.getElementById('resultado');
+            const datos = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                datos.push(`${key}: ${value.substring(0, 100)}...`);
+            }
+            
+            resultado.innerHTML = `
+                <h3>Datos en localStorage:</h3>
+                <pre>${datos.join('\n')}</pre>
+                <p>Total de claves: ${localStorage.length}</p>
+            `;
+        }
+        
+        // Verificar al cargar
+        verificarDatos();
+    </script>
+</body>
+</html>

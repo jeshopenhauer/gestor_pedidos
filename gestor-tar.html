@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de TAR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .btn.btn-secondary.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #0062ff;
+            font-size: 2rem;
+            margin: 0;
+            text-shadow: none;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            display: none;
+        }
+
+        .header .navigation {
+            margin-top: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-success {
+            background: #10b981;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-icon {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+            padding: 5px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+
+        .btn-icon:hover {
+            background: #e5e7eb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .pedido-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .pedido-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .pedido-info h3 {
+            color: #1f2937;
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .pedido-info p {
+            color: #6b7280;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+
+        .pedido-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .timeline {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            padding: 0 25px;
+            min-height: 80px;
+            overflow-x: auto;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 50%;
+            left: 25px;
+            right: 25px;
+            height: 3px;
+            background: #e5e7eb;
+            z-index: 1;
+        }
+
+        .timeline-step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            padding: 0 8px;
+        }
+
+        .timeline-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            background: #e5e7eb;
+            color: #6b7280;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-circle.active {
+            background: #10b981;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .timeline-label {
+            margin-top: 10px;
+            font-size: 13px;
+            text-align: center;
+            color: #6b7280;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .timeline-label.active {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .detalles-panel {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .detalles-panel.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h5 {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .pdf-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .pdf-tag {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .pdf-tag:hover {
+            background: #e5e7eb;
+            border-color: #9ca3af;
+            transform: translateY(-1px);
+        }
+
+        .pdf-tag.clickable {
+            background: #dbeafe;
+            color: #1d4ed8;
+            border-color: #93c5fd;
+        }
+
+        .pdf-tag.clickable:hover {
+            background: #bfdbfe;
+            border-color: #60a5fa;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 95%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .pieces-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            background: #f9fafb;
+            min-height: 350px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+        }
+
+        #tar-pieces-grid {
+            min-width: 975px;
+        }
+
+        .piece-row {
+            display: grid;
+            grid-template-columns: 180px 280px 160px 120px 140px 80px;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f3f4f6;
+        }
+
+        .piece-row input {
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease;
+        }
+
+        .piece-row input[type="number"] {
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .piece-row input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .total-row {
+            text-align: right;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+            color: #059669;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pedido-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .timeline {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .timeline-step {
+                min-width: 100px;
+            }
+            
+            .navigation-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚚 Gestor de TAR</h1>
+            <div style="display: flex; gap: 10px;">
+                <a href="index.html" class="btn btn-secondary">← Volver a Pedidos</a>
+                <button class="btn" onclick="abrirModalCrearTar()">+ Crear TAR</button>
+            </div>
+        </div>
+
+        <!-- Panel de TARs -->
+        <div class="card">
+            <h2 style="color: #1f2937; margin-bottom: 20px; font-size: 1.5rem;">Panel de TARs</h2>
+            
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <div class="empty-icon">🚚</div>
+                <p style="font-size: 18px; margin-bottom: 15px;">No hay TARs registrados</p>
+                <p style="margin-bottom: 20px;">Comience creando su primer TAR</p>
+                <button class="btn" onclick="abrirModalCrearTar()">+ Crear primer TAR</button>
+            </div>
+            
+            <div id="tars-container">
+                <!-- Los TARs se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear TAR -->
+    <div id="modal-crear-tar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear nuevo TAR</h2>
+                <span class="close" onclick="cerrarModalCrearTar()">&times;</span>
+            </div>
+            
+            <form id="form-crear-tar">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="tar_proveedor">Proveedor</label>
+                        <input type="text" id="tar_proveedor" name="proveedor" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tar_email_proveedor">Email Proveedor</label>
+                        <input type="email" id="tar_email_proveedor" name="email_proveedor" required>
+                    </div>
+                </div>
+
+                <div class="pieces-container">
+                    <h3 style="margin-bottom: 20px; color: #374151;">Piezas del TAR</h3>
+                    <div id="tar-pieces-grid">
+                        <div class="piece-row" style="background: #374151; color: white; font-weight: bold; border-radius: 8px;">
+                            <div style="padding: 12px 15px;">Referencia</div>
+                            <div style="padding: 12px 15px;">Descripción</div>
+                            <div style="padding: 12px 15px;">Proyecto</div>
+                            <div style="padding: 12px 15px;">Cantidad</div>
+                            <div style="padding: 12px 15px;">Precio Unit. (€)</div>
+                            <div style="padding: 12px 15px;">Acción</div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: flex-start; margin-top: 15px;">
+                        <button type="button" class="btn btn-secondary" onclick="agregarPiezaTar()">+ Agregar Pieza</button>
+                    </div>
+                    <div class="total-row">
+                        Total: €<span id="total-tar">0.00</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalCrearTar()">Cancelar</button>
+                    <button type="submit" class="btn">Crear TAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para crear Packing List -->
+    <div id="modal-packing-list" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Crear Packing List</h2>
+                <span class="close" onclick="cerrarModalPackingList()">&times;</span>
+            </div>
+            
+            <form id="form-packing-list">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="packing_list_direccion">Dirección de envío</label>
+                        <textarea id="packing_list_direccion" name="direccion" rows="3" required placeholder="Dirección completa de entrega"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="packing_list_fecha">Fecha</label>
+                        <input type="date" id="packing_list_fecha" name="fecha" required>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="packing_list_bultos">Número de bultos</label>
+                        <input type="number" id="packing_list_bultos" name="bultos" min="1" required onchange="generarConfiguracionBultos()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="packing_list_peso_total">Peso total (kg)</label>
+                        <input type="number" id="packing_list_peso_total" name="peso_total" step="0.1" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="packing_list_pdf">Subir PDF del Packing List</label>
+                    <input type="file" id="packing_list_pdf" name="pdf" accept=".pdf">
+                </div>
+
+                <!-- Configuración de Bultos -->
+                <div id="configuracion-bultos-container" style="display: none; margin-top: 30px; padding: 20px; background: #f8fafc; border-radius: 8px; border: 1px solid #e5e7eb;">
+                    <h3 style="margin-bottom: 20px; color: #374151;">Configuración de Bultos</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                        <!-- Selector de bulto y información -->
+                        <div>
+                            <div class="form-group">
+                                <label for="bulto-selector">Seleccionar bulto:</label>
+                                <select id="bulto-selector" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                                    <!-- Se llena dinámicamente -->
+                                </select>
+                            </div>
+                            
+                            <div id="info-bulto-container" style="display: none;">
+                                <div class="form-group">
+                                    <label for="bulto-peso">Peso del bulto (kg):</label>
+                                    <input type="number" id="bulto-peso" step="0.1" min="0" placeholder="0.0" 
+                                           onchange="actualizarInfoBulto()" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="bulto-dimensiones">Dimensiones (ej: 30x20x15 cm):</label>
+                                    <input type="text" id="bulto-dimensiones" placeholder="30x20x15 cm" 
+                                           onchange="actualizarInfoBulto()" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px;">
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 15px; text-align: center;">
+                                <button type="button" onclick="moverPiezaABulto()" style="background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; margin: 0 5px; cursor: pointer;">
+                                    → Agregar al bulto
+                                </button>
+                                <button type="button" onclick="regresarPiezaADisponibles()" style="background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 6px; margin: 0 5px; cursor: pointer;">
+                                    ← Quitar del bulto
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Contenido del bulto seleccionado -->
+                        <div>
+                            <h4 style="margin-bottom: 10px; color: #374151;">Contenido del bulto:</h4>
+                            <div id="bulto-contenido" style="min-height: 200px; max-height: 300px; overflow-y: auto; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; background: white;">
+                                <p style="color: #9ca3af; text-align: center; margin-top: 50px;">
+                                    Seleccione un bulto para ver su contenido
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Piezas disponibles -->
+                    <div style="margin-top: 30px;">
+                        <h4 style="margin-bottom: 10px; color: #374151;">Piezas disponibles para asignar:</h4>
+                        <div id="piezas-disponibles" style="max-height: 200px; overflow-y: auto; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; background: white;">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <input type="hidden" id="packing-list-pedido-id">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalPackingList()">Cancelar</button>
+                    <button type="submit" class="btn">Crear Packing List</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para lanzar TAR -->
+    <div id="modal-lanzar-tar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Lanzar TAR</h2>
+                <span class="close" onclick="cerrarModalLanzarTar()">&times;</span>
+            </div>
+            
+            <form id="form-lanzar-tar">
+                <input type="hidden" id="lanzar-tar-pedido-id">
+                
+                <div class="form-group">
+                    <label for="lanzar_tar_numero">Número TAR</label>
+                    <input type="text" id="lanzar_tar_numero" name="numero" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lanzar_tar_email">Email Logística</label>
+                    <input type="email" id="lanzar_tar_email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lanzar_tar_url">URL del TAR</label>
+                    <input type="url" id="lanzar_tar_url" name="url" placeholder="https://ejemplo.com/tar">
+                </div>
+
+                <div class="form-group">
+                    <label for="lanzar_tar_fecha">Fecha</label>
+                    <input type="date" id="lanzar_tar_fecha" name="fecha" required>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalLanzarTar()">Cancelar</button>
+                    <button type="submit" class="btn">Lanzar TAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para enviar etiquetas -->
+    <div id="modal-enviar-etiquetas" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Enviar Etiquetas</h2>
+                <span class="close" onclick="cerrarModalEnviarEtiquetas()">&times;</span>
+            </div>
+            
+            <form id="form-enviar-etiquetas">
+                <input type="hidden" id="enviar-etiquetas-pedido-id">
+                
+                <div class="form-group">
+                    <label for="enviar_etiquetas_tracking">Número de seguimiento</label>
+                    <input type="text" id="enviar_etiquetas_tracking" name="tracking" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="enviar_etiquetas_fecha">Fecha de envío</label>
+                    <input type="date" id="enviar_etiquetas_fecha" name="fecha" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="enviar_etiquetas_pdf">Subir PDF de etiquetas</label>
+                    <input type="file" id="enviar_etiquetas_pdf" name="pdf" accept=".pdf">
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalEnviarEtiquetas()">Cancelar</button>
+                    <button type="submit" class="btn">Enviar Etiquetas</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Datos en memoria para TARs
+        let tars = JSON.parse(localStorage.getItem('tars')) || [];
+        let nextTarId = parseInt(localStorage.getItem('nextTarId')) || 1;
+
+        // Estados para TAR (empiezan desde packing list)
+        const ESTADOS_TAR = [
+            'packing_list_creado', 
+            'tar_lanzado', 
+            'etiquetas_enviadas', 
+            'recibido_planta', 
+            'sin_incidencias', 
+            'completado'
+        ];
+
+        const NOMBRES_ESTADOS = {
+            'packing_list_creado': 'Packing<br>List',
+            'tar_lanzado': 'TAR<br>Lanzado',
+            'etiquetas_enviadas': 'Etiquetas<br>Enviadas',
+            'recibido_planta': 'Paquete<br>Recogido',
+            'sin_incidencias': 'Paquete<br>en Casa',
+            'completado': 'Paquete<br>Recogido'
+        };
+
+        // Función para obtener nombres de estados sin HTML
+        function getNombreEstadoTexto(estado) {
+            const nombres = {
+                'packing_list_creado': 'Packing List',
+                'tar_lanzado': 'TAR Lanzado',
+                'etiquetas_enviadas': 'Etiquetas Enviadas',
+                'recibido_planta': 'Paquete Recogido',
+                'sin_incidencias': 'Paquete en Casa',
+                'completado': 'Paquete Recogido'
+            };
+            return nombres[estado] || estado;
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarTars();
+            agregarPiezaTar(); // Agregar una pieza inicial
+        });
+
+        // Función para obtener la fecha de hoy en formato YYYY-MM-DD
+        function obtenerFechaHoy() {
+            const hoy = new Date();
+            return hoy.toISOString().split('T')[0];
+        }
+
+        // Guardar datos en localStorage
+        function guardarDatos() {
+            localStorage.setItem('tars', JSON.stringify(tars));
+            localStorage.setItem('nextTarId', nextTarId.toString());
+        }
+
+        // Mostrar TARs
+        function mostrarTars() {
+            const container = document.getElementById('tars-container');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (tars.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            container.innerHTML = tars.map(tar => crearTarjetaTar(tar)).join('');
+        }
+
+        // Crear tarjeta de TAR
+        function crearTarjetaTar(tar) {
+            const estadoIndex = ESTADOS_TAR.indexOf(tar.estado);
+            
+            return `
+                <div class="pedido-card" data-pedido-id="${tar.id}">
+                    <div class="pedido-header">
+                        <div class="pedido-info">
+                            <h3>TAR #${tar.id}</h3>
+                            <p>${tar.fecha_creacion} - ${tar.proveedor} - €${tar.total.toFixed(2)}</p>
+                        </div>
+                        <div class="pedido-actions">
+                            <button class="btn-icon" onclick="toggleDetalles(${tar.id})" title="Ver más detalles">
+                                <span id="toggle-icon-${tar.id}">▼</span>
+                            </button>
+                            <button class="btn-icon" onclick="eliminarTar(${tar.id})" title="Eliminar TAR" style="background: #fee2e2; border-color: #fecaca; color: #dc2626;">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="timeline-line"></div>
+                        ${ESTADOS_TAR.map((estado, index) => `
+                            <div class="timeline-step">
+                                <div class="timeline-circle ${index <= estadoIndex ? 'active' : ''}">
+                                    ${index <= estadoIndex ? '✓' : index + 1}
+                                </div>
+                                <span class="timeline-label ${index <= estadoIndex ? 'active' : ''}">
+                                    ${NOMBRES_ESTADOS[estado]}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div class="navigation-buttons">
+                        ${tar.estado !== 'packing_list_creado' ? `
+                            <button class="btn btn-secondary btn-sm" onclick="retrocederEstado(${tar.id})">
+                                ← Anterior
+                            </button>
+                        ` : ''}
+                        
+                        ${tar.estado === 'packing_list_creado' ? `
+                            <button class="btn btn-sm" onclick="editarPackingList(${tar.id})" style="background: #f59e0b; border-color: #f59e0b;">Editar Packing List</button>
+                            <button class="btn btn-sm" onclick="lanzarTar(${tar.id})">Lanzar TAR</button>
+                        ` : tar.estado === 'tar_lanzado' ? `
+                            <button class="btn btn-sm" onclick="enviarEtiquetas(${tar.id})">Enviar Etiquetas</button>
+                        ` : tar.estado === 'etiquetas_enviadas' ? `
+                            <button class="btn btn-sm" onclick="avanzarEstado(${tar.id})">Paquete recogido al proveedor</button>
+                        ` : tar.estado === 'recibido_planta' ? `
+                            <button class="btn btn-sm" onclick="avanzarEstado(${tar.id})">Paquete ha llegado al almacén</button>
+                        ` : tar.estado === 'sin_incidencias' ? `
+                            <button class="btn btn-sm" onclick="avanzarEstado(${tar.id})">Paquete recogido</button>
+                        ` : `
+                            <span class="btn btn-success btn-sm" style="cursor: default;">✓ Completado</span>
+                        `}
+                    </div>
+
+                    <div id="detalles-${tar.id}" class="detalles-panel">
+                        <h4 style="margin-bottom: 15px;">Información del proceso</h4>
+                        
+                        <div class="info-section">
+                            <h5>Información General</h5>
+                            <div class="info-grid">
+                                <div>
+                                    <p><strong>Proveedor:</strong> ${tar.proveedor}</p>
+                                    <p><strong>Email:</strong> ${tar.email_proveedor || 'N/A'}</p>
+                                    <p><strong>Total:</strong> €${tar.total.toFixed(2)}</p>
+                                </div>
+                                <div>
+                                    <p><strong>Fecha:</strong> ${tar.fecha_creacion}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${tar.packing_list ? `
+                            <div class="info-section">
+                                <h5>Packing List</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>Dirección:</strong> ${tar.packing_list.direccion}</p>
+                                        <p><strong>Bultos:</strong> ${tar.packing_list.bultos}</p>
+                                        <p><strong>Peso Total:</strong> ${tar.packing_list.peso_total || 0} kg</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Fecha:</strong> ${tar.packing_list.fecha || 'N/A'}</p>
+                                    </div>
+                                </div>
+                                ${tar.configuracion_bultos ? `
+                                    <div style="margin-top: 15px;">
+                                        <h6 style="color: #374151; font-weight: 600; margin-bottom: 10px;">Configuración de Bultos:</h6>
+                                        ${Object.entries(tar.configuracion_bultos).map(([bulto, piezas]) => {
+                                            const infoBulto = tar.info_bultos && tar.info_bultos[bulto];
+                                            return `
+                                                <div style="margin-bottom: 8px; padding: 8px; background: #f9fafb; border-radius: 4px;">
+                                                    <strong>${bulto.replace('_', ' ').charAt(0).toUpperCase() + bulto.replace('_', ' ').slice(1)}:</strong>
+                                                    ${infoBulto ? `<span style="color: #6b7280; font-size: 12px;"> (${infoBulto.peso}kg${infoBulto.dimensiones ? `, ${infoBulto.dimensiones}` : ''})</span>` : ''}
+                                                    <br>
+                                                    ${piezas.length > 0 ? piezas.map(p => `${p.referencia} (${p.cantidad})`).join(', ') : 'Sin asignar'}
+                                                </div>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        ` : ''}
+
+                        ${tar.tar ? `
+                            <div class="info-section">
+                                <h5>TAR Lanzado</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>Número:</strong> ${tar.tar.numero}</p>
+                                        <p><strong>Email Logística:</strong> ${tar.tar.email}</p>
+                                        <p><strong>URL:</strong> ${tar.tar.url}</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Fecha:</strong> ${tar.tar.fecha || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        ${tar.etiquetas ? `
+                            <div class="info-section">
+                                <h5>Etiquetas Enviadas</h5>
+                                <div class="info-grid">
+                                    <div>
+                                        <p><strong>Tracking:</strong> ${tar.etiquetas.tracking}</p>
+                                    </div>
+                                    <div>
+                                        <p><strong>Fecha:</strong> ${tar.etiquetas.fecha || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <div class="info-section">
+                            <h5>Documentos</h5>
+                            <div class="pdf-tags">
+                                ${tar.packing_list ? `<span class="pdf-tag clickable" onclick="abrirPDF('PackingList_${tar.id}.pdf', '${getFileData(tar, 'packing')}')" 
+                                      title="Click para abrir PDF">📄 PackingList_${tar.id}.pdf</span>` : ''}
+                                ${tar.etiquetas ? `<span class="pdf-tag clickable" onclick="abrirPDF('Etiquetas_${tar.etiquetas.tracking}.pdf', '${getFileData(tar, 'etiquetas')}')" 
+                                      title="Click para abrir PDF">📄 Etiquetas_${tar.etiquetas.tracking}.pdf</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Modal functions
+        function abrirModalCrearTar() {
+            document.getElementById('modal-crear-tar').style.display = 'block';
+            document.getElementById('form-crear-tar').reset();
+            limpiarPiezasTar();
+            agregarPiezaTar();
+        }
+
+        function cerrarModalCrearTar() {
+            document.getElementById('modal-crear-tar').style.display = 'none';
+        }
+
+        function cerrarModalPackingList() {
+            document.getElementById('modal-packing-list').style.display = 'none';
+        }
+
+        function cerrarModalLanzarTar() {
+            document.getElementById('modal-lanzar-tar').style.display = 'none';
+        }
+
+        function cerrarModalEnviarEtiquetas() {
+            document.getElementById('modal-enviar-etiquetas').style.display = 'none';
+        }
+
+        // Funciones de piezas
+        function agregarPiezaTar() {
+            const grid = document.getElementById('tar-pieces-grid');
+            const pieceCount = grid.children.length;
+            
+            const pieceRow = document.createElement('div');
+            pieceRow.className = 'piece-row';
+            pieceRow.innerHTML = `
+                <input type="text" name="referencia_${pieceCount}" placeholder="REF-001">
+                <input type="text" name="descripcion_${pieceCount}" placeholder="Descripción de la pieza">
+                <input type="text" name="proyecto_${pieceCount}" placeholder="Proyecto A">
+                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" onchange="calcularTotalTar()">
+                <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" onchange="calcularTotalTar()">
+                <button type="button" class="btn btn-secondary" onclick="eliminarPiezaTar(this)" style="padding: 10px 15px; font-size: 14px; font-weight: bold; width: 100%;">×</button>
+            `;
+            
+            grid.appendChild(pieceRow);
+        }
+
+        function eliminarPiezaTar(button) {
+            button.parentElement.remove();
+            calcularTotalTar();
+        }
+
+        function limpiarPiezasTar() {
+            const grid = document.getElementById('tar-pieces-grid');
+            while (grid.children.length > 1) {
+                grid.removeChild(grid.lastChild);
+            }
+        }
+
+        function calcularTotalTar() {
+            const grid = document.getElementById('tar-pieces-grid');
+            let total = 0;
+            
+            for (let i = 1; i < grid.children.length; i++) {
+                const row = grid.children[i];
+                const cantidad = parseFloat(row.children[3].value) || 0;
+                const precio = parseFloat(row.children[4].value) || 0;
+                total += cantidad * precio;
+            }
+            
+            document.getElementById('total-tar').textContent = total.toFixed(2);
+        }
+
+        // Toggle detalles
+        function toggleDetalles(tarId) {
+            const detalles = document.getElementById(`detalles-${tarId}`);
+            const icon = document.getElementById(`toggle-icon-${tarId}`);
+            
+            if (detalles.classList.contains('show')) {
+                detalles.classList.remove('show');
+                icon.textContent = '▼';
+            } else {
+                detalles.classList.add('show');
+                icon.textContent = '▲';
+            }
+        }
+
+        // Funciones específicas para cada estado
+        function lanzarTar(tarId) {
+            document.getElementById('modal-lanzar-tar').style.display = 'block';
+            document.getElementById('lanzar-tar-pedido-id').value = tarId;
+            document.getElementById('lanzar_tar_numero').value = `TAR-${tarId}`;
+            document.getElementById('lanzar_tar_email').value = 'logistica@empresa.com';
+            document.getElementById('lanzar_tar_fecha').value = obtenerFechaHoy();
+        }
+
+        function enviarEtiquetas(tarId) {
+            document.getElementById('modal-enviar-etiquetas').style.display = 'block';
+            document.getElementById('enviar-etiquetas-pedido-id').value = tarId;
+            document.getElementById('enviar_etiquetas_fecha').value = obtenerFechaHoy();
+        }
+
+        function eliminarTar(tarId) {
+            if (confirm('¿Está seguro de que desea eliminar este TAR? Esta acción no se puede deshacer.')) {
+                tars = tars.filter(t => t.id !== tarId);
+                guardarDatos();
+                mostrarTars();
+            }
+        }
+
+        // Funciones para Packing List y configuración de bultos
+        function editarPackingList(tarId) {
+            document.getElementById('modal-packing-list').style.display = 'block';
+            document.getElementById('packing-list-pedido-id').value = tarId;
+            document.getElementById('packing_list_fecha').value = obtenerFechaHoy();
+            
+            // Cargar datos existentes del TAR
+            const tar = tars.find(t => t.id === tarId);
+            if (tar && tar.packing_list) {
+                document.getElementById('packing_list_direccion').value = tar.packing_list.direccion || '';
+                document.getElementById('packing_list_bultos').value = tar.packing_list.bultos || 1;
+                document.getElementById('packing_list_peso_total').value = tar.packing_list.peso_total || 0;
+                document.getElementById('packing_list_fecha').value = tar.packing_list.fecha || obtenerFechaHoy();
+            }
+            
+            // Resetear configuración de bultos
+            document.getElementById('configuracion-bultos-container').style.display = 'none';
+            document.getElementById('packing_list_bultos').value = tar.packing_list?.bultos || '';
+        }
+
+        function generarConfiguracionBultos() {
+            const numBultos = parseInt(document.getElementById('packing_list_bultos').value);
+            const tarId = parseInt(document.getElementById('packing-list-pedido-id').value);
+            const tar = tars.find(t => t.id === tarId);
+            
+            if (!numBultos || !tar) {
+                document.getElementById('configuracion-bultos-container').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('configuracion-bultos-container').style.display = 'block';
+            
+            // Inicializar datos globales para la configuración
+            window.piezasDisponibles = [...tar.piezas];
+            window.configuracionBultos = {};
+            window.infoBultos = {};
+            
+            // Cargar configuración existente si existe
+            if (tar.configuracion_bultos) {
+                window.configuracionBultos = {...tar.configuracion_bultos};
+                window.infoBultos = {...(tar.info_bultos || {})};
+                
+                // Remover piezas ya asignadas de las disponibles
+                Object.values(tar.configuracion_bultos).forEach(piezasEnBulto => {
+                    piezasEnBulto.forEach(piezaEnBulto => {
+                        window.piezasDisponibles = window.piezasDisponibles.filter(p => 
+                            !(p.referencia === piezaEnBulto.referencia && p.descripcion === piezaEnBulto.descripcion)
+                        );
+                    });
+                });
+            } else {
+                // Inicializar bultos vacíos con información adicional
+                for (let i = 1; i <= numBultos; i++) {
+                    window.configuracionBultos[`bulto_${i}`] = [];
+                    window.infoBultos[`bulto_${i}`] = {
+                        peso: 0,
+                        dimensiones: ''
+                    };
+                }
+            }
+            
+            // Llenar selector de bultos
+            const selector = document.getElementById('bulto-selector');
+            selector.innerHTML = '';
+            for (let i = 1; i <= numBultos; i++) {
+                const option = document.createElement('option');
+                option.value = `bulto_${i}`;
+                option.textContent = `Bulto ${i}`;
+                selector.appendChild(option);
+            }
+            
+            // Cargar primera vista
+            mostrarPiezasDisponibles();
+            mostrarContenidoBulto();
+            cargarInfoBulto();
+            
+            // Event listener para cambio de bulto
+            selector.onchange = () => {
+                mostrarContenidoBulto();
+                cargarInfoBulto();
+            };
+        }
+
+        function mostrarPiezasDisponibles() {
+            const container = document.getElementById('piezas-disponibles');
+            container.innerHTML = '';
+            
+            window.piezasDisponibles.forEach((pieza, index) => {
+                const div = document.createElement('div');
+                div.className = 'pieza-item';
+                div.style.cssText = `
+                    padding: 10px;
+                    margin: 5px 0;
+                    border: 1px solid #d1d5db;
+                    border-radius: 6px;
+                    background: white;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                `;
+                div.onclick = () => seleccionarPieza(div, index);
+                div.innerHTML = `
+                    <div style="font-weight: 600; color: #374151;">${pieza.referencia}</div>
+                    <div style="font-size: 12px; color: #6b7280;">${pieza.descripcion}</div>
+                    <div style="font-size: 12px; color: #059669;">Cantidad: ${pieza.cantidad}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function mostrarContenidoBulto() {
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            const container = document.getElementById('bulto-contenido');
+            
+            if (!bultoSeleccionado) return;
+            
+            const piezasEnBulto = window.configuracionBultos[bultoSeleccionado] || [];
+            container.innerHTML = '';
+            
+            if (piezasEnBulto.length === 0) {
+                container.innerHTML = `
+                    <p style="color: #9ca3af; text-align: center; margin-top: 50px;">
+                        Este bulto está vacío.<br>
+                        Seleccione piezas de la izquierda y use el botón → para agregar.
+                    </p>
+                `;
+                return;
+            }
+            
+            piezasEnBulto.forEach((pieza, index) => {
+                const div = document.createElement('div');
+                div.className = 'pieza-en-bulto';
+                div.style.cssText = `
+                    padding: 10px;
+                    margin: 5px 0;
+                    border: 1px solid #10b981;
+                    border-radius: 6px;
+                    background: #ecfdf5;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                `;
+                div.onclick = () => seleccionarPiezaEnBulto(div, index);
+                div.innerHTML = `
+                    <div style="font-weight: 600; color: #065f46;">${pieza.referencia}</div>
+                    <div style="font-size: 12px; color: #047857;">${pieza.descripcion}</div>
+                    <div style="font-size: 12px; color: #059669;">Cantidad: ${pieza.cantidad}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function cargarInfoBulto() {
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            const infoContainer = document.getElementById('info-bulto-container');
+            
+            if (!bultoSeleccionado) {
+                infoContainer.style.display = 'none';
+                return;
+            }
+            
+            infoContainer.style.display = 'block';
+            
+            const infoBulto = window.infoBultos[bultoSeleccionado];
+            document.getElementById('bulto-peso').value = infoBulto.peso;
+            document.getElementById('bulto-dimensiones').value = infoBulto.dimensiones;
+        }
+
+        function actualizarInfoBulto() {
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            
+            if (!bultoSeleccionado) return;
+            
+            const peso = parseFloat(document.getElementById('bulto-peso').value) || 0;
+            const dimensiones = document.getElementById('bulto-dimensiones').value || '';
+            
+            window.infoBultos[bultoSeleccionado] = {
+                peso: peso,
+                dimensiones: dimensiones
+            };
+            
+            // Actualizar peso total automáticamente
+            actualizarPesoTotal();
+        }
+
+        function actualizarPesoTotal() {
+            let pesoTotal = 0;
+            Object.values(window.infoBultos || {}).forEach(info => {
+                pesoTotal += info.peso || 0;
+            });
+            
+            document.getElementById('packing_list_peso_total').value = pesoTotal.toFixed(1);
+        }
+
+        function seleccionarPieza(elemento, index) {
+            // Limpiar selecciones anteriores
+            document.querySelectorAll('.pieza-item').forEach(item => {
+                item.style.background = 'white';
+                item.style.borderColor = '#d1d5db';
+            });
+            document.querySelectorAll('.pieza-en-bulto').forEach(item => {
+                item.style.background = '#ecfdf5';
+                item.style.borderColor = '#10b981';
+            });
+            
+            // Seleccionar elemento actual
+            elemento.style.background = '#dbeafe';
+            elemento.style.borderColor = '#3b82f6';
+            window.piezaSeleccionadaIndex = index;
+            window.piezaSeleccionadaEnBulto = null;
+        }
+
+        function seleccionarPiezaEnBulto(elemento, index) {
+            // Limpiar selecciones anteriores
+            document.querySelectorAll('.pieza-item').forEach(item => {
+                item.style.background = 'white';
+                item.style.borderColor = '#d1d5db';
+            });
+            document.querySelectorAll('.pieza-en-bulto').forEach(item => {
+                item.style.background = '#ecfdf5';
+                item.style.borderColor = '#10b981';
+            });
+            
+            // Seleccionar elemento actual
+            elemento.style.background = '#fef3c7';
+            elemento.style.borderColor = '#f59e0b';
+            window.piezaSeleccionadaEnBulto = index;
+            window.piezaSeleccionadaIndex = null;
+        }
+
+        function moverPiezaABulto() {
+            if (window.piezaSeleccionadaIndex === null || window.piezaSeleccionadaIndex === undefined) {
+                alert('Seleccione una pieza de la lista de disponibles');
+                return;
+            }
+            
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            
+            if (!bultoSeleccionado) {
+                alert('Seleccione un bulto');
+                return;
+            }
+            
+            // Mover pieza
+            const pieza = window.piezasDisponibles[window.piezaSeleccionadaIndex];
+            window.configuracionBultos[bultoSeleccionado].push(pieza);
+            window.piezasDisponibles.splice(window.piezaSeleccionadaIndex, 1);
+            
+            // Actualizar vistas
+            mostrarPiezasDisponibles();
+            mostrarContenidoBulto();
+            
+            // Limpiar selección
+            window.piezaSeleccionadaIndex = null;
+        }
+
+        function regresarPiezaADisponibles() {
+            if (window.piezaSeleccionadaEnBulto === null || window.piezaSeleccionadaEnBulto === undefined) {
+                alert('Seleccione una pieza del bulto');
+                return;
+            }
+            
+            const selector = document.getElementById('bulto-selector');
+            const bultoSeleccionado = selector.value;
+            
+            if (!bultoSeleccionado) return;
+            
+            // Mover pieza de vuelta
+            const pieza = window.configuracionBultos[bultoSeleccionado][window.piezaSeleccionadaEnBulto];
+            window.piezasDisponibles.push(pieza);
+            window.configuracionBultos[bultoSeleccionado].splice(window.piezaSeleccionadaEnBulto, 1);
+            
+            // Actualizar vistas
+            mostrarPiezasDisponibles();
+            mostrarContenidoBulto();
+            
+            // Limpiar selección
+            window.piezaSeleccionadaEnBulto = null;
+        }
+
+        // Estados
+        function avanzarEstado(tarId) {
+            if (confirm('¿Está seguro de que desea avanzar al siguiente estado?')) {
+                const tar = tars.find(t => t.id === tarId);
+                const estadoIndex = ESTADOS_TAR.indexOf(tar.estado);
+                
+                if (estadoIndex < ESTADOS_TAR.length - 1) {
+                    tar.estado = ESTADOS_TAR[estadoIndex + 1];
+                    guardarDatos();
+                    mostrarTars();
+                }
+            }
+        }
+
+        function retrocederEstado(tarId) {
+            if (confirm('¿Está seguro de que desea retroceder al estado anterior?')) {
+                const tar = tars.find(t => t.id === tarId);
+                const estadoIndex = ESTADOS_TAR.indexOf(tar.estado);
+                
+                if (estadoIndex > 0) {
+                    tar.estado = ESTADOS_TAR[estadoIndex - 1];
+                    guardarDatos();
+                    mostrarTars();
+                }
+            }
+        }
+
+        // Funciones para manejo de PDFs
+        function getFileData(tar, tipo) {
+            switch(tipo) {
+                case 'packing':
+                    return (tar.packing_list && tar.packing_list.pdf_url) || '';
+                case 'etiquetas':
+                    return (tar.etiquetas && tar.etiquetas.pdf_url) || '';
+                default:
+                    return '';
+            }
+        }
+
+        function abrirPDF(nombreArchivo, fileData) {
+            if (fileData && fileData.startsWith('data:')) {
+                const byteCharacters = atob(fileData.split(',')[1]);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], {type: 'application/pdf'});
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+                
+                setTimeout(() => URL.revokeObjectURL(url), 10000);
+            } else if (fileData) {
+                window.open(fileData, '_blank');
+            } else {
+                alert('Archivo PDF no disponible. Asegúrese de subir el archivo correspondiente.');
+            }
+        }
+
+        function procesarArchivoPDF(file) {
+            return new Promise((resolve, reject) => {
+                if (file && file.type === 'application/pdf') {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        resolve(e.target.result);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                } else {
+                    reject(new Error('Archivo no válido'));
+                }
+            });
+        }
+
+        // Form handlers
+        document.getElementById('form-crear-tar').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const grid = document.getElementById('tar-pieces-grid');
+            const piezas = [];
+            let total = 0;
+            
+            for (let i = 1; i < grid.children.length; i++) {
+                const row = grid.children[i];
+                const cantidad = parseInt(row.children[3].value);
+                const precio = parseFloat(row.children[4].value);
+                
+                piezas.push({
+                    referencia: row.children[0].value,
+                    descripcion: row.children[1].value,
+                    proyecto: row.children[2].value,
+                    cantidad: cantidad,
+                    precio_unitario: precio,
+                    precio_total: cantidad * precio
+                });
+                
+                total += cantidad * precio;
+            }
+            
+            const nuevoTar = {
+                id: nextTarId++,
+                tipo: 'tar',
+                proveedor: formData.get('proveedor'),
+                email_proveedor: formData.get('email_proveedor'),
+                fecha_creacion: new Date().toLocaleDateString(),
+                estado: 'packing_list_creado',
+                piezas: piezas,
+                total: total,
+                packing_list: {
+                    direccion: '',
+                    bultos: 1,
+                    fecha: new Date().toLocaleDateString(),
+                    peso_total: 0
+                }
+            };
+            
+            tars.push(nuevoTar);
+            guardarDatos();
+            mostrarTars();
+            cerrarModalCrearTar();
+        });
+
+        document.getElementById('form-lanzar-tar').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const tarId = parseInt(document.getElementById('lanzar-tar-pedido-id').value);
+            const tar = tars.find(t => t.id === tarId);
+            
+            if (tar) {
+                tar.tar = {
+                    numero: formData.get('numero'),
+                    email: formData.get('email'),
+                    url: formData.get('url'),
+                    fecha: formData.get('fecha')
+                };
+                tar.estado = 'tar_lanzado';
+                
+                guardarDatos();
+                mostrarTars();
+                cerrarModalLanzarTar();
+            }
+        });
+
+        document.getElementById('form-enviar-etiquetas').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const tarId = parseInt(document.getElementById('enviar-etiquetas-pedido-id').value);
+            const tar = tars.find(t => t.id === tarId);
+            
+            if (tar) {
+                const file = formData.get('pdf');
+                let pdfUrl = '';
+                
+                if (file && file.size > 0) {
+                    try {
+                        pdfUrl = await procesarArchivoPDF(file);
+                    } catch (error) {
+                        alert('Error al procesar el archivo PDF');
+                        return;
+                    }
+                }
+                
+                tar.etiquetas = {
+                    pdf: file ? file.name : 'etiquetas.pdf',
+                    pdf_url: pdfUrl,
+                    tracking: formData.get('tracking'),
+                    fecha: formData.get('fecha')
+                };
+                tar.estado = 'etiquetas_enviadas';
+                
+                guardarDatos();
+                mostrarTars();
+                cerrarModalEnviarEtiquetas();
+            }
+        });
+
+        // Form handler para packing list
+        document.getElementById('form-packing-list').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const tarId = parseInt(document.getElementById('packing-list-pedido-id').value);
+            const tar = tars.find(t => t.id === tarId);
+            
+            if (tar) {
+                // Procesar el PDF del packing list
+                const file = formData.get('pdf');
+                let pdfUrl = '';
+                
+                if (file && file.size > 0) {
+                    try {
+                        pdfUrl = await procesarArchivoPDF(file);
+                    } catch (error) {
+                        alert('Error al procesar el archivo PDF');
+                        return;
+                    }
+                }
+                
+                tar.packing_list = {
+                    direccion: formData.get('direccion'),
+                    bultos: parseInt(formData.get('bultos')),
+                    peso_total: parseFloat(formData.get('peso_total')),
+                    fecha: formData.get('fecha'),
+                    pdf: file ? file.name : (tar.packing_list?.pdf || 'packing_list.pdf'),
+                    pdf_url: pdfUrl || (tar.packing_list?.pdf_url || '')
+                };
+                
+                // Guardar configuración de bultos si existe
+                if (window.configuracionBultos) {
+                    tar.configuracion_bultos = {...window.configuracionBultos};
+                    tar.info_bultos = {...window.infoBultos};
+                }
+                
+                guardarDatos();
+                mostrarTars();
+                cerrarModalPackingList();
+            }
+        });
+
+        // Cerrar modals al hacer click fuera
+        window.onclick = function(event) {
+            const modals = [
+                'modal-crear-tar',
+                'modal-packing-list',
+                'modal-lanzar-tar',
+                'modal-enviar-etiquetas'
+            ];
+            
+            modals.forEach(modalId => {
+                const modal = document.getElementById(modalId);
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

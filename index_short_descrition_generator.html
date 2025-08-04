@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Short Description Generator</title>
+  <style>
+    /* Reset básico */
+    html, body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      background: #57a0ff;
+      color: #ebebeb;
+      font-family: 'Ubuntu Mono', 'Courier New', Courier, monospace;
+      min-height: 100vh;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 0 16px;
+    }
+
+    h2 {
+      color: #f5f5f5;
+      font-weight: normal;
+      font-size: 2rem;
+      margin: 40px 0 32px 0;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    .section {
+      background: #3281f7;
+      border-radius: 10px;
+      box-shadow: 0 2px 16px 0 rgba(255, 255, 255, 0.12);
+      padding: 32px 24px 24px 24px;
+      min-width: 320px;
+      max-width: 420px;
+      width: 100%;
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0;
+    }
+
+    .prompt {
+      font-size: 1rem;
+      min-width: 110px;
+      color: #3091ff;
+      letter-spacing: 0.5px;
+    }
+
+    .prompt .tilde {
+      color: #729fcf;
+      font-weight: bold;
+      margin-right: 2px;
+    }
+
+    .prompt .resto {
+      color: #ebebeb;
+      font-weight: normal;
+    }
+
+    input[type="text"] {
+      background: #c5d7ff; 
+      color: #000000;
+      border: 1px solid #33394d;
+      border-radius: 5px;
+      padding: 6px 10px;
+      font-size: 1rem;
+      flex: 1;
+      transition: border 0.2s;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border: 1.5px solid #3ea2ff;
+      background: #c5d7ff;
+    }
+
+    .paste-button,
+    button {
+      background: #0044ff;
+      color: #cceee3;
+      border: 1px solid #33394d;
+      border-radius: 5px;
+      padding: 6px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.18s, border 0.18s;
+    }
+
+    .paste-button:hover,
+    button:hover {
+      background: #232b33;
+      border-color: #002df8;
+      color: #002df8;
+    }
+
+    .resultado-container {
+      margin-top: 20px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .resultado-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    textarea {
+      background: #c5d7ff; 
+      color: #000000;
+      border: 1px solid #33394d;
+      border-radius: 6px;
+      width: 100%;
+      height: 60px;
+      resize: none;
+      padding: 10px;
+      font-size: 1rem;
+      transition: border 0.18s;
+      outline: none;
+    }
+
+    textarea:focus {
+      border: 1.5px solid #002df8;
+      background: #ffffff;
+    }
+
+    @media (max-width: 500px) {
+      .section {
+        min-width: unset;
+        padding: 18px 4vw 18px 4vw;
+      }
+      .field-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 3px;
+      }
+      .resultado-bar {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h2>Short Description Generator</h2>
+
+  <div class="section">
+    <div class="field-group">
+      <span class="prompt"><span class="tilde"></span><span class="resto"> Nº OFERTA</span></span>
+      <input type="text" id="oferta">
+      <button class="paste-button" onclick="pegar('oferta')">Pegar</button>
+    </div>
+    <div class="field-group">
+      <span class="prompt"><span class="tilde"></span><span class="resto"> PIEZA</span></span>
+      <input type="text" id="pieza">
+      <button class="paste-button" onclick="pegar('pieza')">Pegar</button>
+    </div>
+    <div class="field-group">
+      <span class="prompt"><span class="tilde"></span><span class="resto"> DESCRIPCIÓN</span></span>
+      <input type="text" id="descripcion">
+      <button class="paste-button" onclick="pegar('descripcion')">Pegar</button>
+    </div>
+    <div class="field-group">
+      <span class="prompt"><span class="tilde"></span><span class="resto"> PROYECTO</span></span>
+      <input type="text" id="proyecto">
+      <button class="paste-button" onclick="pegar('proyecto')">Pegar</button>
+    </div>
+    <div class="field-group">
+      <span class="prompt"><span class="tilde"></span><span class="resto"> UNIT PRICE</span></span>
+      <input type="text" id="precio">
+      <button class="paste-button" onclick="pegar('precio')">Pegar</button>
+    </div>
+    <button onclick="generarDescripcion()" style="margin-top:10px;">Generar Descripción</button>
+
+    <div class="resultado-container">
+      <span class="prompt"><span class="tilde"></span><span class="resto"> Resultado</span></span>
+      <div class="resultado-bar">
+        <textarea id="resultado" readonly></textarea>
+        <button onclick="copiarAlPortapapeles()">Copiar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function pegar(id) {
+      navigator.clipboard.readText()
+        .then(text => {
+          document.getElementById(id).value = text;
+        })
+        .catch(err => {
+          console.error('Error al pegar desde el portapapeles:', err);
+        });
+    }
+
+    function generarDescripcion() {
+      const oferta = document.getElementById('oferta').value.trim().replace(/\s+/g, '_');
+      const pieza = document.getElementById('pieza').value.trim().replace(/\s+/g, '_');
+      const descripcion = document.getElementById('descripcion').value.trim().replace(/\s+/g, '_');
+      const proyecto = document.getElementById('proyecto').value.trim().replace(/\s+/g, '_');
+      const precio = document.getElementById('precio').value.trim().replace(/\s+/g, '_');
+      const resultado = `${oferta}_${pieza}_${descripcion}_${proyecto}_${precio}`;
+      document.getElementById('resultado').value = resultado;
+    }
+
+    function copiarAlPortapapeles() {
+      const resultado = document.getElementById('resultado').value;
+      navigator.clipboard.writeText(resultado).catch(err => {
+        console.error("Error al copiar:", err);
+      });
+    }
+
+    // --- NUEVO: Saltar al siguiente campo con Enter ---
+    document.addEventListener("DOMContentLoaded", function() {
+      const inputIds = ['oferta', 'pieza', 'descripcion', 'proyecto', 'precio'];
+      inputIds.forEach((id, idx) => {
+        const input = document.getElementById(id);
+        input.addEventListener('keydown', function(event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            if (idx < inputIds.length - 1) {
+              // Enfoca el siguiente input
+              document.getElementById(inputIds[idx + 1]).focus();
+            } else {
+              // Último campo: enfoca el botón de "Generar Descripción"
+              document.querySelector('button[onclick^="generarDescripcion"]').focus();
+            }
+          }
+        });
+      });
+    });
+    // --- FIN NUEVO ---
+  </script>
+</body>
+</html>
