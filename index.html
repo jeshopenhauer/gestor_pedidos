@@ -420,6 +420,109 @@
         .close:hover {
             color: #000;
         }
+
+        /* Estilos específicos para Short Description Generator */
+        .form-grid-sd {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group-sd {
+            margin-bottom: 20px;
+        }
+
+        .form-group-sd label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .label-icon-sd {
+            color: #0062ff;
+            margin-right: 8px;
+        }
+
+        .input-row-sd {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-row-sd input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+            background: white;
+            color: #374151;
+        }
+
+        .input-row-sd input[type="text"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .generate-section-sd {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px 0;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .result-section-sd {
+            margin-top: 30px;
+        }
+
+        .result-label-sd {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .result-row-sd {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+        }
+
+        .result-row-sd textarea {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f9fafb;
+            color: #374151;
+            resize: none;
+            height: 80px;
+            transition: border-color 0.2s ease;
+        }
+
+        .result-row-sd textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background: white;
+        }
+
+        .success-message-sd {
+            background: #dcfce7;
+            color: #166534;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: none;
+            margin-top: 10px;
+            border: 1px solid #bbf7d0;
+        }
     </style>
 </head>
 <body>
@@ -429,7 +532,10 @@
             <h1>📦 Gestor de pedidos</h1>
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button class="btn btn-secondary" onclick="abrirShortDescriptionGenerator()" title="Abrir generador de descripciones">
-                    🧮 Short Description Generator
+                    Short Description Generator
+                </button>
+                <button class="btn btn-secondary" onclick="abrirGestorTar()" title="Ir al gestor de TAR">
+                    🚚 Gestor TAR
                 </button>
                 <button class="btn" onclick="abrirModalCrearPedido()">+ Crear pedido</button>
             </div>
@@ -817,6 +923,95 @@
         </div>
     </div>
 
+    <!-- Modal para Short Description Generator -->
+    <div id="modal-short-description" class="modal">
+        <div class="modal-content" style="max-width: 850px; max-height: 90vh;">
+            <div class="modal-header">
+                <h2 style="color: #0062ff; margin: 0; font-size: 1.8rem;">Short Description Generator</h2>
+                <span class="close" onclick="cerrarModalShortDescription()">&times;</span>
+            </div>
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto; padding: 20px;">
+                <div class="form-grid-sd">
+                    <div class="form-group-sd">
+                        <label for="sd-oferta">
+                            <span class="label-icon-sd"></span>Nº OFERTA
+                        </label>
+                        <div class="input-row-sd">
+                            <input type="text" id="sd-oferta">
+                            <button class="btn btn-secondary" onclick="pegarSD('sd-oferta')">Pegar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group-sd">
+                        <label for="sd-pieza">
+                            <span class="label-icon-sd"></span>PIEZA
+                        </label>
+                        <div class="input-row-sd">
+                            <input type="text" id="sd-pieza">
+                            <button class="btn btn-secondary" onclick="pegarSD('sd-pieza')">Pegar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group-sd">
+                        <label for="sd-descripcion">
+                            <span class="label-icon-sd"></span>DESCRIPCIÓN
+                        </label>
+                        <div class="input-row-sd">
+                            <input type="text" id="sd-descripcion">
+                            <button class="btn btn-secondary" onclick="pegarSD('sd-descripcion')">Pegar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group-sd">
+                        <label for="sd-proyecto">
+                            <span class="label-icon-sd"></span>PROYECTO
+                        </label>
+                        <div class="input-row-sd">
+                            <input type="text" id="sd-proyecto">
+                            <button class="btn btn-secondary" onclick="pegarSD('sd-proyecto')">Pegar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group-sd">
+                        <label for="sd-precio">
+                            <span class="label-icon-sd"></span>PRECIO UNITARIO
+                        </label>
+                        <div class="input-row-sd">
+                            <input type="text" id="sd-precio">
+                            <button class="btn btn-secondary" onclick="pegarSD('sd-precio')">Pegar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="generate-section-sd">
+                    <button class="btn" onclick="generarDescripcionSD()" style="background: #10b981; padding: 12px 24px; font-size: 16px; font-weight: 600;">
+                        Generar Descripción
+                    </button>
+                </div>
+
+                <div class="result-section-sd">
+                    <label class="result-label-sd">
+                        <span class="label-icon-sd"></span>Resultado Generado
+                    </label>
+                    <div class="result-row-sd">
+                        <textarea id="sd-resultado" readonly style="font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; height: 80px; background: #f9fafb;"></textarea>
+                        <button class="btn" onclick="copiarAlPortapapelesSD()" style="height: fit-content;">
+                            Copiar
+                        </button>
+                    </div>
+                    <div class="success-message-sd" id="sd-success-message">
+                        ¡Copiado al portapapeles exitosamente!
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px; padding: 0 20px 20px 20px;">
+                <button type="button" class="btn btn-secondary" onclick="limpiarCamposSD()">Limpiar</button>
+                <button type="button" class="btn btn-secondary" onclick="cerrarModalShortDescription()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Datos en memoria
         let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
@@ -1096,7 +1291,16 @@
         }
 
         function abrirShortDescriptionGenerator() {
-            window.open('index_short_descrition_generator.html', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
+            document.getElementById('modal-short-description').style.display = 'block';
+            limpiarCamposSD();
+            setTimeout(() => {
+                document.getElementById('sd-oferta').focus();
+            }, 100);
+        }
+
+        function abrirGestorTar() {
+            // Navegación segura sin conflictos de memoria
+            window.location.href = 'gestor-tar.html';
         }
 
         function cerrarModal() {
@@ -1126,6 +1330,77 @@
 
         function cerrarModalDetalle() {
             document.getElementById('modal-detalle-completo').style.display = 'none';
+        }
+
+        // Funciones para Short Description Generator
+        function cerrarModalShortDescription() {
+            document.getElementById('modal-short-description').style.display = 'none';
+        }
+
+        function limpiarCamposSD() {
+            document.getElementById('sd-oferta').value = '';
+            document.getElementById('sd-pieza').value = '';
+            document.getElementById('sd-descripcion').value = '';
+            document.getElementById('sd-proyecto').value = '';
+            document.getElementById('sd-precio').value = '';
+            document.getElementById('sd-resultado').value = '';
+            document.getElementById('sd-success-message').style.display = 'none';
+        }
+
+        function pegarSD(id) {
+            navigator.clipboard.readText()
+                .then(text => {
+                    document.getElementById(id).value = text.trim();
+                    // Removido: Auto-generar si todos los campos están llenos
+                    // La generación ahora solo se hace manualmente con el botón
+                })
+                .catch(err => {
+                    console.error('Error al pegar desde el portapapeles:', err);
+                });
+        }
+
+        function generarDescripcionSD() {
+            const oferta = document.getElementById('sd-oferta').value.trim().replace(/\s+/g, '_');
+            const pieza = document.getElementById('sd-pieza').value.trim().replace(/\s+/g, '_');
+            const descripcion = document.getElementById('sd-descripcion').value.trim().replace(/\s+/g, '_');
+            const proyecto = document.getElementById('sd-proyecto').value.trim().replace(/\s+/g, '_');
+            const precio = document.getElementById('sd-precio').value.trim().replace(/\s+/g, '_');
+            
+            if (!oferta || !pieza || !descripcion || !proyecto || !precio) {
+                alert('⚠️ Por favor, complete todos los campos antes de generar la descripción.');
+                return;
+            }
+            
+            const resultado = `${oferta}_${pieza}_${descripcion}_${proyecto}_${precio}`;
+            document.getElementById('sd-resultado').value = resultado;
+            
+            // Enfocar el textarea del resultado
+            document.getElementById('sd-resultado').focus();
+        }
+
+        function copiarAlPortapapelesSD() {
+            const resultado = document.getElementById('sd-resultado').value;
+            if (!resultado) {
+                alert('⚠️ No hay ninguna descripción generada para copiar.');
+                return;
+            }
+            
+            navigator.clipboard.writeText(resultado)
+                .then(() => {
+                    mostrarMensajeExitoSD();
+                })
+                .catch(err => {
+                    console.error("Error al copiar:", err);
+                    alert('❌ Error al copiar al portapapeles.');
+                });
+        }
+
+        function mostrarMensajeExitoSD() {
+            const mensaje = document.getElementById('sd-success-message');
+            mensaje.style.display = 'block';
+            setTimeout(() => {
+                mensaje.style.display = 'none';
+            }, 3000);
         }
 
         // Función para mostrar detalle completo en modal
@@ -1943,7 +2218,8 @@
                 'modal-packing-list',
                 'modal-lanzar-tar',
                 'modal-enviar-etiquetas',
-                'modal-detalle-completo'
+                'modal-detalle-completo',
+                'modal-short-description'
             ];
             
             modals.forEach(modalId => {
@@ -1953,6 +2229,30 @@
                 }
             });
         }
+
+        // Event listeners para Short Description Generator
+        document.addEventListener("DOMContentLoaded", function() {
+            const inputIds = ['sd-oferta', 'sd-pieza', 'sd-descripcion', 'sd-proyecto', 'sd-precio'];
+            
+            inputIds.forEach((id, idx) => {
+                const input = document.getElementById(id);
+                
+                // Evento de Enter para navegar (excepto en el último campo)
+                if (id !== 'sd-precio') {
+                    input.addEventListener('keydown', function(event) {
+                        if (event.key === "Enter") {
+                            event.preventDefault();
+                            if (idx < inputIds.length - 1) {
+                                document.getElementById(inputIds[idx + 1]).focus();
+                            }
+                        }
+                    });
+                }
+                
+                // Removido: Auto-generar cuando se complete el último campo
+                // La generación ahora solo se hace manualmente con el botón
+            });
+        });
     </script>
 </body>
 </html><!-- Cache Buster: 20250804100120 -->
