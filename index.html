@@ -184,6 +184,12 @@
             transform: scale(1.1); /* Añadido */
         }
 
+        .timeline-circle.active-blue {
+            background: #0062ff;
+            color: white;
+            transform: scale(1.1);
+        }
+
         .timeline-label {
             margin-top: 10px;    /* Aumentado de 8px */
             font-size: 13px;     /* Aumentado de 12px */
@@ -194,6 +200,11 @@
 
         .timeline-label.active {
             color: #10b981;
+            font-weight: 600;
+        }
+
+        .timeline-label.active-blue {
+            color: #0062ff;
             font-weight: 600;
         }
 
@@ -523,6 +534,48 @@
             margin-top: 10px;
             border: 1px solid #bbf7d0;
         }
+
+        /* Estilos específicos para TAR */
+        #tar-pieces-grid {
+            min-width: 975px;
+        }
+
+        .tar-header {
+            background: linear-gradient(135deg, #0062ff 0%, #3b82f6 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
+        }
+
+        .tar-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tar-status.creado {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .tar-status.packing_list_generado {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .tar-status.tar_lanzado {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tar-status.completado {
+            background: #d1fae5;
+            color: #065f46;
+        }
     </style>
 </head>
 <body>
@@ -534,27 +587,42 @@
                 <button class="btn btn-secondary" onclick="abrirShortDescriptionGenerator()" title="Abrir generador de descripciones">
                     Short Description Generator
                 </button>
-                <button class="btn btn-secondary" onclick="abrirGestorTar()" title="Ir al gestor de TAR">
-                    🚚 Gestor TAR
-                </button>
                 <button class="btn" onclick="abrirModalCrearPedido()">+ Crear pedido</button>
+                <button class="btn" onclick="abrirModalCrearTar()" style="background: #0062ff;">+ Crear TAR</button>
             </div>
         </div>
 
         <!-- Panel de pedidos -->
         <div class="card">
-            <h2 style="color: #1f2937; margin-bottom: 20px; font-size: 1.5rem;">Panel de pedidos</h2>
+            <h2 style="color: #1f2937; margin-bottom: 20px; font-size: 1.5rem;">📦 Panel de Pedidos</h2>
             
             <div id="pedidos-container">
                 <!-- Aquí se mostrarán los pedidos dinámicamente -->
             </div>
 
-            <!-- Estado vacío -->
-            <div id="empty-state" class="empty-state">
+            <!-- Estado vacío pedidos -->
+            <div id="empty-state-pedidos" class="empty-state">
                 <div class="icon">📋</div>
                 <p style="font-size: 18px; margin-bottom: 15px;">No hay pedidos registrados</p>
                 <p style="margin-bottom: 20px;">Comience creando su primer pedido</p>
                 <button class="btn" onclick="abrirModalCrearPedido()">+ Crear primer pedido</button>
+            </div>
+        </div>
+
+        <!-- Panel de TAR -->
+        <div class="card" style="margin-top: 30px;">
+            <h2 style="color: #1f2937; margin-bottom: 20px; font-size: 1.5rem;">🚚 Panel de TAR</h2>
+            
+            <div id="tar-container">
+                <!-- Aquí se mostrarán los TAR dinámicamente -->
+            </div>
+
+            <!-- Estado vacío TAR -->
+            <div id="empty-state-tar" class="empty-state">
+                <div class="icon">🚚</div>
+                <p style="font-size: 18px; margin-bottom: 15px;">No hay TAR registrados</p>
+                <p style="margin-bottom: 20px;">Comience creando su primer TAR</p>
+                <button class="btn" onclick="abrirModalCrearTar()" style="background: #0062ff;">+ Crear primer TAR</button>
             </div>
         </div>
     </div>
@@ -1012,6 +1080,79 @@
         </div>
     </div>
 
+    <!-- Modal para crear TAR -->
+    <div id="modal-crear-tar" class="modal">
+        <div class="modal-content" style="max-width: 1200px;">
+            <div class="modal-header">
+                <h2>🚚 Crear Nuevo TAR</h2>
+                <span class="close" onclick="cerrarModalCrearTar()">&times;</span>
+            </div>
+            
+            <form id="form-crear-tar">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="tar_proveedor">Proveedor</label>
+                        <input type="text" id="tar_proveedor" name="proveedor">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tar_email_proveedor">Email del Proveedor</label>
+                        <input type="email" id="tar_email_proveedor" name="email_proveedor">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tar_numero_oferta">Número de Oferta</label>
+                        <input type="text" id="tar_numero_oferta" name="numero_oferta">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tar_fecha_oferta">Fecha de Oferta</label>
+                        <input type="date" id="tar_fecha_oferta" name="fecha_oferta">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tar_numero_eproc">Número EPROC</label>
+                        <input type="text" id="tar_numero_eproc" name="numero_eproc">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tar_oi_eproc">OI (Opcional)</label>
+                        <input type="text" id="tar_oi_eproc" name="oi_eproc">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tar_oferta_pdf">Subir PDF de Oferta</label>
+                        <input type="file" id="tar_oferta_pdf" name="oferta_pdf" accept=".pdf">
+                    </div>
+                </div>
+
+                <!-- Sección de piezas -->
+                <div class="pieces-container">
+                    <h3 style="margin-bottom: 20px; color: #374151;">Piezas del TAR</h3>
+                    <div id="tar-pieces-grid">
+                        <div class="piece-row" style="font-weight: bold; background: #f3f4f6;">
+                            <div style="padding: 12px 15px;">Referencia</div>
+                            <div style="padding: 12px 15px;">Descripción</div>
+                            <div style="padding: 12px 15px;">Proyecto</div>
+                            <div style="padding: 12px 15px;">Cantidad</div>
+                            <div style="padding: 12px 15px;">Precio Unit. (€)</div>
+                            <div style="padding: 12px 15px;">Acción</div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="agregarPiezaTar()" style="margin-top: 15px;">+ Agregar Pieza</button>
+                    <div class="total-row">
+                        Total: €<span id="total-tar">0.00</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalCrearTar()">Cancelar</button>
+                    <button type="submit" class="btn">Crear TAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Datos en memoria
         let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
@@ -1077,28 +1218,44 @@
 
         // Mostrar pedidos
         function mostrarPedidos() {
-            const container = document.getElementById('pedidos-container');
-            const emptyState = document.getElementById('empty-state');
+            const pedidosContainer = document.getElementById('pedidos-container');
+            const tarContainer = document.getElementById('tar-container');
+            const emptyStatePedidos = document.getElementById('empty-state-pedidos');
+            const emptyStateTar = document.getElementById('empty-state-tar');
             
-            if (pedidos.length === 0) {
-                container.innerHTML = '';
-                emptyState.style.display = 'block';
-                return;
+            // Separar pedidos y TAR
+            const solosPedidos = pedidos.filter(p => p.tipo !== 'TAR');
+            const solosTar = pedidos.filter(p => p.tipo === 'TAR');
+            
+            // Mostrar pedidos
+            if (solosPedidos.length === 0) {
+                pedidosContainer.innerHTML = '';
+                emptyStatePedidos.style.display = 'block';
+            } else {
+                emptyStatePedidos.style.display = 'none';
+                pedidosContainer.innerHTML = solosPedidos.map(pedido => crearTarjetaPedido(pedido)).join('');
             }
             
-            emptyState.style.display = 'none';
-            container.innerHTML = pedidos.map(pedido => crearTarjetaPedido(pedido)).join('');
+            // Mostrar TAR
+            if (solosTar.length === 0) {
+                tarContainer.innerHTML = '';
+                emptyStateTar.style.display = 'block';
+            } else {
+                emptyStateTar.style.display = 'none';
+                tarContainer.innerHTML = solosTar.map(pedido => crearTarjetaPedido(pedido)).join('');
+            }
         }
 
         // Crear tarjeta de pedido
         function crearTarjetaPedido(pedido) {
             const estadoIndex = ESTADOS.indexOf(pedido.estado);
+            const esTar = pedido.tipo === 'TAR';
             
             return `
                 <div class="pedido-card" data-pedido-id="${pedido.id}">
                     <div class="pedido-header">
                         <div class="pedido-info">
-                            <h3>Pedido #${pedido.id}</h3>
+                            <h3>${esTar ? '🚚 TAR' : 'Pedido'} #${pedido.id}</h3>
                             <p>${pedido.fecha_creacion} - ${pedido.proveedor} - €${pedido.total.toFixed(2)}</p>
                         </div>
                         <div class="pedido-actions">
@@ -1116,16 +1273,38 @@
 
                     <div class="timeline">
                         <div class="timeline-line"></div>
-                        ${ESTADOS.map((estado, index) => `
+                        ${ESTADOS.map((estado, index) => {
+                            let claseEstado = '';
+                            let circuloTexto = '';
+                            
+                            if (esTar && (estado === 'oferta_recibida' || estado === 'eproc_lanzado' || estado === 'eproc_firmado')) {
+                                // Para TAR: primeros tres estados siempre en azul (pre-completados) sin números
+                                claseEstado = 'active-blue';
+                                circuloTexto = '';
+                            } else if (index <= estadoIndex) {
+                                // Estados completados normalmente (verde)
+                                claseEstado = 'active';
+                                circuloTexto = '✓';
+                            } else {
+                                // Estados pendientes - para TAR el paso 1 empieza en packing_list (índice 3)
+                                claseEstado = '';
+                                if (esTar) {
+                                    circuloTexto = index >= 3 ? (index - 2) : '';
+                                } else {
+                                    circuloTexto = index + 1;
+                                }
+                            }
+                            
+                            return `
                             <div class="timeline-step">
-                                <div class="timeline-circle ${index <= estadoIndex ? 'active' : ''}">
-                                    ${index <= estadoIndex ? '✓' : index + 1}
+                                <div class="timeline-circle ${claseEstado}">
+                                    ${circuloTexto}
                                 </div>
-                                <span class="timeline-label ${index <= estadoIndex ? 'active' : ''}">
+                                <span class="timeline-label ${claseEstado}">
                                     ${NOMBRES_ESTADOS[estado]}
                                 </span>
                             </div>
-                        `).join('')}
+                        `}).join('')}
                     </div>
 
                     <div class="navigation-buttons">
@@ -1174,16 +1353,16 @@
                             </div>
                         </div>
 
-                        ${pedido.eproc ? `
+                        ${(pedido.eproc || esTar) ? `
                             <div class="info-section">
-                                <h5>Eproc Lanzado</h5>
+                                <h5>Eproc ${esTar ? '(Pre-lanzado)' : 'Lanzado'}</h5>
                                 <div class="info-grid">
                                     <div>
-                                        <p><strong>Número:</strong> ${pedido.eproc.numero}</p>
-                                        ${pedido.eproc.oi ? `<p><strong>OI:</strong> ${pedido.eproc.oi}</p>` : ''}
+                                        <p><strong>Número:</strong> ${pedido.eproc?.numero || 'N/A'}</p>
+                                        ${pedido.eproc?.oi ? `<p><strong>OI:</strong> ${pedido.eproc.oi}</p>` : ''}
                                     </div>
                                     <div>
-                                        <p><strong>Fecha:</strong> ${pedido.eproc.fecha}</p>
+                                        <p><strong>Fecha:</strong> ${pedido.eproc?.fecha || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
@@ -1298,9 +1477,18 @@
             }, 100);
         }
 
-        function abrirGestorTar() {
-            // Navegación segura sin conflictos de memoria
-            window.location.href = 'gestor-tar.html';
+        function abrirModalCrearTar() {
+            document.getElementById('modal-crear-tar').style.display = 'block';
+            document.getElementById('form-crear-tar').reset();
+            document.getElementById('tar_fecha_oferta').value = obtenerFechaHoy();
+            
+            // Valores por defecto para EPROC
+            const año = new Date().getFullYear();
+            const numeroEproc = `EP${año}-TAR-${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`;
+            document.getElementById('tar_numero_eproc').value = numeroEproc;
+            
+            limpiarPiezasTar();
+            agregarPiezaTar();
         }
 
         function cerrarModal() {
@@ -1403,12 +1591,66 @@
             }, 3000);
         }
 
+        // ===============================
+        // FUNCIONES PARA CREAR TAR
+        // ===============================
+
+        function cerrarModalCrearTar() {
+            document.getElementById('modal-crear-tar').style.display = 'none';
+        }
+
+        function agregarPiezaTar() {
+            const grid = document.getElementById('tar-pieces-grid');
+            const pieceCount = grid.children.length;
+            
+            const pieceRow = document.createElement('div');
+            pieceRow.className = 'piece-row';
+            pieceRow.innerHTML = `
+                <input type="text" name="referencia_${pieceCount}" placeholder="REF-001">
+                <input type="text" name="descripcion_${pieceCount}" placeholder="Descripción de la pieza">
+                <input type="text" name="proyecto_${pieceCount}" placeholder="Proyecto A">
+                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" onchange="calcularTotalTar()">
+                <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" onchange="calcularTotalTar()">
+                <button type="button" class="btn btn-secondary" onclick="eliminarPiezaTar(this)" style="padding: 10px 15px; font-size: 14px; font-weight: bold; width: 100%;">×</button>
+            `;
+            
+            grid.appendChild(pieceRow);
+        }
+
+        function eliminarPiezaTar(button) {
+            button.parentElement.remove();
+            calcularTotalTar();
+        }
+
+        function limpiarPiezasTar() {
+            const grid = document.getElementById('tar-pieces-grid');
+            while (grid.children.length > 1) {
+                grid.removeChild(grid.lastChild);
+            }
+        }
+
+        function calcularTotalTar() {
+            const grid = document.getElementById('tar-pieces-grid');
+            let total = 0;
+            
+            for (let i = 1; i < grid.children.length; i++) {
+                const row = grid.children[i];
+                const cantidad = parseFloat(row.children[3].value) || 0;
+                const precio = parseFloat(row.children[4].value) || 0;
+                total += cantidad * precio;
+            }
+            
+            document.getElementById('total-tar').textContent = total.toFixed(2);
+        }
+
         // Función para mostrar detalle completo en modal
         function mostrarDetalleCompleto(pedidoId) {
             const pedido = pedidos.find(p => p.id === pedidoId);
             if (!pedido) return;
 
-            document.getElementById('detalle-titulo').textContent = `Detalles del Pedido #${pedido.id}`;
+            const esTar = pedido.tipo === 'TAR';
+            const titulo = esTar ? `Detalles del TAR #${pedido.id}` : `Detalles del Pedido #${pedido.id}`;
+            document.getElementById('detalle-titulo').textContent = titulo;
             
             const contenido = `
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
@@ -2209,6 +2451,71 @@
             }
         });
 
+        // Form handler para crear TAR
+        document.getElementById('form-crear-tar').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const grid = document.getElementById('tar-pieces-grid');
+            const piezas = [];
+            let total = 0;
+            
+            for (let i = 1; i < grid.children.length; i++) {
+                const row = grid.children[i];
+                const cantidad = parseInt(row.children[3].value);
+                const precio = parseFloat(row.children[4].value);
+                
+                piezas.push({
+                    referencia: row.children[0].value,
+                    descripcion: row.children[1].value,
+                    proyecto: row.children[2].value,
+                    cantidad: cantidad,
+                    precio_unitario: precio,
+                    precio_total: cantidad * precio
+                });
+                
+                total += cantidad * precio;
+            }
+            
+            // Procesar el PDF de la oferta
+            const file = formData.get('oferta_pdf');
+            let pdfUrl = '';
+            
+            if (file && file.size > 0) {
+                try {
+                    pdfUrl = await procesarArchivoPDF(file);
+                } catch (error) {
+                    alert('Error al procesar el archivo PDF');
+                    return;
+                }
+            }
+            
+            const nuevoTar = {
+                id: nextId++,
+                numero_oferta: formData.get('numero_oferta'),
+                proveedor: formData.get('proveedor'),
+                email_proveedor: formData.get('email_proveedor'),
+                fecha_oferta: formData.get('fecha_oferta'),
+                fecha_creacion: new Date().toLocaleDateString(),
+                estado: 'eproc_firmado', // TAR empieza en eproc_firmado (saltando oferta_recibida y eproc_lanzado)
+                piezas: piezas,
+                total: total,
+                oferta_pdf: pdfUrl,
+                tipo: 'TAR', // Identificador para distinguir TARs de pedidos normales
+                // Datos predefinidos de EPROC (porque el TAR ya tiene esta info)
+                eproc: {
+                    numero: formData.get('numero_eproc'),
+                    oi: formData.get('oi_eproc'),
+                    fecha: new Date().toLocaleDateString()
+                }
+            };
+            
+            pedidos.push(nuevoTar);
+            guardarDatos();
+            mostrarPedidos();
+            cerrarModalCrearTar();
+        });
+
         // Cerrar modals al hacer click fuera
         window.onclick = function(event) {
             const modals = [
@@ -2219,7 +2526,8 @@
                 'modal-lanzar-tar',
                 'modal-enviar-etiquetas',
                 'modal-detalle-completo',
-                'modal-short-description'
+                'modal-short-description',
+                'modal-crear-tar'
             ];
             
             modals.forEach(modalId => {
