@@ -519,7 +519,12 @@
         <!-- Header -->
         <div class="header">
             <h1>🚚 Gestor de TAR</h1>
-            <button class="btn" onclick="abrirModalCrearTar()">+ Crear TAR</button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="btn btn-secondary" onclick="abrirShortDescriptionGenerator()" title="Abrir generador de descripciones">
+                    🧮 Short Description Generator
+                </button>
+                <button class="btn" onclick="abrirModalCrearTar()">+ Crear TAR</button>
+            </div>
         </div>
 
         <!-- Panel de TARs -->
@@ -1057,6 +1062,10 @@
             document.getElementById('form-crear-tar').reset();
             limpiarPiezasTar();
             agregarPiezaTar();
+        }
+
+        function abrirShortDescriptionGenerator() {
+            window.open('index_short_descrition_generator.html', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
         }
 
         function cerrarModalCrearTar() {

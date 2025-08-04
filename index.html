@@ -427,7 +427,12 @@
         <!-- Header -->
         <div class="header">
             <h1>📦 Gestor de pedidos</h1>
-            <button class="btn" onclick="abrirModalCrearPedido()">+ Crear pedido</button>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="btn btn-secondary" onclick="abrirShortDescriptionGenerator()" title="Abrir generador de descripciones">
+                    🧮 Short Description Generator
+                </button>
+                <button class="btn" onclick="abrirModalCrearPedido()">+ Crear pedido</button>
+            </div>
         </div>
 
         <!-- Panel de pedidos -->
@@ -1088,6 +1093,10 @@
             document.getElementById('fecha_oferta').value = obtenerFechaHoy();
             limpiarPiezas();
             agregarPieza();
+        }
+
+        function abrirShortDescriptionGenerator() {
+            window.open('index_short_descrition_generator.html', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
         }
 
         function cerrarModal() {

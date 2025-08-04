@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🧮 Short Description Generator</title>
+  <title>Short Description Generator</title>
   <style>
     * {
       margin: 0;
@@ -234,17 +234,17 @@
             <span class="label-icon"></span>Nº OFERTA
           </label>
           <div class="input-row">
-            <input type="text" id="oferta" placeholder="Ej: OF-2024-001">
+            <input type="text" id="oferta">
             <button class="btn btn-secondary" onclick="pegar('oferta')">Pegar</button>
           </div>
         </div>
 
         <div class="form-group">
           <label for="pieza">
-            <span class="label-icon">🔧</span>PIEZA
+            <span class="label-icon"></span>PIEZA
           </label>
           <div class="input-row">
-            <input type="text" id="pieza" placeholder="Ej: VALVE-001">
+            <input type="text" id="pieza">
             <button class="btn btn-secondary" onclick="pegar('pieza')">Pegar</button>
           </div>
         </div>
@@ -254,27 +254,27 @@
             <span class="label-icon"></span>DESCRIPCIÓN
           </label>
           <div class="input-row">
-            <input type="text" id="descripcion" placeholder="Ej: Válvula de control">
+            <input type="text" id="descripcion">
             <button class="btn btn-secondary" onclick="pegar('descripcion')">Pegar</button>
           </div>
         </div>
 
         <div class="form-group">
           <label for="proyecto">
-            <span class="label-icon">🏗️</span>PROYECTO
+            <span class="label-icon"></span>PROYECTO
           </label>
           <div class="input-row">
-            <input type="text" id="proyecto" placeholder="Ej: Proyecto Alpha">
+            <input type="text" id="proyecto">
             <button class="btn btn-secondary" onclick="pegar('proyecto')">Pegar</button>
           </div>
         </div>
 
         <div class="form-group">
           <label for="precio">
-            <span class="label-icon">💰</span>PRECIO UNITARIO
+            <span class="label-icon"></span>PRECIO UNITARIO
           </label>
           <div class="input-row">
-            <input type="text" id="precio" placeholder="Ej: 150.50">
+            <input type="text" id="precio">
             <button class="btn btn-secondary" onclick="pegar('precio')">Pegar</button>
           </div>
         </div>
@@ -291,7 +291,7 @@
           <span class="label-icon"></span>Resultado Generado
         </label>
         <div class="result-row">
-          <textarea id="resultado" readonly placeholder="La descripción generada aparecerá aquí..."></textarea>
+          <textarea id="resultado" readonly></textarea>
           <button class="btn" onclick="copiarAlPortapapeles()">
             Copiar
           </button>
