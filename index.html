@@ -1774,13 +1774,13 @@
                         <div class="info-section">
                             <h5>Documentos</h5>
                             <div class="pdf-tags">
-                                <span class="pdf-tag clickable" onclick="abrirPDF('Oferta_${pedido.numero_oferta}.pdf', '${getFileData(pedido, 'oferta')}')" 
+                                <span class="pdf-tag clickable" onclick="abrirPDF('Oferta_${pedido.numero_oferta}.pdf', '${getFileData(pedido, 'oferta')}', ${pedido.id}, 'oferta')" 
                                       title="Click para abrir PDF">📄 Oferta_${pedido.numero_oferta}.pdf</span>
-                                ${pedido.eproc_firmado ? `<span class="pdf-tag clickable" onclick="abrirPDF('PO_${pedido.eproc_firmado.po}.pdf', '${getFileData(pedido, 'po')}')" 
+                                ${pedido.eproc_firmado ? `<span class="pdf-tag clickable" onclick="abrirPDF('PO_${pedido.eproc_firmado.po}.pdf', '${getFileData(pedido, 'po')}', ${pedido.id}, 'po')" 
                                       title="Click para abrir PDF">📄 PO_${pedido.eproc_firmado.po}.pdf</span>` : ''}
-                                ${pedido.packing_list ? `<span class="pdf-tag clickable" onclick="abrirPDF('PackingList_${pedido.id}.pdf', '${getFileData(pedido, 'packing')}')" 
+                                ${pedido.packing_list ? `<span class="pdf-tag clickable" onclick="abrirPDF('PackingList_${pedido.id}.pdf', '${getFileData(pedido, 'packing')}', ${pedido.id}, 'packing')" 
                                       title="Click para abrir PDF">📄 PackingList_${pedido.id}.pdf</span>` : ''}
-                                ${pedido.etiquetas ? `<span class="pdf-tag clickable" onclick="abrirPDF('Etiquetas_${pedido.etiquetas.tracking}.pdf', '${getFileData(pedido, 'etiquetas')}')" 
+                                ${pedido.etiquetas ? `<span class="pdf-tag clickable" onclick="abrirPDF('Etiquetas_${pedido.etiquetas.tracking}.pdf', '${getFileData(pedido, 'etiquetas')}', ${pedido.id}, 'etiquetas')" 
                                       title="Click para abrir PDF">📄 Etiquetas_${pedido.etiquetas.tracking}.pdf</span>` : ''}
                             </div>
                         </div>
@@ -2925,27 +2925,124 @@
             }
         }
 
-        function abrirPDF(nombreArchivo, fileData) {
+        function abrirPDF(nombreArchivo, fileData, pedidoId, tipo) {
             if (fileData && fileData.startsWith('data:')) {
-                // Si es un archivo base64, crear un blob y abrirlo
-                const byteCharacters = atob(fileData.split(',')[1]);
-                const byteNumbers = new Array(byteCharacters.length);
-                for (let i = 0; i < byteCharacters.length; i++) {
-                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                try {
+                    // Si es un archivo base64, crear un blob y abrirlo
+                    const byteCharacters = atob(fileData.split(',')[1]);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], {type: 'application/pdf'});
+                    const url = URL.createObjectURL(blob);
+                    window.open(url, '_blank');
+                    
+                    // Limpiar la URL después de un tiempo
+                    setTimeout(() => URL.revokeObjectURL(url), 10000);
+                } catch (error) {
+                    console.error('Error al abrir PDF:', error);
+                    mostrarOpcionCargarPDF(nombreArchivo, pedidoId, tipo);
                 }
-                const byteArray = new Uint8Array(byteNumbers);
-                const blob = new Blob([byteArray], {type: 'application/pdf'});
-                const url = URL.createObjectURL(blob);
-                window.open(url, '_blank');
-                
-                // Limpiar la URL después de un tiempo
-                setTimeout(() => URL.revokeObjectURL(url), 10000);
-            } else if (fileData) {
+            } else if (fileData && fileData.startsWith('http')) {
                 // Si es una URL, abrirla directamente
                 window.open(fileData, '_blank');
             } else {
-                // Si no hay archivo, mostrar mensaje
-                alert('Archivo PDF no disponible. Asegúrese de subir el archivo correspondiente.');
+                // Si no hay archivo, mostrar opción de carga
+                mostrarOpcionCargarPDF(nombreArchivo, pedidoId, tipo);
+            }
+        }
+
+        function mostrarOpcionCargarPDF(nombreArchivo, pedidoId, tipo) {
+            const resultado = confirm(`📄 ${nombreArchivo}\n\n❌ Archivo no disponible o corrupto.\n\n¿Deseas cargar este archivo ahora?`);
+            
+            if (resultado) {
+                abrirSelectorArchivoPDF(pedidoId, tipo, nombreArchivo);
+            }
+        }
+
+        function abrirSelectorArchivoPDF(pedidoId, tipo, nombreArchivo) {
+            // Crear un input file temporal
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.pdf';
+            input.style.display = 'none';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file && file.type === 'application/pdf') {
+                    procesarYGuardarPDF(file, pedidoId, tipo, nombreArchivo);
+                } else {
+                    alert('❌ Por favor, selecciona un archivo PDF válido.');
+                }
+            };
+            
+            document.body.appendChild(input);
+            input.click();
+            document.body.removeChild(input);
+        }
+
+        async function procesarYGuardarPDF(file, pedidoId, tipo, nombreArchivo) {
+            try {
+                // Mostrar mensaje de procesamiento
+                const originalAlert = alert;
+                
+                // Procesar archivo a Base64
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64Data = e.target.result;
+                    
+                    // Buscar el pedido y actualizar el campo correspondiente
+                    const pedido = pedidos.find(p => p.id === pedidoId);
+                    if (!pedido) {
+                        alert('❌ Error: No se encontró el pedido.');
+                        return;
+                    }
+                    
+                    // Guardar el PDF en el campo correspondiente
+                    switch(tipo) {
+                        case 'oferta':
+                            pedido.oferta_pdf = base64Data;
+                            break;
+                        case 'po':
+                            if (!pedido.eproc_firmado) pedido.eproc_firmado = {};
+                            pedido.eproc_firmado.pdf_url = base64Data;
+                            break;
+                        case 'packing':
+                            if (!pedido.packing_list) pedido.packing_list = {};
+                            pedido.packing_list.pdf_url = base64Data;
+                            break;
+                        case 'etiquetas':
+                            if (!pedido.etiquetas) pedido.etiquetas = {};
+                            pedido.etiquetas.pdf_url = base64Data;
+                            break;
+                    }
+                    
+                    // Guardar cambios
+                    guardarDatos();
+                    
+                    // Actualizar interfaz
+                    mostrarPedidos();
+                    
+                    // Confirmar éxito y abrir el PDF
+                    alert(`✅ ${nombreArchivo} cargado exitosamente.\n\n📄 El archivo se abrirá automáticamente.`);
+                    
+                    // Abrir el PDF recién cargado
+                    setTimeout(() => {
+                        abrirPDF(nombreArchivo, base64Data, pedidoId, tipo);
+                    }, 500);
+                };
+                
+                reader.onerror = function() {
+                    alert('❌ Error al leer el archivo. Inténtalo de nuevo.');
+                };
+                
+                reader.readAsDataURL(file);
+                
+            } catch (error) {
+                console.error('Error al procesar PDF:', error);
+                alert('❌ Error al procesar el archivo PDF. Inténtalo de nuevo.');
             }
         }
 
