@@ -599,7 +599,14 @@
 
         <!-- Panel de pedidos -->
         <div class="card">
-            <h2 style="color: #1f2937; margin-bottom: 20px; font-size: 1.5rem;">📦 Panel de Pedidos</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #1f2937; font-size: 1.5rem; margin: 0;">📦 Panel de Pedidos</h2>
+                <button class="btn btn-secondary" onclick="abrirInputCargarPedidos('pedidos')" 
+                        style="background: #7c3aed; color: white; border-color: #7c3aed;" 
+                        title="Cargar pedidos desde archivo JSON">
+                    📤 Cargar Pedidos
+                </button>
+            </div>
             
             <div id="pedidos-container">
                 <!-- Aquí se mostrarán los pedidos dinámicamente -->
@@ -616,7 +623,14 @@
 
         <!-- Panel de TAR -->
         <div class="card" style="margin-top: 30px;">
-            <h2 style="color: #1f2937; margin-bottom: 20px; font-size: 1.5rem;">🚚 Panel de TAR</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #1f2937; font-size: 1.5rem; margin: 0;">🚚 Panel de TAR</h2>
+                <button class="btn btn-secondary" onclick="abrirInputCargarPedidos('tar')" 
+                        style="background: #7c3aed; color: white; border-color: #7c3aed;" 
+                        title="Cargar TAR desde archivo JSON">
+                    📤 Cargar TAR
+                </button>
+            </div>
             
             <div id="tar-container">
                 <!-- Aquí se mostrarán los TAR dinámicamente -->
@@ -631,6 +645,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Inputs ocultos para cargar archivos -->
+    <input type="file" id="input-cargar-pedidos" accept=".json" 
+           style="display: none;" onchange="cargarPedidos(this, 'pedidos')">
+    <input type="file" id="input-cargar-tar" accept=".json" 
+           style="display: none;" onchange="cargarPedidos(this, 'tar')">
 
     <!-- Modal para crear pedido -->
     <div id="modal-crear-pedido" class="modal">
@@ -1234,172 +1254,6 @@
         let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
         let nextId = parseInt(localStorage.getItem('nextId')) || 1;
 
-        // Inicializar con datos de ejemplo si no hay pedidos
-        if (pedidos.length === 0) {
-            pedidos = [
-                // Pedido completo de ejemplo
-                {
-                    id: 1,
-                    numero_oferta: "OF-2025-001",
-                    proveedor: "Proveedor Industrial S.L.",
-                    email_proveedor: "ventas@proveedor.com",
-                    fecha_oferta: "2025-01-15",
-                    fecha_creacion: "15/1/2025",
-                    estado: "etiquetas_enviadas",
-                    piezas: [
-                        {
-                            referencia: "PZ-001",
-                            descripcion: "Componente principal",
-                            proyecto: "Proyecto Alpha",
-                            cantidad: 10,
-                            precio_unitario: 25.50,
-                            precio_total: 255.00
-                        },
-                        {
-                            referencia: "PZ-002",
-                            descripcion: "Accesorio secundario",
-                            proyecto: "Proyecto Alpha",
-                            cantidad: 5,
-                            precio_unitario: 12.30,
-                            precio_total: 61.50
-                        }
-                    ],
-                    total: 316.50,
-                    oferta_pdf: "",
-                    eproc: {
-                        numero: "EP2025-001",
-                        oi: "OI-2025-001",
-                        fecha: "2025-01-18"
-                    },
-                    eproc_firmado: {
-                        pdf: "PO_EP2025-001_signed.pdf",
-                        pdf_url: "",
-                        po: "PO-2025-001",
-                        fecha: "2025-01-22"
-                    },
-                    packing_list: {
-                        pdf: "PackingList_EP2025-001.pdf",
-                        pdf_url: "",
-                        direccion: "Calle Industrial 123, 28001 Madrid, España",
-                        bultos: 2,
-                        fecha: "2025-01-25",
-                        peso_total: 15.5
-                    },
-                    configuracion_bultos: {
-                        bulto_1: [
-                            {
-                                referencia: "PZ-001",
-                                descripcion: "Componente principal",
-                                cantidad: 10
-                            }
-                        ],
-                        bulto_2: [
-                            {
-                                referencia: "PZ-002",
-                                descripcion: "Accesorio secundario",
-                                cantidad: 5
-                            }
-                        ]
-                    },
-                    info_bultos: {
-                        bulto_1: {
-                            peso: 10.2,
-                            dimensiones: "40x30x20 cm"
-                        },
-                        bulto_2: {
-                            peso: 5.3,
-                            dimensiones: "25x20x15 cm"
-                        }
-                    },
-                    tar: {
-                        numero: "TAR-1",
-                        email: "logistica@empresa.com",
-                        url: "https://tar-system.com/TAR-1",
-                        fecha: "2025-01-28"
-                    },
-                    etiquetas: {
-                        pdf: "Etiquetas_EP2025-001.pdf",
-                        pdf_url: "",
-                        tracking: "7116274686",
-                        transportista: "DHL Express",
-                        fecha: "2025-01-30"
-                    }
-                },
-                // TAR completo de ejemplo
-                {
-                    id: 2,
-                    numero_oferta: "TAR-2025-001",
-                    proveedor: "Servicios Técnicos TAR S.A.",
-                    email_proveedor: "tar@servicios.com",
-                    fecha_oferta: "2025-01-20",
-                    fecha_creacion: "20/1/2025",
-                    estado: "etiquetas_enviadas",
-                    piezas: [
-                        {
-                            referencia: "TAR-SRV-001",
-                            descripcion: "Servicio de reparación avanzada",
-                            proyecto: "Proyecto Beta TAR",
-                            cantidad: 1,
-                            precio_unitario: 850.00,
-                            precio_total: 850.00
-                        }
-                    ],
-                    total: 850.00,
-                    tipo: "TAR",
-                    oferta_pdf: "",
-                    eproc: {
-                        numero: "EP2025-TAR-002",
-                        oi: "OI-TAR-2025-002",
-                        fecha: "2025-01-20"
-                    },
-                    eproc_firmado: {
-                        pdf: "PO_TAR_EP2025-002_signed.pdf",
-                        pdf_url: "",
-                        po: "PO-TAR-2025-002",
-                        fecha: "2025-01-23"
-                    },
-                    packing_list: {
-                        pdf: "PackingList_TAR_EP2025-002.pdf",
-                        pdf_url: "",
-                        direccion: "Avenida TAR 456, 08001 Barcelona, España",
-                        bultos: 1,
-                        fecha: "2025-01-26",
-                        peso_total: 8.2
-                    },
-                    configuracion_bultos: {
-                        bulto_1: [
-                            {
-                                referencia: "TAR-SRV-001",
-                                descripcion: "Servicio de reparación avanzada",
-                                cantidad: 1
-                            }
-                        ]
-                    },
-                    info_bultos: {
-                        bulto_1: {
-                            peso: 8.2,
-                            dimensiones: "35x25x18 cm"
-                        }
-                    },
-                    tar: {
-                        numero: "TAR-2",
-                        email: "logistica@empresa.com",
-                        url: "https://tar-system.com/TAR-2",
-                        fecha: "2025-01-29"
-                    },
-                    etiquetas: {
-                        pdf: "Etiquetas_TAR_EP2025-002.pdf",
-                        pdf_url: "",
-                        tracking: "7116274686",
-                        transportista: "DHL Express",
-                        fecha: "2025-01-31"
-                    }
-                }
-            ];
-            nextId = 3;
-            guardarDatos();
-        }
-
         // Estados del workflow (9 estados sin bultos)
         const ESTADOS = [
             'oferta_recibida', 
@@ -1458,6 +1312,232 @@
             localStorage.setItem('nextId', nextId.toString());
         }
 
+        // ===============================
+        // FUNCIONES DE BACKUP/RESTORE
+        // ===============================
+        
+        // Función para descargar todos los pedidos como archivo JSON
+        function descargarPedidos() {
+            try {
+                // Crear objeto con todos los datos
+                const datosCompletos = {
+                    version: "1.0",
+                    fechaExportacion: new Date().toISOString(),
+                    totalPedidos: pedidos.length,
+                    nextId: nextId,
+                    pedidos: pedidos
+                };
+
+                // Convertir a JSON con formato legible
+                const jsonString = JSON.stringify(datosCompletos, null, 2);
+                
+                // Crear blob y URL para descargar
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                // Crear enlace temporal para descarga
+                const link = document.createElement('a');
+                link.href = url;
+                
+                // Generar nombre de archivo con fecha y hora
+                const fecha = new Date();
+                const fechaFormateada = fecha.toISOString().slice(0, 19).replace(/:/g, '-');
+                link.download = `gestor-pedidos-backup-${fechaFormateada}.json`;
+                
+                // Ejecutar descarga
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Limpiar URL
+                URL.revokeObjectURL(url);
+                
+                // Mostrar confirmación
+                alert(`✅ Descarga completada!\n\n` +
+                      `📄 Archivo: gestor-pedidos-backup-${fechaFormateada}.json\n` +
+                      `📦 Pedidos exportados: ${pedidos.length}\n` +
+                      `📅 Fecha: ${fecha.toLocaleString('es-ES')}\n\n` +
+                      `El archivo se ha guardado en tu carpeta de Descargas.`);
+                
+            } catch (error) {
+                console.error('Error al descargar pedidos:', error);
+                alert('❌ Error al descargar los pedidos. Revisa la consola para más detalles.');
+            }
+        }
+
+        // Función para descargar un pedido individual
+        function descargarPedidoIndividual(pedidoId) {
+            try {
+                // Encontrar el pedido específico
+                const pedido = pedidos.find(p => p.id === pedidoId);
+                
+                if (!pedido) {
+                    alert('❌ Error: No se encontró el pedido solicitado.');
+                    return;
+                }
+
+                // Crear objeto con el pedido individual
+                const datosCompletos = {
+                    version: "1.0",
+                    fechaExportacion: new Date().toISOString(),
+                    totalPedidos: 1,
+                    nextId: nextId,
+                    pedidos: [pedido]
+                };
+
+                // Convertir a JSON con formato legible
+                const jsonString = JSON.stringify(datosCompletos, null, 2);
+                
+                // Crear blob y URL para descargar
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                // Crear enlace temporal para descarga
+                const link = document.createElement('a');
+                link.href = url;
+                
+                // Generar nombre de archivo específico
+                const fecha = new Date();
+                const fechaFormateada = fecha.toISOString().slice(0, 10);
+                const tipo = pedido.tipo === 'TAR' ? 'TAR' : 'Pedido';
+                link.download = `${tipo}-${pedido.id}-${pedido.numero_oferta}-${fechaFormateada}.json`;
+                
+                // Ejecutar descarga
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Limpiar URL
+                URL.revokeObjectURL(url);
+                
+                // Mostrar confirmación
+                alert(`✅ ${tipo} descargado exitosamente!\n\n` +
+                      `📄 Archivo: ${link.download}\n` +
+                      `📦 ${tipo}: #${pedido.id} - ${pedido.numero_oferta}\n` +
+                      `💰 Total: €${pedido.total.toFixed(2)}\n` +
+                      `📅 Fecha: ${fecha.toLocaleString('es-ES')}\n\n` +
+                      `El archivo se ha guardado en tu carpeta de Descargas.`);
+                
+            } catch (error) {
+                console.error('Error al descargar pedido individual:', error);
+                alert('❌ Error al descargar el pedido. Revisa la consola para más detalles.');
+            }
+        }
+
+        // Función para abrir el input de archivo (carga)
+        function abrirInputCargarPedidos(tipo = 'pedidos') {
+            if (tipo === 'tar') {
+                document.getElementById('input-cargar-tar').click();
+            } else {
+                document.getElementById('input-cargar-pedidos').click();
+            }
+        }
+
+        // Función para cargar pedidos desde archivo JSON
+        function cargarPedidos(inputElement, tipo = 'pedidos') {
+            const archivo = inputElement.files[0];
+            
+            if (!archivo) {
+                return;
+            }
+
+            // Verificar que sea un archivo JSON
+            if (!archivo.name.toLowerCase().endsWith('.json')) {
+                alert('❌ Error: Solo se permiten archivos JSON (.json)');
+                inputElement.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const datosImportados = JSON.parse(e.target.result);
+                    
+                    // Validar estructura del archivo
+                    if (!datosImportados.pedidos || !Array.isArray(datosImportados.pedidos)) {
+                        throw new Error('Estructura de archivo inválida: no se encontró array de pedidos');
+                    }
+
+                    // Filtrar según el tipo solicitado
+                    let pedidosFiltrados;
+                    if (tipo === 'tar') {
+                        pedidosFiltrados = datosImportados.pedidos.filter(p => p.tipo === 'TAR');
+                    } else {
+                        pedidosFiltrados = datosImportados.pedidos.filter(p => p.tipo !== 'TAR');
+                    }
+
+                    // Mostrar información del archivo y pedir confirmación
+                    const totalPedidosActuales = tipo === 'tar' ? 
+                        pedidos.filter(p => p.tipo === 'TAR').length : 
+                        pedidos.filter(p => p.tipo !== 'TAR').length;
+                    const totalPedidosNuevos = pedidosFiltrados.length;
+                    const fechaExportacion = datosImportados.fechaExportacion ? 
+                                           new Date(datosImportados.fechaExportacion).toLocaleString('es-ES') : 'No disponible';
+                    
+                    const tipoTexto = tipo === 'tar' ? 'TAR' : 'Pedidos';
+                    const mensaje = `📂 CARGAR ${tipoTexto.toUpperCase()} DESDE ARCHIVO\n\n` +
+                                  `📄 Archivo: ${archivo.name}\n` +
+                                  `📅 Fecha exportación: ${fechaExportacion}\n` +
+                                  `📊 ${tipoTexto} en archivo: ${totalPedidosNuevos}\n` +
+                                  `📊 ${tipoTexto} actuales: ${totalPedidosActuales}\n\n` +
+                                  `✅ Los nuevos ${tipoTexto.toLowerCase()} se añadirán a los existentes.\n\n` +
+                                  `¿Deseas continuar?`;
+                    
+                    if (!confirm(mensaje)) {
+                        inputElement.value = '';
+                        return;
+                    }
+
+                    // Realizar la importación - AÑADIR en lugar de reemplazar
+                    // Asignar nuevos IDs únicos a los pedidos importados
+                    let maxIdActual = pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) : 0;
+                    
+                    pedidosFiltrados.forEach(pedidoImportado => {
+                        maxIdActual++;
+                        pedidoImportado.id = maxIdActual;
+                        pedidos.push(pedidoImportado);
+                    });
+                    
+                    // Actualizar nextId para evitar conflictos futuros
+                    const maxIdFinal = pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) : 0;
+                    nextId = Math.max(nextId, maxIdFinal + 1);
+
+                    // Guardar en localStorage
+                    guardarDatos();
+                    
+                    // Actualizar la interfaz
+                    mostrarPedidos();
+                    
+                    // Mostrar confirmación de éxito
+                    const totalFinal = tipo === 'tar' ? 
+                        pedidos.filter(p => p.tipo === 'TAR').length : 
+                        pedidos.filter(p => p.tipo !== 'TAR').length;
+                        
+                    alert(`✅ ${tipoTexto} añadidos exitosamente!\n\n` +
+                          `📦 ${tipoTexto} importados: ${totalPedidosNuevos}\n` +
+                          `📊 Total ${tipoTexto.toLowerCase()} ahora: ${totalFinal}\n` +
+                          `🔄 La interfaz ha sido actualizada.\n\n` +
+                          `Los datos se han guardado automáticamente.`);
+                    
+                } catch (error) {
+                    console.error('Error al procesar archivo:', error);
+                    alert(`❌ Error al cargar el archivo:\n\n${error.message}\n\nVerifica que el archivo sea un backup válido del Gestor de Pedidos.`);
+                } finally {
+                    // Limpiar el input
+                    inputElement.value = '';
+                }
+            };
+
+            reader.onerror = function() {
+                alert('❌ Error al leer el archivo. Inténtalo de nuevo.');
+                inputElement.value = '';
+            };
+
+            // Leer el archivo
+            reader.readAsText(archivo);
+        }
+
         // Mostrar pedidos
         function mostrarPedidos() {
             const pedidosContainer = document.getElementById('pedidos-container');
@@ -1506,6 +1586,9 @@
                             </button>
                             <button class="btn-icon" onclick="mostrarDetalleCompleto(${pedido.id})" title="Ver detalle completo" style="background: #dbeafe; border-color: #93c5fd; color: #1d4ed8;">
                                 👁️
+                            </button>
+                            <button class="btn-icon" onclick="descargarPedidoIndividual(${pedido.id})" title="Descargar este pedido" style="background: #dcfce7; border-color: #bbf7d0; color: #059669;">
+                                📥
                             </button>
                             <button class="btn-icon" onclick="eliminarPedido(${pedido.id})" title="Eliminar pedido" style="background: #fee2e2; border-color: #fecaca; color: #dc2626;">
                                 🗑️
