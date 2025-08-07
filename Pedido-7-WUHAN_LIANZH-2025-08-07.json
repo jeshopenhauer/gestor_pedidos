@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "fechaExportacion": "2025-08-07T17:15:00.000Z",
+  "totalPedidos": 1,
+  "nextId": 8,
+  "pedidos": [
+    {
+      "id": 7,
+      "numero_oferta": "LZ250711006",
+      "proveedor": "WUHAN LIANZH",
+      "email_proveedor": " mli@lianzhentech.com",
+      "eproc": {
+        "numero": "MTPR219064 ",
+        "oi": "104250002909",
+        "fecha": "2025-08-07"
+      },
+      "eproc_firmado": {
+        "pdf": "PO_4302144383_1752141462.pdf",
+        "po": "4302144383",
+        "fecha": "2025-08-07",
+        "email_confirmacion": "mli@lianzhentech.com"
+      },
+      "estado": "eproc_firmado",
+      "fecha_creacion": "7/8/2025",
+      "fecha_oferta": "2025-08-07",
+      "notas": [
+        {
+          "texto": "Ya se les ha avisado de que pasen el packing list",
+          "fecha": "07/08/2025, 17:08"
+        }
+      ],
+      "oferta_pdf": "data:application/pdf;base64,JVBERi0xLjcKJcKzx9gNC",
+      "piezas": [
+        {
+          "referencia": "LE14064",
+          "descripcion": "MAIN HARNESS HIGH ",
+          "proyecto": "VW210 HL",
+          "cantidad": 125,
+          "precio": 0.000
+        }
+      ],
+      "total": 0.000
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "version": "1.0",
+  "fechaExportacion": "2025-08-07T10:30:00.000Z",
+  "totalPedidos": 1,
+  "nextId": 6,
+  "pedidos": [
+    {
+      "id": 5,
+      "numero_oferta": "PF 2025A26/14",
+      "proveedor": "STOKVIS",
+      "email_proveedor": "j.mendes@stokvistapes.pt   c.carvalho@celix-eu.com",
+      "fecha_oferta": "2025-08-07",
+      "fecha_creacion": "7/8/2025",
+      "estado": "eproc_firmado",
+      "total": 493.28,
+      "oferta_pdf": "data:application/pdf;base64,JVBERi0xLjQNJeLjz9MNC",
+      "eproc": {
+        "numero": "MTPR218857 ",
+        "oi": "104250002718",
+        "fecha": "2025-08-07"
+      },
+      "eproc_firmado": {
+        "pdf": "PO_4302144559_1752838098.pdf",
+        "pdf_url": "",
+        "po": "4302144559",
+        "fecha": "2025-08-07"
+      },
+      "piezas": [
+        {
+          "referencia": "S-STKPRT-OTH",
+          "descripcion": "Film protectivo S-STKPRT-OTH 1 rollo = 50 mm x 16m",
+          "proyecto": "Proyecto A",
+          "cantidad": 1,
+          "precio_unitario": 493.28,
+          "precio_total": 493.28
+        }
+      ],
+      "notas": [
+        {
+          "texto": "La PO.pdf le ha llegado al comercial y le he escrito para que me hagan el packing list",
+          "fecha": "07/08/2025, 10:30"
+        }
+      ]
+    }
+  ]
+}

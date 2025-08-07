@@ -1,0 +1,67 @@
+{
+  "version": "1.0",
+  "fechaExportacion": "2025-08-07T17:20:00.000Z",
+  "totalPedidos": 1,
+  "nextId": 9,
+  "pedidos": [
+    {
+      "id": 8,
+      "numero_oferta": "240048",
+      "proveedor": "FORTITER",
+      "email_proveedor": "",
+      "configuracion_bultos": {},
+      "eproc": {
+        "numero": "MTPR218844 ",
+        "oi": "104700018015",
+        "fecha": "2025-08-07"
+      },
+      "eproc_firmado": {
+        "pdf": "PO_4102049041_1752133524.pdf",
+        "po": "4102049041",
+        "fecha": "2025-08-07",
+        "email_confirmacion": ""
+      },
+      "estado": "completado",
+      "etiquetas": {
+        "pdf": "",
+        "pdf_url": "",
+        "tracking": "",
+        "fecha": "2025-08-07"
+      },
+      "fecha_creacion": "7/8/2025",
+      "fecha_oferta": "2025-08-07",
+      "info_bultos": {},
+      "notas": [
+        {
+          "texto": "Se le ha enviado el pedido de mod. molde",
+          "fecha": "07/08/2025, 17:19"
+        }
+      ],
+      "oferta_pdf": "data:application/pdf;base64,JVBERi0xLjcKCjQgMCBvY",
+      "packing_list": {
+        "pdf": "",
+        "pdf_url": "",
+        "direccion": "",
+        "bultos": null,
+        "fecha": "2025-08-07",
+        "peso_total": 0
+      },
+      "piezas": [
+        {
+          "referencia": "LD9624_25",
+          "descripcion": "MODIFICACIÓN SEGÚN LCR1031768",
+          "proyecto": "SK216_HL",
+          "cantidad": 1,
+          "precio": 5185.000
+        }
+      ],
+      "tar": {
+        "numero": "",
+        "email": "",
+        "url": "",
+        "fecha": "2025-08-07"
+      },
+      "total": 5185.000
+    }
+  ]
+}
