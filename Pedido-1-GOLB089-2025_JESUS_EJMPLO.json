@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "fechaExportacion": "2025-08-06T12:00:00.000Z",
+  "fechaExportacion": "2025-08-07T11:10:47.530Z",
   "totalPedidos": 1,
-  "nextId": 4,
+  "nextId": 3,
   "pedidos": [
     {
-      "id": 3,
+      "id": 1,
       "numero_oferta": "GOLB089/2025",
       "proveedor": "TAKAHATA",
       "email_proveedor": "j.medina@takahata.biz",
@@ -60,7 +60,13 @@
         "numero": "MTPR220435",
         "oi": "104250002895",
         "fecha": "2025-08-06"
-      }
+      },
+      "notas": [
+        {
+          "texto": "falta a que se genere el pdf",
+          "fecha": "07/08/2025, 13:08"
+        }
+      ]
     }
   ]
 }

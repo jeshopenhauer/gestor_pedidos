@@ -282,6 +282,45 @@
             border-color: #60a5fa;
         }
 
+        .notas-container {
+            margin-top: 10px;
+        }
+
+        .nota-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .nota-fecha {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .nota-texto {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.4;
+        }
+
+        .sin-notas {
+            color: #9ca3af;
+            font-style: italic;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .nota-eliminar:hover {
+            background: #fca5a5 !important;
+            border-color: #f87171 !important;
+            transform: scale(1.1);
+        }
+
         .empty-state {
             text-align: center;
             padding: 40px;
@@ -1249,6 +1288,30 @@
         </div>
     </div>
 
+    <!-- Modal para añadir nota -->
+    <div id="modal-nota" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Añadir Nota</h2>
+                <span class="close" onclick="cerrarModalNota()">&times;</span>
+            </div>
+            
+            <form id="form-nota">
+                <div class="form-group">
+                    <label for="texto-nota">Nota</label>
+                    <textarea id="texto-nota" name="texto-nota" rows="4" 
+                              placeholder="Escribe tu nota aquí..." 
+                              style="width: 100%; min-height: 100px; resize: vertical;"></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalNota()">Cancelar</button>
+                    <button type="button" class="btn" onclick="guardarNota()" style="background: #3b82f6; color: white; border-color: #3b82f6;">Guardar Nota</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // Datos en memoria
         let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
@@ -1587,6 +1650,9 @@
                             <button class="btn-icon" onclick="mostrarDetalleCompleto(${pedido.id})" title="Ver detalle completo" style="background: #dbeafe; border-color: #93c5fd; color: #1d4ed8;">
                                 👁️
                             </button>
+                            <button class="btn-icon" onclick="abrirModalNota(${pedido.id})" title="Añadir nota" style="background: #fef3c7; border-color: #fcd34d; color: #d97706;">
+                                📝
+                            </button>
                             <button class="btn-icon" onclick="descargarPedidoIndividual(${pedido.id})" title="Descargar este pedido" style="background: #dcfce7; border-color: #bbf7d0; color: #059669;">
                                 📥
                             </button>
@@ -1848,6 +1914,152 @@
         function cerrarModalDetalle() {
             document.getElementById('modal-detalle-completo').style.display = 'none';
         }
+
+        // Funciones para notas
+        let pedidoIdNota = null;
+
+        function abrirModalNota(pedidoId) {
+            pedidoIdNota = pedidoId;
+            
+            // Buscar el pedido para mostrar las notas existentes
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            const modalContent = document.querySelector('#modal-nota .modal-content');
+            
+            // Actualizar el título del modal
+            const titulo = modalContent.querySelector('h2');
+            titulo.textContent = `Notas - Pedido #${pedidoId}`;
+            
+            // Mostrar notas existentes antes del formulario
+            const formNota = document.getElementById('form-nota');
+            
+            // Remover notas existentes si las hay
+            const notasExistentes = modalContent.querySelector('.notas-existentes');
+            if (notasExistentes) {
+                notasExistentes.remove();
+            }
+            
+            // Crear sección de notas existentes
+            if (pedido && pedido.notas && pedido.notas.length > 0) {
+                const notasDiv = document.createElement('div');
+                notasDiv.className = 'notas-existentes';
+                notasDiv.innerHTML = `
+                    <h4 style="margin-bottom: 15px; color: #374151; font-size: 14px;">Notas existentes:</h4>
+                    <div style="max-height: 200px; overflow-y: auto; margin-bottom: 20px;">
+                        ${pedido.notas.map((nota, index) => `
+                            <div class="nota-item" style="margin-bottom: 10px; position: relative;">
+                                <button class="nota-eliminar" onclick="eliminarNota(${pedidoId}, ${index})" 
+                                        title="Eliminar nota"
+                                        style="position: absolute; top: 8px; right: 8px; background: #fee2e2; border: 1px solid #fecaca; color: #dc2626; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0;">
+                                    ×
+                                </button>
+                                <div class="nota-fecha">${nota.fecha}</div>
+                                <div class="nota-texto" style="padding-right: 30px;">${nota.texto}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <hr style="margin: 20px 0; border: none; border-top: 1px solid #e5e7eb;">
+                `;
+                formNota.parentNode.insertBefore(notasDiv, formNota);
+            }
+            
+            document.getElementById('modal-nota').style.display = 'block';
+            document.getElementById('texto-nota').value = '';
+            document.getElementById('texto-nota').focus();
+        }
+
+        function cerrarModalNota() {
+            document.getElementById('modal-nota').style.display = 'none';
+            pedidoIdNota = null;
+        }
+
+        function guardarNota() {
+            const texto = document.getElementById('texto-nota').value.trim();
+            
+            if (!texto) {
+                alert('Por favor, escribe una nota antes de guardar.');
+                return;
+            }
+
+            if (!pedidoIdNota) {
+                alert('Error: No se ha seleccionado un pedido.');
+                return;
+            }
+
+            const pedidoIndex = pedidos.findIndex(p => p.id === pedidoIdNota);
+            if (pedidoIndex === -1) {
+                alert('Error: Pedido no encontrado.');
+                return;
+            }
+
+            // Crear la nota con fecha actual
+            const nuevaNota = {
+                texto: texto,
+                fecha: new Date().toLocaleString('es-ES', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+
+            // Añadir la nota al pedido
+            if (!pedidos[pedidoIndex].notas) {
+                pedidos[pedidoIndex].notas = [];
+            }
+            pedidos[pedidoIndex].notas.push(nuevaNota);
+
+            // Guardar cambios
+            localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+            // Cerrar modal y actualizar vista
+            cerrarModalNota();
+            mostrarPedidos();
+        }
+
+        function eliminarNota(pedidoId, notaIndex) {
+            if (!confirm('¿Estás seguro de que quieres eliminar esta nota?')) {
+                return;
+            }
+
+            const pedidoIndex = pedidos.findIndex(p => p.id === pedidoId);
+            if (pedidoIndex === -1) {
+                alert('Error: Pedido no encontrado.');
+                return;
+            }
+
+            // Eliminar la nota del array
+            if (pedidos[pedidoIndex].notas && pedidos[pedidoIndex].notas[notaIndex]) {
+                pedidos[pedidoIndex].notas.splice(notaIndex, 1);
+                
+                // Si no quedan notas, eliminar el array completo
+                if (pedidos[pedidoIndex].notas.length === 0) {
+                    delete pedidos[pedidoIndex].notas;
+                }
+
+                // Guardar cambios
+                localStorage.setItem('pedidos', JSON.stringify(pedidos));
+
+                // Actualizar vista del modal
+                abrirModalNota(pedidoId);
+                
+                // Actualizar vista principal
+                mostrarPedidos();
+            }
+        }
+
+        // Event listener para Ctrl+Enter en el textarea de notas
+        document.addEventListener('DOMContentLoaded', function() {
+            const textareaNota = document.getElementById('texto-nota');
+            if (textareaNota) {
+                textareaNota.addEventListener('keydown', function(event) {
+                    if (event.ctrlKey && event.key === 'Enter') {
+                        event.preventDefault();
+                        guardarNota();
+                    }
+                });
+            }
+        });
 
         // Funciones para Short Description Generator
         function cerrarModalShortDescription() {
@@ -3397,7 +3609,8 @@
                 'modal-detalle-completo',
                 'modal-short-description',
                 'modal-crear-tar',
-                'modal-seguimiento-dhl'
+                'modal-seguimiento-dhl',
+                'modal-nota'
             ];
             
             modals.forEach(modalId => {
