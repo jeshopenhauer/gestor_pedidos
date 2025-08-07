@@ -1465,7 +1465,13 @@
                 const fecha = new Date();
                 const fechaFormateada = fecha.toISOString().slice(0, 10);
                 const tipo = pedido.tipo === 'TAR' ? 'TAR' : 'Pedido';
-                link.download = `${tipo}-${pedido.id}-${pedido.numero_oferta}-${fechaFormateada}.json`;
+                
+                // Limpiar el nombre del proveedor para el archivo (sin espacios ni caracteres especiales)
+                const proveedorLimpio = pedido.proveedor 
+                    ? pedido.proveedor.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase()
+                    : 'SIN_PROVEEDOR';
+                
+                link.download = `${tipo}-${pedido.id}-${proveedorLimpio}-${fechaFormateada}.json`;
                 
                 // Ejecutar descarga
                 document.body.appendChild(link);
