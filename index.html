@@ -378,12 +378,12 @@
         }
 
         #pieces-grid {
-            min-width: 975px; /* Asegurar ancho mínimo para el grid */
+            min-width: 1095px; /* Asegurar ancho mínimo para el grid */
         }
 
         .piece-row {
             display: grid;
-            grid-template-columns: 180px 280px 160px 120px 140px 80px;
+            grid-template-columns: 180px 280px 160px 120px 140px 120px 80px;
             gap: 15px;
             align-items: center;
             margin-bottom: 15px;
@@ -576,7 +576,7 @@
 
         /* Estilos específicos para TAR */
         #tar-pieces-grid {
-            min-width: 975px;
+            min-width: 1095px;
         }
 
         .tar-header {
@@ -712,7 +712,7 @@
 
                 <div class="form-group">
                     <label for="email_proveedor">Email Proveedor</label>
-                    <input type="email" id="email_proveedor" name="email_proveedor">
+                    <input type="text" id="email_proveedor" name="email_proveedor">
                 </div>
 
                 <div class="form-group">
@@ -734,12 +734,13 @@
                             <div style="padding: 12px 15px;">Proyecto</div>
                             <div style="padding: 12px 15px;">Cantidad</div>
                             <div style="padding: 12px 15px;">Precio Unit. (€)</div>
+                            <div style="padding: 12px 15px;">Total Fila (€)</div>
                             <div style="padding: 12px 15px;">Acción</div>
                         </div>
                     </div>
                     <button type="button" class="btn btn-secondary" onclick="agregarPieza()" style="margin-top: 15px;">+ Agregar Pieza</button>
                     <div class="total-row">
-                        Total: €<span id="total-pedido">0.00</span>
+                        Total: €<span id="total-pedido">0.000</span>
                     </div>
                 </div>
 
@@ -982,7 +983,7 @@
 
                 <div class="form-group">
                     <label for="lanzar_tar_email">Email Logística</label>
-                    <input type="email" id="lanzar_tar_email" name="email">
+                    <input type="text" id="lanzar_tar_email" name="email">
                 </div>
 
                 <div class="form-group">
@@ -1161,7 +1162,7 @@
 
                     <div class="form-group">
                         <label for="tar_email_proveedor">Email del Proveedor</label>
-                        <input type="email" id="tar_email_proveedor" name="email_proveedor">
+                        <input type="text" id="tar_email_proveedor" name="email_proveedor">
                     </div>
 
                     <div class="form-group">
@@ -1200,12 +1201,13 @@
                             <div style="padding: 12px 15px;">Proyecto</div>
                             <div style="padding: 12px 15px;">Cantidad</div>
                             <div style="padding: 12px 15px;">Precio Unit. (€)</div>
+                            <div style="padding: 12px 15px;">Total Fila (€)</div>
                             <div style="padding: 12px 15px;">Acción</div>
                         </div>
                     </div>
                     <button type="button" class="btn btn-secondary" onclick="agregarPiezaTar()" style="margin-top: 15px;">+ Agregar Pieza</button>
                     <div class="total-row">
-                        Total: €<span id="total-tar">0.00</span>
+                        Total: €<span id="total-tar">0.000</span>
                     </div>
                 </div>
 
@@ -1477,7 +1479,7 @@
                 alert(`✅ ${tipo} descargado exitosamente!\n\n` +
                       `📄 Archivo: ${link.download}\n` +
                       `📦 ${tipo}: #${pedido.id} - ${pedido.numero_oferta}\n` +
-                      `💰 Total: €${pedido.total.toFixed(2)}\n` +
+                      `💰 Total: €${pedido.total.toFixed(3)}\n` +
                       `📅 Fecha: ${fecha.toLocaleString('es-ES')}\n\n` +
                       `El archivo se ha guardado en tu carpeta de Descargas.`);
                 
@@ -1641,7 +1643,7 @@
                     <div class="pedido-header">
                         <div class="pedido-info">
                             <h3>${esTar ? '🚚 TAR' : 'Pedido'} #${pedido.id}</h3>
-                            <p>${pedido.fecha_creacion} - ${pedido.proveedor} - €${pedido.total.toFixed(2)}</p>
+                            <p>${pedido.fecha_creacion} - ${pedido.proveedor} - €${pedido.total.toFixed(3)}</p>
                         </div>
                         <div class="pedido-actions">
                             <button class="btn-icon" onclick="toggleDetalles(${pedido.id})" title="Ver más detalles">
@@ -1736,7 +1738,7 @@
                                     <p><strong>Número:</strong> ${pedido.numero_oferta}</p>
                                     <p><strong>Proveedor:</strong> ${pedido.proveedor}</p>
                                     <p><strong>Email:</strong> ${pedido.email_proveedor || 'N/A'}</p>
-                                    <p><strong>Total:</strong> €${pedido.total.toFixed(2)}</p>
+                                    <p><strong>Total:</strong> €${pedido.total.toFixed(3)}</p>
                                 </div>
                                 <div>
                                     <p><strong>Fecha:</strong> ${pedido.fecha_oferta || 'N/A'}</p>
@@ -2150,8 +2152,9 @@
                 <input type="text" name="referencia_${pieceCount}" placeholder="REF-001">
                 <input type="text" name="descripcion_${pieceCount}" placeholder="Descripción de la pieza">
                 <input type="text" name="proyecto_${pieceCount}" placeholder="Proyecto A">
-                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" onchange="calcularTotalTar()">
-                <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" onchange="calcularTotalTar()">
+                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" onchange="calcularTotalTar(); actualizarTotalFilaTar(this)">
+                <input type="number" name="precio_${pieceCount}" step="0.001" min="0" placeholder="0.000" onchange="calcularTotalTar(); actualizarTotalFilaTar(this)">
+                <div class="total-fila" style="text-align: center; font-weight: bold; color: #059669; padding: 12px 15px; background: #f0fdf4; border-radius: 4px;">0.000</div>
                 <button type="button" class="btn btn-secondary" onclick="eliminarPiezaTar(this)" style="padding: 10px 15px; font-size: 14px; font-weight: bold; width: 100%;">×</button>
             `;
             
@@ -2178,10 +2181,33 @@
                 const row = grid.children[i];
                 const cantidad = parseFloat(row.children[3].value) || 0;
                 const precio = parseFloat(row.children[4].value) || 0;
-                total += cantidad * precio;
+                const subtotal = cantidad * precio;
+                total += subtotal;
+                
+                // Actualizar total de la fila
+                if (row.children[5]) {
+                    row.children[5].textContent = subtotal.toFixed(3);
+                }
             }
             
-            document.getElementById('total-tar').textContent = total.toFixed(2);
+            document.getElementById('total-tar').textContent = total.toFixed(3);
+        }
+
+        // Funciones para actualizar totales individuales por fila
+        function actualizarTotalFila(input) {
+            const row = input.parentElement;
+            const cantidad = parseFloat(row.children[3].value) || 0;
+            const precio = parseFloat(row.children[4].value) || 0;
+            const total = cantidad * precio;
+            row.children[5].textContent = total.toFixed(3);
+        }
+
+        function actualizarTotalFilaTar(input) {
+            const row = input.parentElement;
+            const cantidad = parseFloat(row.children[3].value) || 0;
+            const precio = parseFloat(row.children[4].value) || 0;
+            const total = cantidad * precio;
+            row.children[5].textContent = total.toFixed(3);
         }
 
         // Función para mostrar detalle completo en modal
@@ -2205,7 +2231,7 @@
                             <p><strong>Fecha Creación:</strong> ${pedido.fecha_creacion}</p>
                             <p><strong>Fecha Oferta:</strong> ${pedido.fecha_oferta || 'N/A'}</p>
                             <p><strong>Estado Actual:</strong> <span style="color: #10b981; font-weight: bold;">${getNombreEstadoTexto(pedido.estado)}</span></p>
-                            <p><strong>Total:</strong> <span style="color: #059669; font-weight: bold;">€${pedido.total.toFixed(2)}</span></p>
+                            <p><strong>Total:</strong> <span style="color: #059669; font-weight: bold;">€${pedido.total.toFixed(3)}</span></p>
                         </div>
                     </div>
                     
@@ -2215,7 +2241,7 @@
                             ${pedido.piezas.map(pieza => `
                                 <div style="border-bottom: 1px solid #e5e7eb; padding: 8px 0;">
                                     <p style="margin: 2px 0;"><strong>${pieza.referencia}</strong> - ${pieza.descripcion}</p>
-                                    <p style="margin: 2px 0; font-size: 12px; color: #6b7280;">Proyecto: ${pieza.proyecto} | Cantidad: ${pieza.cantidad} | Precio: €${pieza.precio_unitario.toFixed(2)}</p>
+                                    <p style="margin: 2px 0; font-size: 12px; color: #6b7280;">Proyecto: ${pieza.proyecto} | Cantidad: ${pieza.cantidad} | Precio: €${pieza.precio_unitario.toFixed(3)}</p>
                                 </div>
                             `).join('')}
                         </div>
@@ -2335,8 +2361,9 @@
                 <input type="text" name="referencia_${pieceCount}" placeholder="REF-001">
                 <input type="text" name="descripcion_${pieceCount}" placeholder="Descripción de la pieza">
                 <input type="text" name="proyecto_${pieceCount}" placeholder="Proyecto A">
-                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" onchange="calcularTotal()">
-                <input type="number" name="precio_${pieceCount}" step="0.01" min="0" placeholder="0.00" onchange="calcularTotal()">
+                <input type="number" name="cantidad_${pieceCount}" value="1" min="1" onchange="calcularTotal(); actualizarTotalFila(this)">
+                <input type="number" name="precio_${pieceCount}" step="0.001" min="0" placeholder="0.000" onchange="calcularTotal(); actualizarTotalFila(this)">
+                <div class="total-fila" style="text-align: center; font-weight: bold; color: #059669; padding: 12px 15px; background: #f0fdf4; border-radius: 4px;">0.000</div>
                 <button type="button" class="btn btn-secondary" onclick="eliminarPieza(this)" style="padding: 10px 15px; font-size: 14px; font-weight: bold; width: 100%;">×</button>
             `;
             
@@ -2363,10 +2390,16 @@
                 const row = grid.children[i];
                 const cantidad = parseFloat(row.children[3].value) || 0;
                 const precio = parseFloat(row.children[4].value) || 0;
-                total += cantidad * precio;
+                const subtotal = cantidad * precio;
+                total += subtotal;
+                
+                // Actualizar total de la fila
+                if (row.children[5]) {
+                    row.children[5].textContent = subtotal.toFixed(3);
+                }
             }
             
-            document.getElementById('total-pedido').textContent = total.toFixed(2);
+            document.getElementById('total-pedido').textContent = total.toFixed(3);
         }
 
         // Toggle detalles
