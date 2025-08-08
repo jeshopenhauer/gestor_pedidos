@@ -818,9 +818,9 @@
     </button>
 
     <!-- Inputs ocultos para cargar archivos -->
-    <input type="file" id="input-cargar-pedidos" accept=".json" 
+    <input type="file" id="input-cargar-pedidos" accept=".json" multiple
            style="display: none;" onchange="cargarPedidos(this, 'pedidos')">
-    <input type="file" id="input-cargar-tar" accept=".json" 
+    <input type="file" id="input-cargar-tar" accept=".json" multiple
            style="display: none;" onchange="cargarPedidos(this, 'tar')">
 
     <!-- Modal para crear pedido -->
@@ -906,6 +906,16 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="lanzar_eproc_short_description">Short Description</label>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <textarea id="lanzar_eproc_short_description" name="short_description" rows="3" style="flex: 1; resize: vertical; font-family: inherit; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" placeholder="Ingrese la descripción corta del EPROC"></textarea>
+                        <button type="button" class="btn btn-secondary" onclick="abrirShortDescriptionGenerator()" style="padding: 10px 15px; white-space: nowrap;" title="Abrir generador de descripción corta">
+                            📝 Generator
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="lanzar_eproc_fecha">Fecha</label>
                     <input type="date" id="lanzar_eproc_fecha" name="fecha">
                 </div>
@@ -966,11 +976,6 @@
                 <div class="form-group">
                     <label for="packing_list_pdf">PDF del Packing List</label>
                     <input type="file" id="packing_list_pdf" name="pdf" accept=".pdf">
-                </div>
-
-                <div class="form-group">
-                    <label for="packing_list_direccion">Dirección de entrega</label>
-                    <textarea id="packing_list_direccion" name="direccion" rows="3"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -1158,6 +1163,11 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="enviar_etiquetas_direccion_envio">Dirección de recogida</label>
+                    <textarea id="enviar_etiquetas_direccion_envio" name="direccion_envio" rows="3" placeholder="Dirección completa desde donde recoger el paquete"></textarea>
+                </div>
+
+                <div class="form-group">
                     <label for="enviar_etiquetas_fecha">Fecha</label>
                     <input type="date" id="enviar_etiquetas_fecha" name="fecha">
                 </div>
@@ -1260,9 +1270,14 @@
                     </label>
                     <div class="result-row-sd">
                         <textarea id="sd-resultado" readonly style="font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; height: 80px; background: #f9fafb;"></textarea>
-                        <button class="btn" onclick="copiarAlPortapapelesSD()" style="height: fit-content;">
-                            Copiar
-                        </button>
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <button class="btn" onclick="copiarAlPortapapelesSD()" style="height: fit-content;">
+                                Copiar
+                            </button>
+                            <button class="btn btn-secondary" onclick="transferirAEproc()" style="height: fit-content; font-size: 12px; padding: 5px 10px;" title="Transferir a campo EPROC">
+                                📋 A EPROC
+                            </button>
+                        </div>
                     </div>
                     <div class="success-message-sd" id="sd-success-message">
                         ¡Copiado al portapapeles exitosamente!
@@ -1638,107 +1653,140 @@
 
         // Función para cargar pedidos desde archivo JSON
         function cargarPedidos(inputElement, tipo = 'pedidos') {
-            const archivo = inputElement.files[0];
+            const archivos = Array.from(inputElement.files);
             
-            if (!archivo) {
+            if (archivos.length === 0) {
                 return;
             }
 
-            // Verificar que sea un archivo JSON
-            if (!archivo.name.toLowerCase().endsWith('.json')) {
-                alert('❌ Error: Solo se permiten archivos JSON (.json)');
+            // Verificar que todos sean archivos JSON
+            const archivosInvalidos = archivos.filter(archivo => !archivo.name.toLowerCase().endsWith('.json'));
+            if (archivosInvalidos.length > 0) {
+                alert(`❌ Error: Solo se permiten archivos JSON (.json)\n\nArchivos inválidos:\n${archivosInvalidos.map(a => a.name).join('\n')}`);
                 inputElement.value = '';
                 return;
             }
 
-            const reader = new FileReader();
+            const tipoTexto = tipo === 'tar' ? 'TAR' : 'Pedidos';
             
-            reader.onload = function(e) {
-                try {
-                    const datosImportados = JSON.parse(e.target.result);
-                    
-                    // Validar estructura del archivo
-                    if (!datosImportados.pedidos || !Array.isArray(datosImportados.pedidos)) {
-                        throw new Error('Estructura de archivo inválida: no se encontró array de pedidos');
-                    }
+            // Mostrar información previa y pedir confirmación
+            const totalPedidosActuales = tipo === 'tar' ? 
+                pedidos.filter(p => p.tipo === 'TAR').length : 
+                pedidos.filter(p => p.tipo !== 'TAR').length;
+            
+            const mensaje = `📂 CARGAR ${tipoTexto.toUpperCase()} DESDE MÚLTIPLES ARCHIVOS\n\n` +
+                          `📄 Archivos seleccionados: ${archivos.length}\n` +
+                          `📊 ${tipoTexto} actuales: ${totalPedidosActuales}\n\n` +
+                          `Archivos a procesar:\n${archivos.map(a => a.name).join('\n')}\n\n` +
+                          `✅ Los nuevos ${tipoTexto.toLowerCase()} se añadirán a los existentes.\n\n` +
+                          `¿Deseas continuar?`;
+            
+            if (!confirm(mensaje)) {
+                inputElement.value = '';
+                return;
+            }
 
-                    // Filtrar según el tipo solicitado
-                    let pedidosFiltrados;
-                    if (tipo === 'tar') {
-                        pedidosFiltrados = datosImportados.pedidos.filter(p => p.tipo === 'TAR');
-                    } else {
-                        pedidosFiltrados = datosImportados.pedidos.filter(p => p.tipo !== 'TAR');
-                    }
+            // Variables para seguimiento del progreso
+            let archivosProcessados = 0;
+            let totalPedidosImportados = 0;
+            let errores = [];
+            let maxIdActual = pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) : 0;
 
-                    // Mostrar información del archivo y pedir confirmación
-                    const totalPedidosActuales = tipo === 'tar' ? 
-                        pedidos.filter(p => p.tipo === 'TAR').length : 
-                        pedidos.filter(p => p.tipo !== 'TAR').length;
-                    const totalPedidosNuevos = pedidosFiltrados.length;
-                    const fechaExportacion = datosImportados.fechaExportacion ? 
-                                           new Date(datosImportados.fechaExportacion).toLocaleString('es-ES') : 'No disponible';
-                    
-                    const tipoTexto = tipo === 'tar' ? 'TAR' : 'Pedidos';
-                    const mensaje = `📂 CARGAR ${tipoTexto.toUpperCase()} DESDE ARCHIVO\n\n` +
-                                  `📄 Archivo: ${archivo.name}\n` +
-                                  `📅 Fecha exportación: ${fechaExportacion}\n` +
-                                  `📊 ${tipoTexto} en archivo: ${totalPedidosNuevos}\n` +
-                                  `📊 ${tipoTexto} actuales: ${totalPedidosActuales}\n\n` +
-                                  `✅ Los nuevos ${tipoTexto.toLowerCase()} se añadirán a los existentes.\n\n` +
-                                  `¿Deseas continuar?`;
-                    
-                    if (!confirm(mensaje)) {
-                        inputElement.value = '';
-                        return;
-                    }
-
-                    // Realizar la importación - AÑADIR en lugar de reemplazar
-                    // Asignar nuevos IDs únicos a los pedidos importados
-                    let maxIdActual = pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) : 0;
-                    
-                    pedidosFiltrados.forEach(pedidoImportado => {
-                        maxIdActual++;
-                        pedidoImportado.id = maxIdActual;
-                        pedidos.push(pedidoImportado);
-                    });
-                    
-                    // Actualizar nextId para evitar conflictos futuros
-                    const maxIdFinal = pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) : 0;
-                    nextId = Math.max(nextId, maxIdFinal + 1);
-
-                    // Guardar en localStorage
-                    guardarDatos();
-                    
-                    // Actualizar la interfaz
-                    mostrarPedidos();
-                    
-                    // Mostrar confirmación de éxito
-                    const totalFinal = tipo === 'tar' ? 
-                        pedidos.filter(p => p.tipo === 'TAR').length : 
-                        pedidos.filter(p => p.tipo !== 'TAR').length;
+            // Función para procesar cada archivo
+            function procesarArchivo(archivo, index) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const datosImportados = JSON.parse(e.target.result);
                         
-                    alert(`✅ ${tipoTexto} añadidos exitosamente!\n\n` +
-                          `📦 ${tipoTexto} importados: ${totalPedidosNuevos}\n` +
-                          `📊 Total ${tipoTexto.toLowerCase()} ahora: ${totalFinal}\n` +
-                          `🔄 La interfaz ha sido actualizada.\n\n` +
-                          `Los datos se han guardado automáticamente.`);
+                        // Validar estructura del archivo
+                        if (!datosImportados.pedidos || !Array.isArray(datosImportados.pedidos)) {
+                            throw new Error(`Estructura de archivo inválida: no se encontró array de pedidos`);
+                        }
+
+                        // Filtrar según el tipo solicitado
+                        let pedidosFiltrados;
+                        if (tipo === 'tar') {
+                            pedidosFiltrados = datosImportados.pedidos.filter(p => p.tipo === 'TAR');
+                        } else {
+                            pedidosFiltrados = datosImportados.pedidos.filter(p => p.tipo !== 'TAR');
+                        }
+
+                        // Asignar nuevos IDs únicos a los pedidos importados
+                        pedidosFiltrados.forEach(pedidoImportado => {
+                            maxIdActual++;
+                            pedidoImportado.id = maxIdActual;
+                            pedidos.push(pedidoImportado);
+                        });
+                        
+                        totalPedidosImportados += pedidosFiltrados.length;
+                        
+                    } catch (error) {
+                        console.error('Error al procesar archivo:', error);
+                        errores.push(`${archivo.name}: ${error.message}`);
+                    }
                     
-                } catch (error) {
-                    console.error('Error al procesar archivo:', error);
-                    alert(`❌ Error al cargar el archivo:\n\n${error.message}\n\nVerifica que el archivo sea un backup válido del Gestor de Pedidos.`);
-                } finally {
-                    // Limpiar el input
-                    inputElement.value = '';
+                    archivosProcessados++;
+                    
+                    // Si todos los archivos han sido procesados
+                    if (archivosProcessados === archivos.length) {
+                        finalizarCarga();
+                    }
+                };
+
+                reader.onerror = function() {
+                    errores.push(`${archivo.name}: Error al leer el archivo`);
+                    archivosProcessados++;
+                    
+                    if (archivosProcessados === archivos.length) {
+                        finalizarCarga();
+                    }
+                };
+
+                // Leer el archivo
+                reader.readAsText(archivo);
+            }
+
+            function finalizarCarga() {
+                // Actualizar nextId para evitar conflictos futuros
+                const maxIdFinal = pedidos.length > 0 ? Math.max(...pedidos.map(p => p.id)) : 0;
+                nextId = Math.max(nextId, maxIdFinal + 1);
+
+                // Guardar en localStorage
+                guardarDatos();
+                
+                // Actualizar la interfaz
+                mostrarPedidos();
+                
+                // Mostrar resumen de la importación
+                const totalFinal = tipo === 'tar' ? 
+                    pedidos.filter(p => p.tipo === 'TAR').length : 
+                    pedidos.filter(p => p.tipo !== 'TAR').length;
+                
+                let mensajeFinal = `📊 RESUMEN DE IMPORTACIÓN\n\n` +
+                                 `📄 Archivos procesados: ${archivosProcessados}\n` +
+                                 `📦 ${tipoTexto} importados: ${totalPedidosImportados}\n` +
+                                 `📊 Total ${tipoTexto.toLowerCase()} ahora: ${totalFinal}\n`;
+                
+                if (errores.length > 0) {
+                    mensajeFinal += `\n⚠️ ERRORES ENCONTRADOS:\n${errores.join('\n')}\n`;
                 }
-            };
-
-            reader.onerror = function() {
-                alert('❌ Error al leer el archivo. Inténtalo de nuevo.');
+                
+                if (totalPedidosImportados > 0) {
+                    mensajeFinal += `\n✅ Los datos se han guardado automáticamente.`;
+                }
+                
+                alert(mensajeFinal);
+                
+                // Limpiar el input
                 inputElement.value = '';
-            };
+            }
 
-            // Leer el archivo
-            reader.readAsText(archivo);
+            // Procesar todos los archivos
+            archivos.forEach((archivo, index) => {
+                procesarArchivo(archivo, index);
+            });
         }
 
         // Mostrar pedidos
@@ -1892,6 +1940,7 @@
                                     <div>
                                         <p><strong>Número:</strong> ${pedido.eproc?.numero || 'N/A'}</p>
                                         ${pedido.eproc?.oi ? `<p><strong>OI:</strong> ${pedido.eproc.oi}</p>` : ''}
+                                        ${pedido.eproc?.short_description ? `<p><strong>Short Description:</strong> ${pedido.eproc.short_description}</p>` : ''}
                                     </div>
                                     <div>
                                         <p><strong>Fecha:</strong> ${pedido.eproc?.fecha || 'N/A'}</p>
@@ -2299,6 +2348,35 @@
             }, 3000);
         }
 
+        function transferirAEproc() {
+            const resultado = document.getElementById('sd-resultado').value;
+            if (!resultado) {
+                alert('⚠️ No hay ninguna descripción generada para transferir.');
+                return;
+            }
+            
+            // Verificar si el modal de EPROC está abierto
+            const modalEproc = document.getElementById('modal-lanzar-eproc');
+            if (!modalEproc || modalEproc.style.display === 'none') {
+                alert('⚠️ El modal de Lanzar EPROC no está abierto.\n\nPrimero abre el modal de EPROC y luego usa el generador.');
+                return;
+            }
+            
+            // Transferir el texto al campo de short description
+            const campoShortDescription = document.getElementById('lanzar_eproc_short_description');
+            if (campoShortDescription) {
+                campoShortDescription.value = resultado;
+                
+                // Cerrar el modal del generador
+                cerrarModalShortDescription();
+                
+                // Mostrar mensaje de éxito
+                alert('✅ Descripción transferida exitosamente al campo EPROC.');
+            } else {
+                alert('❌ Error: No se pudo encontrar el campo de descripción en el modal EPROC.');
+            }
+        }
+
         // ===============================
         // FUNCIONES PARA CREAR TAR
         // ===============================
@@ -2421,6 +2499,7 @@
                         <div style="background: #dbeafe; padding: 12px; border-radius: 6px;">
                             <p><strong>Número:</strong> ${pedido.eproc.numero}</p>
                             <p><strong>OI:</strong> ${pedido.eproc.oi || 'N/A'}</p>
+                            ${pedido.eproc.short_description ? `<p><strong>Short Description:</strong> ${pedido.eproc.short_description}</p>` : ''}
                             <p><strong>Fecha:</strong> ${pedido.eproc.fecha || 'N/A'}</p>
                         </div>
                     </div>
@@ -2871,6 +2950,8 @@
             document.getElementById('modal-enviar-etiquetas').style.display = 'block';
             document.getElementById('enviar-etiquetas-pedido-id').value = pedidoId;
             document.getElementById('enviar_etiquetas_fecha').value = obtenerFechaHoy();
+            // Limpiar el campo de dirección de recogida (sin valor por defecto)
+            document.getElementById('enviar_etiquetas_direccion_envio').value = '';
         }
 
         function eliminarPedido(pedidoId) {
@@ -3572,6 +3653,7 @@
                 pedido.eproc = {
                     numero: formData.get('numero'),
                     oi: formData.get('oi'),
+                    short_description: formData.get('short_description'),
                     fecha: formData.get('fecha')
                 };
                 pedido.estado = 'eproc_lanzado';
@@ -3656,7 +3738,6 @@
                 pedido.packing_list = {
                     pdf: file ? file.name : 'packinglist.pdf',
                     pdf_url: pdfUrl,
-                    direccion: formData.get('direccion'),
                     bultos: numBultos,
                     fecha: formData.get('fecha'),
                     peso_total: parseFloat(formData.get('peso_total')) || 0
@@ -3720,13 +3801,22 @@
                     }
                 }
                 
+                const trackingNumber = formData.get('tracking');
+                const fechaEnvio = formData.get('fecha');
+                const direccionRecogida = formData.get('direccion_envio'); // Renombrado para mayor claridad
+                
+                // Guardar datos del pedido
                 pedido.etiquetas = {
                     pdf: file ? file.name : 'etiquetas.pdf',
                     pdf_url: pdfUrl,
-                    tracking: formData.get('tracking'),
-                    fecha: formData.get('fecha')
+                    tracking: trackingNumber,
+                    fecha: fechaEnvio,
+                    direccion_recogida: direccionRecogida // Nombre correcto
                 };
                 pedido.estado = 'etiquetas_enviadas';
+                
+                // Generar email automático para Gmail
+                generarEmailEtiquetas(pedido, trackingNumber, fechaEnvio);
                 
                 guardarDatos();
                 mostrarPedidos();
@@ -3850,6 +3940,141 @@
                 // La generación ahora solo se hace manualmente con el botón
             });
         });
+
+        // ===============================
+        // FUNCIÓN PARA EMAIL DE ETIQUETAS
+        // ===============================
+
+        function generarEmailEtiquetas(pedido, trackingNumber, fechaEnvio) {
+            try {
+                // Confirmación antes de abrir Gmail
+                const confirmar = confirm('📧 ¿Deseas ser redireccionado a Gmail para generar el correo automáticamente?\n\nSe abrirá Gmail con toda la información ya completada.');
+                
+                if (!confirmar) {
+                    return; // El usuario canceló
+                }
+                
+                // Obtener información del proveedor
+                const proveedor = pedido.proveedor || 'Proveedor';
+                const emailProveedor = pedido.email_proveedor || '';
+                
+                // Obtener información del PO desde eproc_firmado
+                const numeroPO = pedido.eproc_firmado?.po || 'Not available';
+                
+                // Información de los bultos - usar configuración de packing list
+                let infoBultos = '';
+                if (pedido.configuracion_bultos && pedido.info_bultos) {
+                    infoBultos = generarInfoBultosDetallada(pedido.configuracion_bultos, pedido.info_bultos);
+                } else if (pedido.packing_list && pedido.packing_list.bultos > 1) {
+                    infoBultos = `PACKAGE DISTRIBUTION:\n- ${pedido.packing_list.bultos} packages total\n`;
+                } else {
+                    infoBultos = 'PACKAGE DISTRIBUTION:\n- 1 package containing all items\n';
+                }
+                
+                // Actualizar direcciones según especificaciones
+                const direccionRecogida = pedido.etiquetas?.direccion_recogida || 'No especificada'; // Dirección de recogida desde el modal (sin defecto)
+                const direccionEntrega = 'C/ Linares Pol Cañada Fuente15\n23600 MARTOS\nSpain'; // Dirección fija de entrega correcta
+                
+                // Crear asunto del email
+                const asunto = `Shipping Labels Ready - Order #${pedido.numero_oferta || pedido.id} - Tracking: ${trackingNumber || 'TBD'}`;
+                
+                // Crear cuerpo del email con el formato solicitado
+                const cuerpoEmail = `Hello,
+
+Labels for shipping are ready.
+
+ORDER DETAILS:
+PO: ${numeroPO}
+Tracking Number: ${trackingNumber || 'To be provided by courier'}
+
+${infoBultos}
+SHIPPING INFORMATION:
+Pickup: ${direccionRecogida}
+Delivery: ${direccionEntrega}
+
+Best regards,
+Logistics Team`.trim();
+
+                // Crear URL para Gmail
+                const gmailBaseUrl = 'https://mail.google.com/mail/?view=cm&fs=1';
+                const emailParams = new URLSearchParams({
+                    to: emailProveedor,
+                    su: asunto,
+                    body: cuerpoEmail
+                });
+                
+                const gmailUrl = `${gmailBaseUrl}&${emailParams.toString()}`;
+                
+                // Abrir Gmail en nueva pestaña
+                window.open(gmailUrl, '_blank');
+                
+                console.log('📧 Email generado para etiquetas:', {
+                    pedido: pedido.id,
+                    tracking: trackingNumber,
+                    proveedor: proveedor,
+                    asunto: asunto,
+                    po: numeroPO
+                });
+                
+            } catch (error) {
+                console.error('Error al generar email de etiquetas:', error);
+                alert('❌ Error al generar el email automático.\n\nPuedes crear el email manualmente con la información del pedido.');
+            }
+        }
+        
+        function generarInfoBultosDetallada(configuracionBultos, infoBultos) {
+            if (!configuracionBultos || Object.keys(configuracionBultos).length === 0) {
+                return 'PACKAGE DISTRIBUTION:\n- 1 package containing all items\n';
+            }
+            
+            let info = 'PACKAGE DISTRIBUTION:\n';
+            
+            Object.keys(configuracionBultos).forEach((bultoClave, index) => {
+                const numeroBulto = index + 1;
+                const piezasEnBulto = configuracionBultos[bultoClave];
+                const infoBulto = infoBultos[bultoClave] || {};
+                
+                info += `\nPackage ${numeroBulto}:\n`;
+                
+                if (infoBulto.peso) {
+                    info += `• Weight: ${infoBulto.peso} kg\n`;
+                }
+                if (infoBulto.dimensiones) {
+                    info += `• Dimensions: ${infoBulto.dimensiones}\n`;
+                }
+                
+                if (piezasEnBulto && piezasEnBulto.length > 0) {
+                    info += `• Contents:\n`;
+                    piezasEnBulto.forEach(pieza => {
+                        info += `  - ${pieza.referencia} x${pieza.cantidad}\n`;
+                    });
+                }
+            });
+            
+            return info;
+        }
+
+        function generarInfoBultos(bultos) {
+            if (!bultos || bultos.length === 0) {
+                return 'PACKAGE DISTRIBUTION:\n- 1 standard package\n';
+            }
+            
+            let info = 'PACKAGE DISTRIBUTION:\n';
+            bultos.forEach((bulto, index) => {
+                info += `\nPackage ${index + 1}:\n`;
+                info += `• Weight: ${bulto.peso || 'Not specified'} kg\n`;
+                info += `• Dimensions: ${bulto.dimensiones || 'Not specified'}\n`;
+                
+                if (bulto.piezas && bulto.piezas.length > 0) {
+                    info += `• Contents:\n`;
+                    bulto.piezas.forEach(pieza => {
+                        info += `  - ${pieza.referencia} (${pieza.cantidad_en_bulto} units)\n`;
+                    });
+                }
+            });
+            
+            return info;
+        }
 
         // ===============================
         // FUNCIÓN PARA TAR EXTERNO
