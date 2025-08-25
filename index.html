@@ -757,8 +757,7 @@
                 <h2 style="color: #1f2937; font-size: 1.5rem; margin: 0;">📦 Panel de Pedidos</h2>
                 <div style="display: flex; gap: 10px;">
                     <button class="btn btn-secondary" onclick="abrirInputCargarPedidos('pedidos')" 
-                            style="background: #7c3aed; color: white; border-color: #7c3aed;" 
-                            title="Cargar pedidos desde archivo JSON">
+                            style="background: #7c3aed; color: white; border-color: #7c3aed;">
                         📤 Cargar Pedidos
                     </button>
                     <button class="btn btn-success" onclick="descargarPedidos()" 
@@ -1447,12 +1446,7 @@
                 // Limpiar URL
                 URL.revokeObjectURL(url);
                 
-                // Mostrar confirmación
-                alert(`✅ Descarga completada!\n\n` +
-                      `📄 Archivo: gestor-pedidos-backup-${fechaFormateada}.json\n` +
-                      `📦 Pedidos exportados: ${pedidos.length}\n` +
-                      `📅 Fecha: ${fecha.toLocaleString('es-ES')}\n\n` +
-                      `El archivo se ha guardado en tu carpeta de Descargas.`);
+
                 
             } catch (error) {
                 console.error('Error al descargar pedidos:', error);
@@ -1511,17 +1505,11 @@
                 // Limpiar URL
                 URL.revokeObjectURL(url);
                 
-                // Mostrar confirmación
-                alert(`✅ ${tipo} descargado exitosamente!\n\n` +
-                      `📄 Archivo: ${link.download}\n` +
-                      `📦 ${tipo}: #${pedido.id} - ${pedido.numero_oferta}\n` +
-                      `💰 Total: €${pedido.total.toFixed(3)}\n` +
-                      `📅 Fecha: ${fecha.toLocaleString('es-ES')}\n\n` +
-                      `El archivo se ha guardado en tu carpeta de Descargas.`);
+
                 
             } catch (error) {
                 console.error('Error al descargar pedido individual:', error);
-                alert('❌ Error al descargar el pedido. Revisa la consola para más detalles.');
+                alert('❌ Error al descargar.');
             }
         }
 
@@ -1552,22 +1540,10 @@
 
             const tipoTexto = tipo === 'tar' ? 'TAR' : 'Pedidos';
             
-            // Mostrar información previa y pedir confirmación
+            // Proceder con la carga de archivos
             const totalPedidosActuales = tipo === 'tar' ? 
                 pedidos.filter(p => p.tipo === 'TAR').length : 
                 pedidos.filter(p => p.tipo !== 'TAR').length;
-            
-            const mensaje = `📂 CARGAR ${tipoTexto.toUpperCase()} DESDE MÚLTIPLES ARCHIVOS\n\n` +
-                          `📄 Archivos seleccionados: ${archivos.length}\n` +
-                          `📊 ${tipoTexto} actuales: ${totalPedidosActuales}\n\n` +
-                          `Archivos a procesar:\n${archivos.map(a => a.name).join('\n')}\n\n` +
-                          `✅ Los nuevos ${tipoTexto.toLowerCase()} se añadirán a los existentes.\n\n` +
-                          `¿Deseas continuar?`;
-            
-            if (!confirm(mensaje)) {
-                inputElement.value = '';
-                return;
-            }
 
             // Variables para seguimiento del progreso
             let archivosProcessados = 0;
@@ -1642,25 +1618,10 @@
                 // Actualizar la interfaz
                 mostrarPedidos();
                 
-                // Mostrar resumen de la importación
-                const totalFinal = tipo === 'tar' ? 
-                    pedidos.filter(p => p.tipo === 'TAR').length : 
-                    pedidos.filter(p => p.tipo !== 'TAR').length;
-                
-                let mensajeFinal = `📊 RESUMEN DE IMPORTACIÓN\n\n` +
-                                 `📄 Archivos procesados: ${archivosProcessados}\n` +
-                                 `📦 ${tipoTexto} importados: ${totalPedidosImportados}\n` +
-                                 `📊 Total ${tipoTexto.toLowerCase()} ahora: ${totalFinal}\n`;
-                
+                // Solo mostrar errores si los hay
                 if (errores.length > 0) {
-                    mensajeFinal += `\n⚠️ ERRORES ENCONTRADOS:\n${errores.join('\n')}\n`;
+                    alert(`⚠️ ERRORES ENCONTRADOS:\n${errores.join('\n')}`);
                 }
-                
-                if (totalPedidosImportados > 0) {
-                    mensajeFinal += `\n✅ Los datos se han guardado automáticamente.`;
-                }
-                
-                alert(mensajeFinal);
                 
                 // Limpiar el input
                 inputElement.value = '';
@@ -2841,11 +2802,9 @@
         }
 
         function eliminarPedido(pedidoId) {
-            if (confirm('¿Está seguro de que desea eliminar este pedido? Esta acción no se puede deshacer.')) {
-                pedidos = pedidos.filter(p => p.id !== pedidoId);
-                guardarDatos();
-                mostrarPedidos();
-            }
+            pedidos = pedidos.filter(p => p.id !== pedidoId);
+            guardarDatos();
+            mostrarPedidos();
         }
 
         // ===============================
@@ -3444,15 +3403,13 @@
 
         // Estados
         function avanzarEstado(pedidoId) {
-            if (confirm('¿Está seguro de que desea avanzar al siguiente estado?')) {
-                const pedido = pedidos.find(p => p.id === pedidoId);
-                const estadoIndex = ESTADOS.indexOf(pedido.estado);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            const estadoIndex = ESTADOS.indexOf(pedido.estado);
                 
-                if (estadoIndex < ESTADOS.length - 1) {
-                    pedido.estado = ESTADOS[estadoIndex + 1];
-                    guardarDatos();
-                    mostrarPedidos();
-                }
+            if (estadoIndex < ESTADOS.length - 1) {
+                pedido.estado = ESTADOS[estadoIndex + 1];
+                guardarDatos();
+                mostrarPedidos();
             }
         }
 
