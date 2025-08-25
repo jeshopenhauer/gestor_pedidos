@@ -1278,7 +1278,7 @@
 
 
 
-    <!-- Modal para Seguimiento DHL -->
+   <!-- Modal para Seguimiento DHL -->
     <div id="modal-seguimiento-dhl" class="modal">
         <div class="modal-content" style="max-width: 900px; max-height: 90vh;">
             <div class="modal-header">
@@ -1287,9 +1287,44 @@
             </div>
             
             <div style="max-height: 70vh; overflow-y: auto; padding: 20px;">
+                <!-- Panel para guardar entradas DHL -->
+                <div style="background: #f0f9ff; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 2px solid #0ea5e9;">
+                    <h3 style="color: #0c4a6e; margin-bottom: 15px;">💾 Guardar Entrada DHL</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label for="entrada-tracking" style="display: block; margin-bottom: 5px; font-weight: 500; color: #0c4a6e;">
+                                Tracking Number
+                            </label>
+                            <input type="text" id="entrada-tracking" placeholder="Ej: 1234567890" 
+                                   style="width: 100%; padding: 10px; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 14px;">
+                        </div>
+                        <div>
+                            <label for="entrada-asunto" style="display: block; margin-bottom: 5px; font-weight: 500; color: #0c4a6e;">
+                                Asunto
+                            </label>
+                            <input type="text" id="entrada-asunto" placeholder="Ej: Pedido #123 - Cliente ABC" 
+                                   style="width: 100%; padding: 10px; border: 1px solid #0ea5e9; border-radius: 6px; font-size: 14px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                        <button onclick="guardarEntradaDHL()" class="btn" 
+                                style="background: #0ea5e9; border-color: #0ea5e9; padding: 8px 16px;">
+                            💾 Guardar Entrada
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lista de entradas guardadas -->
+                <div id="entradas-dhl-container" style="background: #fefefe; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
+                    <h3 style="color: #374151; margin-bottom: 15px;">📋 Entradas Guardadas</h3>
+                    <div id="lista-entradas-dhl">
+                        <!-- Aquí se mostrarán las entradas guardadas -->
+                    </div>
+                </div>
+
                 <!-- Sección de entrada de tracking -->
                 <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                    <h3 style="color: #374151; margin-bottom: 15px;">📋 Consultar Seguimiento</h3>
+                    
                     <div style="display: flex; gap: 15px; align-items: end;">
                         <div style="flex: 1;">
                             <label for="tracking-input" style="display: block; margin-bottom: 5px; font-weight: 500; color: #374151;">
@@ -1303,7 +1338,7 @@
                             🔍 Consultar API
                         </button>
                     </div>
-
+                    
                 </div>
 
                 <!-- Contenedor para mostrar resultados -->
@@ -1311,7 +1346,11 @@
                     <!-- Aquí se mostrarán los resultados de la API -->
                 </div>
 
+                <!-- Mensaje de instrucciones inicial -->
+                <div id="instrucciones-iniciales" style="text-align: center; padding: 60px 20px;">
 
+
+                </div>
             </div>
 
             <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px; padding: 20px; border-top: 1px solid #e5e7eb;">
@@ -2818,6 +2857,9 @@
             document.getElementById('dhl-frame-container').style.display = 'none';
             document.getElementById('instrucciones-iniciales').style.display = 'block';
             
+            // Inicializar entradas DHL
+            inicializarEntradasDHL();
+            
             // Enfocar el input de tracking
             setTimeout(() => {
                 document.getElementById('tracking-input').focus();
@@ -3244,8 +3286,184 @@
                         }
                     });
                 }
+
+                // Event listeners para DHL entries
+                const entradaTracking = document.getElementById('entrada-tracking');
+                const entradaAsunto = document.getElementById('entrada-asunto');
+                
+                if (entradaTracking) {
+                    entradaTracking.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            entradaAsunto.focus();
+                        }
+                    });
+                }
+                
+                if (entradaAsunto) {
+                    entradaAsunto.addEventListener('keypress', function(event) {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            guardarEntradaDHL();
+                        }
+                    });
+                }
             }, 1000);
         });
+
+        // ===============================
+        // FUNCIONES PARA GESTIÓN DE ENTRADAS DHL
+        // ===============================
+
+        // Variable global para almacenar entradas DHL
+        let entradasDHL = JSON.parse(localStorage.getItem('entradasDHL')) || [];
+
+        function guardarEntradaDHL() {
+            const tracking = document.getElementById('entrada-tracking').value.trim();
+            const asunto = document.getElementById('entrada-asunto').value.trim();
+
+            if (!tracking) {
+                alert('❌ Por favor, ingresa un número de tracking.');
+                return;
+            }
+
+            if (!asunto) {
+                alert('❌ Por favor, ingresa un asunto.');
+                return;
+            }
+
+            // Verificar si ya existe una entrada con el mismo tracking
+            const yaExiste = entradasDHL.some(entrada => entrada.tracking === tracking);
+            if (yaExiste) {
+                alert('⚠️ Ya existe una entrada con este número de tracking.');
+                return;
+            }
+
+            // Crear nueva entrada
+            const nuevaEntrada = {
+                id: Date.now(),
+                tracking: tracking,
+                asunto: asunto,
+                fecha_creacion: new Date().toLocaleDateString(),
+                hora_creacion: new Date().toLocaleTimeString()
+            };
+
+            // Agregar a la lista
+            entradasDHL.unshift(nuevaEntrada); // Agregar al inicio para mostrar las más recientes primero
+            
+            // Guardar en localStorage
+            localStorage.setItem('entradasDHL', JSON.stringify(entradasDHL));
+
+            // Limpiar campos
+            document.getElementById('entrada-tracking').value = '';
+            document.getElementById('entrada-asunto').value = '';
+
+            // Actualizar lista
+            mostrarEntradasDHL();
+
+            // Mensaje de éxito
+            alert('✅ Entrada DHL guardada exitosamente.');
+        }
+
+        function mostrarEntradasDHL() {
+            const container = document.getElementById('lista-entradas-dhl');
+            
+            if (entradasDHL.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #9ca3af;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">📋</div>
+                        <p>No hay entradas guardadas</p>
+                        <p style="font-size: 14px;">Usa el formulario de arriba para crear tu primera entrada</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = entradasDHL.map(entrada => `
+                <div style="
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                    padding: 15px; 
+                    border: 1px solid #e5e7eb; 
+                    border-radius: 8px; 
+                    margin-bottom: 10px; 
+                    background: white;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                ">
+                    <div style="flex: 1;">
+                        <div style="display: flex; gap: 20px; align-items: center;">
+                            <div>
+                                <strong style="color: #374151; font-size: 16px;">${entrada.tracking}</strong>
+                                <div style="color: #6b7280; font-size: 12px; margin-top: 2px;">
+                                    ${entrada.fecha_creacion} • ${entrada.hora_creacion}
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="color: #374151; font-size: 14px;">${entrada.asunto}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="consultarEntradaDHL('${entrada.tracking}')" 
+                                style="
+                                    background: #ff6b00; 
+                                    color: white; 
+                                    border: none; 
+                                    padding: 8px 12px; 
+                                    border-radius: 6px; 
+                                    cursor: pointer; 
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                " 
+                                title="Consultar seguimiento">
+                            🔍 Consultar
+                        </button>
+                        <button onclick="eliminarEntradaDHL(${entrada.id})" 
+                                style="
+                                    background: #dc2626; 
+                                    color: white; 
+                                    border: none; 
+                                    padding: 8px 12px; 
+                                    border-radius: 6px; 
+                                    cursor: pointer; 
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                " 
+                                title="Eliminar entrada">
+                            🗑️ Eliminar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function consultarEntradaDHL(tracking) {
+            // Llenar el campo de tracking con el valor de la entrada
+            document.getElementById('tracking-input').value = tracking;
+            
+            // Llamar a la función de consulta
+            consultarAPIDHL();
+        }
+
+        function eliminarEntradaDHL(entradaId) {
+            if (!confirm('¿Estás seguro de que quieres eliminar esta entrada?')) {
+                return;
+            }
+
+            // Filtrar para eliminar la entrada
+            entradasDHL = entradasDHL.filter(entrada => entrada.id !== entradaId);
+            
+            // Guardar en localStorage
+            localStorage.setItem('entradasDHL', JSON.stringify(entradasDHL));
+            
+            // Actualizar lista
+            mostrarEntradasDHL();
+        }
+
+        function inicializarEntradasDHL() {
+            mostrarEntradasDHL();
+        }
 
         // Funciones para manejo de PDFs
         function getFileData(pedido, tipo) {

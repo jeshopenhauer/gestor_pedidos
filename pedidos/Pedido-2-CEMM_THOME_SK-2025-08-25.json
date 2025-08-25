@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "fechaExportacion": "2025-08-07T14:49:09.783Z",
+  "fechaExportacion": "2025-08-25T10:01:16.645Z",
   "totalPedidos": 1,
-  "nextId": 7,
+  "nextId": 3,
   "pedidos": [
     {
-      "id": 3,
+      "id": 2,
       "numero_oferta": "2025-PR-1-xxx",
       "proveedor": "Cemm Thome SK",
       "email_proveedor": "gnadal@cemmthome.com",

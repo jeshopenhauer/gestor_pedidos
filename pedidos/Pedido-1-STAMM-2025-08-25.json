@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "fechaExportacion": "2025-08-07T14:49:00.950Z",
+  "fechaExportacion": "2025-08-25T10:00:55.540Z",
   "totalPedidos": 1,
-  "nextId": 7,
+  "nextId": 3,
   "pedidos": [
     {
-      "id": 2,
+      "id": 1,
       "numero_oferta": "V1253",
       "proveedor": "STAMM",
       "email_proveedor": "JuanManuelBATALLA@stamm.com",
