@@ -746,8 +746,8 @@
         <div class="header">
             <h1>📦 Gestor de pedidos</h1>
             <div style="display: flex; gap: 10px; align-items: center;">
-                <button class="btn" onclick="abrirModalCrearPedido()">+ Crear pedido</button>
-                <button class="btn" onclick="abrirModalCrearTar()" style="background: #0062ff;">+ Crear TAR</button>
+                
+                <!-- Botones de creación eliminados -->
             </div>
         </div>
 
@@ -781,30 +781,6 @@
                 <button class="btn" onclick="abrirModalCrearPedido()">+ Crear primer pedido</button>
             </div>
         </div>
-
-        <!-- Panel de TAR -->
-        <div class="card" style="margin-top: 30px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: #1f2937; font-size: 1.5rem; margin: 0;">🚚 Panel de TAR</h2>
-                <button class="btn btn-secondary" onclick="abrirInputCargarPedidos('tar')" 
-                        style="background: #7c3aed; color: white; border-color: #7c3aed;" 
-                        title="Cargar TAR desde archivo JSON">
-                    📤 Cargar TAR
-                </button>
-            </div>
-            
-            <div id="tar-container">
-                <!-- Aquí se mostrarán los TAR dinámicamente -->
-            </div>
-
-            <!-- Estado vacío TAR -->
-            <div id="empty-state-tar" class="empty-state">
-                <div class="icon">🚚</div>
-                <p style="font-size: 18px; margin-bottom: 15px;">No hay TAR registrados</p>
-                <p style="margin-bottom: 20px;">Comience creando su primer TAR</p>
-                <button class="btn" onclick="abrirModalCrearTar()" style="background: #0062ff;">+ Crear primer TAR</button>
-            </div>
-        </div>
     </div>
 
     <!-- Botones flotantes laterales -->
@@ -827,8 +803,6 @@
     <!-- Inputs ocultos para cargar archivos -->
     <input type="file" id="input-cargar-pedidos" accept=".json" multiple
            style="display: none;" onchange="cargarPedidos(this, 'pedidos')">
-    <input type="file" id="input-cargar-tar" accept=".json" multiple
-           style="display: none;" onchange="cargarPedidos(this, 'tar')">
 
     <!-- Modal para crear pedido -->
     <div id="modal-crear-pedido" class="modal">
@@ -1182,6 +1156,7 @@
                 <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
                     <button type="button" class="btn btn-secondary" onclick="cerrarModalEnviarEtiquetas()">Cancelar</button>
                     <button type="submit" class="btn">Enviar Etiquetas</button>
+                    <button type="button" class="btn" onclick="abrirGmailEtiquetas()" style="background-color: #34A853; border-color: #34A853;">Enviar Gmail</button>
                 </div>
             </form>
         </div>
@@ -1299,79 +1274,9 @@
         </div>
     </div>
 
-    <!-- Modal para crear TAR -->
-    <div id="modal-crear-tar" class="modal">
-        <div class="modal-content" style="max-width: 1200px;">
-            <div class="modal-header">
-                <h2>🚚 Crear Nuevo TAR</h2>
-                <span class="close" onclick="cerrarModalCrearTar()">&times;</span>
-            </div>
-            
-            <form id="form-crear-tar">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="tar_proveedor">Proveedor</label>
-                        <input type="text" id="tar_proveedor" name="proveedor">
-                    </div>
+    <!-- Modal para crear TAR eliminado -->
 
-                    <div class="form-group">
-                        <label for="tar_email_proveedor">Email del Proveedor</label>
-                        <input type="text" id="tar_email_proveedor" name="email_proveedor">
-                    </div>
 
-                    <div class="form-group">
-                        <label for="tar_numero_oferta">Número de Oferta</label>
-                        <input type="text" id="tar_numero_oferta" name="numero_oferta">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tar_fecha_oferta">Fecha de Oferta</label>
-                        <input type="date" id="tar_fecha_oferta" name="fecha_oferta">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tar_numero_eproc">Número EPROC</label>
-                        <input type="text" id="tar_numero_eproc" name="numero_eproc">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tar_oi_eproc">OI (Opcional)</label>
-                        <input type="text" id="tar_oi_eproc" name="oi_eproc">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tar_oferta_pdf">Subir PDF de Oferta</label>
-                        <input type="file" id="tar_oferta_pdf" name="oferta_pdf" accept=".pdf">
-                    </div>
-                </div>
-
-                <!-- Sección de piezas -->
-                <div class="pieces-container">
-                    <h3 style="margin-bottom: 20px; color: #374151;">Piezas del TAR</h3>
-                    <div id="tar-pieces-grid">
-                        <div class="piece-row" style="font-weight: bold; background: #f3f4f6;">
-                            <div style="padding: 12px 15px;">Referencia</div>
-                            <div style="padding: 12px 15px;">Descripción</div>
-                            <div style="padding: 12px 15px;">Proyecto</div>
-                            <div style="padding: 12px 15px;">Cantidad</div>
-                            <div style="padding: 12px 15px;">Precio Unit. (€)</div>
-                            <div style="padding: 12px 15px;">Total Fila (€)</div>
-                            <div style="padding: 12px 15px;">Acción</div>
-                        </div>
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="agregarPiezaTar()" style="margin-top: 15px;">+ Agregar Pieza</button>
-                    <div class="total-row">
-                        Total: €<span id="total-tar">0.000</span>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px;">
-                    <button type="button" class="btn btn-secondary" onclick="cerrarModalCrearTar()">Cancelar</button>
-                    <button type="submit" class="btn">Crear TAR</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <!-- Modal para Seguimiento DHL -->
     <div id="modal-seguimiento-dhl" class="modal">
@@ -1398,10 +1303,7 @@
                             🔍 Consultar API
                         </button>
                     </div>
-                    <p style="color: #059669; font-size: 12px; margin-top: 10px;">
-                        � <strong>API Configurada:</strong> Conectado a DHL Unified Tracking API para datos en tiempo real.
-                        <br>Estado: <span style="color: green; font-weight: bold;">✅ Producción</span>
-                    </p>
+
                 </div>
 
                 <!-- Contenedor para mostrar resultados -->
@@ -1409,33 +1311,7 @@
                     <!-- Aquí se mostrarán los resultados de la API -->
                 </div>
 
-                <!-- Mensaje de instrucciones inicial -->
-                <div id="instrucciones-iniciales" style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 48px; margin-bottom: 20px;">�</div>
-                    <h3 style="color: #374151; margin-bottom: 15px;">Consulta el estado de tus paquetes con la API de DHL</h3>
-                    <p style="color: #6b7280; line-height: 1.6; margin-bottom: 20px;">
-                        Este sistema utiliza la API oficial de DHL para obtener información actualizada 
-                        del estado de tus envíos en tiempo real.
-                    </p>
-                    <div style="margin-top: 30px; padding: 20px; background: #d1fae5; border-left: 4px solid #059669; border-radius: 6px; text-align: left;">
-                        <h4 style="color: #047857; margin-bottom: 10px;">✅ Estado de la API:</h4>
-                        <ul style="color: #047857; padding-left: 20px; margin: 0;">
-                            <li><strong>Estado:</strong> ✅ Configurado para producción</li>
-                            <li><strong>API:</strong> DHL Unified Tracking API activa</li>
-                            <li><strong>API Key:</strong> Configurada y validada</li>
-                            <li><strong>Límites:</strong> 250 consultas/día, 1 consulta/segundo</li>
-                        </ul>
-                    </div>
-                    <div style="margin-top: 20px; padding: 20px; background: #dbeafe; border-left: 4px solid #3b82f6; border-radius: 6px; text-align: left;">
-                        <h4 style="color: #1e40af; margin-bottom: 10px;">💡 Consejos de uso:</h4>
-                        <ul style="color: #1e40af; padding-left: 20px; margin: 0;">
-                            <li>Los números de tracking DHL suelen tener 10-11 dígitos</li>
-                            <li>También pueden empezar con letras (ej: JD001234567890)</li>
-                            <li>El sistema valida formato básico antes de consultar</li>
-                            <li>Manejo inteligente de errores y reintentos</li>
-                        </ul>
-                    </div>
-                </div>
+
             </div>
 
             <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px; padding: 20px; border-top: 1px solid #e5e7eb;">
@@ -1799,13 +1675,10 @@
         // Mostrar pedidos
         function mostrarPedidos() {
             const pedidosContainer = document.getElementById('pedidos-container');
-            const tarContainer = document.getElementById('tar-container');
             const emptyStatePedidos = document.getElementById('empty-state-pedidos');
-            const emptyStateTar = document.getElementById('empty-state-tar');
             
-            // Separar pedidos y TAR
+            // Filtrar solo pedidos (excluir TAR)
             const solosPedidos = pedidos.filter(p => p.tipo !== 'TAR');
-            const solosTar = pedidos.filter(p => p.tipo === 'TAR');
             
             // Mostrar pedidos
             if (solosPedidos.length === 0) {
@@ -1814,15 +1687,6 @@
             } else {
                 emptyStatePedidos.style.display = 'none';
                 pedidosContainer.innerHTML = solosPedidos.map(pedido => crearTarjetaPedido(pedido)).join('');
-            }
-            
-            // Mostrar TAR
-            if (solosTar.length === 0) {
-                tarContainer.innerHTML = '';
-                emptyStateTar.style.display = 'block';
-            } else {
-                emptyStateTar.style.display = 'none';
-                tarContainer.innerHTML = solosTar.map(pedido => crearTarjetaPedido(pedido)).join('');
             }
         }
 
@@ -2132,6 +1996,21 @@
 
         function cerrarModalEnviarEtiquetas() {
             document.getElementById('modal-enviar-etiquetas').style.display = 'none';
+        }
+        
+        function abrirGmailEtiquetas() {
+            const pedidoId = parseInt(document.getElementById('enviar-etiquetas-pedido-id').value);
+            const pedido = pedidos.find(p => p.id === pedidoId);
+            
+            if (pedido) {
+                const trackingNumber = document.getElementById('enviar_etiquetas_tracking').value;
+                const fechaEnvio = document.getElementById('enviar_etiquetas_fecha').value;
+                
+                // Usar la función existente sin la confirmación
+                generarEmailEtiquetas(pedido, trackingNumber, fechaEnvio);
+            } else {
+                alert('Error: No se encontró información del pedido.');
+            }
         }
 
         function cerrarModalDetalle() {
@@ -3822,8 +3701,8 @@
                 };
                 pedido.estado = 'etiquetas_enviadas';
                 
-                // Generar email automático para Gmail
-                generarEmailEtiquetas(pedido, trackingNumber, fechaEnvio);
+                // Ya no generamos email automáticamente aquí,
+                // ahora se hace con el botón verde específico
                 
                 guardarDatos();
                 mostrarPedidos();
@@ -3954,13 +3833,6 @@
 
         function generarEmailEtiquetas(pedido, trackingNumber, fechaEnvio) {
             try {
-                // Confirmación antes de abrir Gmail
-                const confirmar = confirm('📧 ¿Deseas ser redireccionado a Gmail para generar el correo automáticamente?\n\nSe abrirá Gmail con toda la información ya completada.');
-                
-                if (!confirmar) {
-                    return; // El usuario canceló
-                }
-                
                 // Obtener información del proveedor
                 const proveedor = pedido.proveedor || 'Proveedor';
                 const emailProveedor = pedido.email_proveedor || '';
@@ -3983,14 +3855,15 @@
                 const direccionEntrega = 'C/ Linares Pol Cañada Fuente15\n23600 MARTOS\nSpain'; // Dirección fija de entrega correcta
                 
                 // Crear asunto del email
-                const asunto = `Shipping Labels Ready - Order #${pedido.numero_oferta || pedido.id} - Tracking: ${trackingNumber || 'TBD'}`;
-                
+                const asunto = `Shipping Labels Ready - PO: ${numeroPO} - Offer #${pedido.numero_oferta || 'N/A'} - Tracking: ${trackingNumber || 'TBD'}`;
+
                 // Crear cuerpo del email con el formato solicitado
                 const cuerpoEmail = `Hello,
 
 Labels for shipping are ready.
 
 ORDER DETAILS:
+Offer #: ${pedido.numero_oferta || 'N/A'}
 PO: ${numeroPO}
 Tracking Number: ${trackingNumber || 'To be provided by courier'}
 
